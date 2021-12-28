@@ -1,0 +1,60 @@
+Windows :
+
+1, Toolchain
+|
+|---A, MSVC(e.g. Visual Studio 2017)
+|   |
+|   |---a, Compiler : Install vs_BuildTools.exe online or vs2017offline_buildtools.zip offline.
+|   |---b, SDK : Install 19041.685.201201-2105.vb_release_svc_prod1_WindowsSDK.iso.
+|   |---c, cdb : Install wdksetup.exe online or Windows Kits.zip offline.
+|
+|---B, GCC(msys2)
+    |
+    |---a, msys2 : Install msys2-x86_64-20210228.exe.
+    |---b, shell : "pacman -Syu".
+    |---c, shell : "pacman -Sy mingw-w64-x86_64-toolchain"
+
+
+2, IDE(Qt Creator / Visual Studio)
+|
+|---A, Qt Creator
+|   |
+|   |---a, Install qt-creator-opensource-windows-x86_64-4.15.0.exe standalone.
+|   |---b, Or install qt-opensource-windows-x86-5.12.10.exe together with Qt SDK.
+|   |---c, Or install qt-unified-windows-x86-4.1.0-online.exe online.
+|
+|---B, Visual Studio : Install vs_WDExpress.exe for a version of Visual Studio Express.
+
+
+3, Software / SDK
+|
+|---A, Qt SDK
+|   |
+|   |---a, Install qt-opensource-windows-x86-5.12.10.exe standalone.
+|   |---b, Or install qt-unified-windows-x86-4.1.0-online.exe online.
+|
+|---B, NI-VISA : Install ni-visa_20.0.0_offline.iso.
+|
+|---C, RS Power Meter Driver : Install NrpToolkit-4.20.7532.14297.exe.
+|
+|---D, RS PowerViewer : Install PowerViewer-Install_11.3.7338.3230.msi.
+|
+|---E, USB-to-RS232 : Install FTDI232_windows_212226.zip.
+|
+|---F, Git
+    |
+    |---a, Standalone : Install Git-2.31.1-64-bit.exe.
+    |---b, msys2 : "pacman -Sy git" if 1.B.c has not been executed.
+
+
+4, Library
+|
+|---A, boost
+|   |
+|   |---a, Unzip boost_x_xx_x.7z(e.g. boost_1_75_0.7z).
+|   |---b, Run bootstrap.bat if compile with MSVC.Or bootstrap.sh in msys2 if compile with GCC.
+|   |---c, Run "b2.exe --build-type=complete install".
+|   |---d, Waiting the compile process(typically 30 minutes).
+|   |---e, Precompiled files are listed in ./boost/ directory.
+|
+|---B, qwt : Just compile it as a normal Qt project.

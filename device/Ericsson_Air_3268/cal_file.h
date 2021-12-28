@@ -1,0 +1,61 @@
+#ifndef DEVICE_ERICSSON_AIR_3268_CAL_FILE_H
+#define DEVICE_ERICSSON_AIR_3268_CAL_FILE_H
+
+#include "../report/report.h"
+#include "cal_table_tx_aclr.h"
+#include "cal_table_tx_vga.h"
+#include "cal_table_rx_rf_vga.h"
+#include "cal_table_rx_gain_accu.h"
+
+namespace ns_ericsson {
+
+DECL_CAL_TABLE(air_3268,
+    Begin = 0,
+    TX_ACLR = 0,
+    RX_Gain_Accu,
+    TX_VGA,
+    RX_RF_VGA,
+    Total)
+
+namespace ns_air_3268 {
+
+class API cal_file : public basic_report<cal_table_t>
+{
+public:
+    cal_file() : basic_report<cal_table_t>(path()) {}
+    virtual ~cal_file() {}
+
+    const item_table_base *db(const uint32_t table) const
+    {
+        switch (table) {
+        case cal_table_t::TX_ACLR : return &_tx_aclr;
+        case cal_table_t::RX_Gain_Accu : return &_rx_gain_accu;
+        case cal_table_t::TX_VGA : return &_tx_vga;
+        case cal_table_t::RX_RF_VGA : return &_rx_rf_vga;
+        default : return nullptr;
+        }
+    }
+
+    int32_t open()
+    {
+        basic_report<cal_table_t>::open();
+        make_sure_has(cal_table_t::TX_ACLR,&_tx_aclr);
+        make_sure_has(cal_table_t::RX_Gain_Accu,&_rx_gain_accu);
+        make_sure_has(cal_table_t::TX_VGA,&_tx_vga);
+        make_sure_has(cal_table_t::RX_RF_VGA,&_rx_rf_vga);
+        return 0;
+    }
+
+    std::string path() const;
+
+private:
+    tx_aclr_table_t _tx_aclr;
+    rx_gain_accu_table_t _rx_gain_accu;
+    tx_vga_table_t _tx_vga;
+    rx_rf_vga_table_t _rx_rf_vga;
+};
+
+} // namespace ns_air_3268
+} // namespace ns_ericsson
+
+#endif
