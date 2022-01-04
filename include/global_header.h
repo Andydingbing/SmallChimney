@@ -45,8 +45,6 @@ template<int T> int32_t name##_t<T>
 #define ADF5355_FUNC FAKE_TEMPLATE_CLASS_FUNC(adf5355)
 #define LMX2594_FUNC FAKE_TEMPLATE_CLASS_FUNC(lmx2594)
 
-#define DECL_SPTR(class_name) typedef boost::shared_ptr<class_name> sptr;
-
 #define VI_CHECK(func) { if ((status = (func)) < VI_SUCCESS) { return status; } } NEED_SEMICOLON
 
 #define BOOST_SPTR_SAFE_MAKE(type,sptr) { if (!sptr) sptr = boost::make_shared<type>(); }

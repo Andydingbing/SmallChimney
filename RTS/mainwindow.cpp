@@ -240,7 +240,7 @@ void MainWindow::initMsgLogDlg()
     msgTableView = new Q_Table_View;
     msgTableView->setModel(msgLogModel);
     msgTableView->setColumnWidth(0,50);
-    msgTableView->setColumnWidth(1,125);
+    msgTableView->setColumnWidth(1,150);
     msgTableView->setColumnWidth(2,350);
     msgTableView->setColumnWidth(3,50);
     msgTableView->setColumnWidth(4,80);
@@ -298,7 +298,6 @@ void MainWindow::threadSPC()
 {
     if (thread == nullptr) {
         thread = new Q_Main_Thread(this);
-        connect(thread,SIGNAL(done(bool)),this,SLOT(threadDone(bool)));
         thread->start(QThread::LowPriority);
         return;
     }
@@ -349,7 +348,6 @@ void MainWindow::threadStop()
 {
     if (Q_Thread_Base::g_threadPausing == true) {
         Q_Thread_Base::g_threadPausing = false;
-        Q_Thread_Base::g_threadThread->threadLock.unlock();
     }
     Q_Thread_Base::g_threadStop = true;
 }

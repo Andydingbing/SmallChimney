@@ -31,4 +31,4 @@ struct API item_header_t {
     int32_t set_freq_str(const std::string &str);
 };
 
-#endif // REPORT_HEADER_H
+#endif

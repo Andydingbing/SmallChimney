@@ -100,14 +100,12 @@ public:
 
     void threadPause()
     {
-        Q_Thread_Base::g_threadThread->threadLock.lock();
         widgetPausing();
         Q_Thread_Base::g_threadPausing = true;
     }
 
     void threadContinue()
     {
-        Q_Thread_Base::g_threadThread->threadLock.unlock();
         widgetRunning();
         Q_Thread_Base::g_threadPausing = false;
     }
@@ -197,4 +195,4 @@ public:
 #define KASE_WIDGET_SUFFIX() \
     };
 
-#endif // THREAD_WIDGET_H
+#endif

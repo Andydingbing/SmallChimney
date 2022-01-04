@@ -38,4 +38,4 @@
     #define CXX14_CONSTEXPR constexpr
 #endif
 
-#endif // INCLUDE_PREPROCESSOR_SUFFIX_H
+#endif

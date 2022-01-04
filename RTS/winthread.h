@@ -3,7 +3,6 @@
 
 #include "global.h"
 #include <QThread>
-#include <QMutex>
 #include "freq_string.hpp"
 #include "set_helper.hpp"
 
@@ -11,7 +10,6 @@
 {   emit threadCheckBox(msg); \
     if (Q_Thread_Base::g_threadStop) { \
         emit threadProcess(End_Manual); \
-        emit done(); \
         return; \
     } \
 }
@@ -83,7 +81,6 @@ signals:
 public:
     quint32 RFIdx;
 
-    QMutex threadLock;
     static bool g_threadStop;
     static bool g_threadPausing;
     static QString  g_threadName;
@@ -122,4 +119,4 @@ void threadErrorBox(const QString &msg);
 
 bool ftpRetryBox();
 
-#endif // Q_WINTHREAD_H
+#endif

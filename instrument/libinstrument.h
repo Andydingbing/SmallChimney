@@ -1,8 +1,7 @@
 #ifndef LIB_INSTR_H
 #define LIB_INSTR_H
 
-#include <boost/cstdint.hpp>
-#include <preprocessor/prefix.h>
+#include "preprocessor/prefix.h"
 
 // Common
 enum io_mixer_t {

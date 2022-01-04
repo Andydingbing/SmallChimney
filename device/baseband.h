@@ -3,13 +3,10 @@
 
 #include "libdriver.h"
 #include <list>
-#include <boost/smart_ptr.hpp>
 
 class API baseband : noncopyable
 {
 public:
-    typedef boost::shared_ptr<baseband> sptr;
-
     virtual ~baseband() {}
 
     virtual int32_t open_board() { return 0; }

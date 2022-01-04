@@ -29,7 +29,7 @@ using boost::ignore_unused;
 
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
 
-#define ZERO_ARRAY(array) { memset(array,0,sizeof(array)); } NEED_SEMICOLON
+#define ZERO_ARRAY(array) { memset(array,0,sizeof(array)); }
 
 #define INIT_ARRAY(array,value) \
 {   for (size_t i = 0;i < ARRAY_SIZE(array);++i) { \
@@ -56,4 +56,4 @@ using boost::ignore_unused;
 #define FREQ_M(freq) freq##000000ll
 #define FREQ_G(freq) freq##000000000ll
 
-#endif // INCLUDE_PREPROCESSOR_COMMON_H
+#endif

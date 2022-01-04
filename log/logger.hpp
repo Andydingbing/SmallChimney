@@ -26,4 +26,4 @@ protected:
     ctd::dlist<T *> _logs;
 };
 
-#endif // LOGGER_HPP
+#endif

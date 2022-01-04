@@ -26,4 +26,4 @@
     #include "nullptr.h"
 #endif // __cplusplus
 
-#endif // PREPROCESSOR_H
+#endif

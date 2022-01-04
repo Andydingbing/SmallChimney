@@ -32,4 +32,4 @@
     #define PLATFORM_WIN32
 #endif
 
-#endif // INCLUDE_CONFIG_PLATFORM_H
+#endif

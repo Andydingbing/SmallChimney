@@ -64,4 +64,4 @@
         PARAM_PICK_1_OF_1(,Namespace##_##Enum##_,,__VA_ARGS__) \
     };
 
-#endif // INCLUDE_PREPROCESSOR_PREFIX_H
+#endif

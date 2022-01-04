@@ -30,7 +30,6 @@ enum lo_t {
 class API sp1403 : public frontend
 {
 public:
-    typedef boost::shared_ptr<sp1403> sptr;
     typedef ns_sp1403::port_t port_t;
     typedef ns_sp1403::path_t path_t;
     typedef ns_sp1403::led_t  led_t;

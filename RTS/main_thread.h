@@ -11,7 +11,7 @@ public:
     Q_Main_Thread(QObject *parent = nullptr);
 
     void run();
-    void waitChildThread(int timeout = 0);
+    void waitChildThread(int timeout = 0, int idx = 0);
 
 signals:
     void prepare(const int idx);

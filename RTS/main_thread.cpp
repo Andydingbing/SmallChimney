@@ -12,7 +12,8 @@ Q_Main_Thread::Q_Main_Thread(QObject *parent) :
     Q_Thread_Base(parent),
     childThreadRunning(false)
 {
-    connect(this,SIGNAL(prepare(const int)),parent,SLOT(runThread(const int)));
+    connect(this,SIGNAL(prepare(const int)),parent,SLOT(runThread(const int)),Qt::BlockingQueuedConnection);
+    connect(this,SIGNAL(done(bool)),parent,SLOT(threadDone(bool)));
 }
 
 void Q_Main_Thread::run()
@@ -27,7 +28,7 @@ void Q_Main_Thread::run()
     for (;iterCheckList != checkList.constEnd();++iterCheckList,++iterChildItem) {
         if (*iterCheckList) {
             emit prepare(i);
-            waitChildThread();
+            waitChildThread(0,i);
             i ++;
         }
     }
@@ -40,7 +41,7 @@ void Q_Main_Thread::childThreadDone(bool success)
     childThreadRunning = false;
 }
 
-void Q_Main_Thread::waitChildThread(int timeout)
+void Q_Main_Thread::waitChildThread(int timeout, int idx)
 {
     timeout = timeout ? timeout : int(0x7fffffff);
 

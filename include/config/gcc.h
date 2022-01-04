@@ -62,4 +62,4 @@
     #define ZERO_OBJ(obj) { memset(static_cast<void *>(&obj),0,sizeof(obj)); }
 #endif
 
-#endif // INCLUDE_CONFIG_GCC_H
+#endif

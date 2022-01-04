@@ -37,4 +37,4 @@
     #include "msc.h"
 #endif
 
-#endif // INCLUDE_CONFIG_COMPILER_H
+#endif

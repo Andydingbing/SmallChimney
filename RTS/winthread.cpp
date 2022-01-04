@@ -12,8 +12,8 @@
     #define KASE_CATCH \
         } catch (std::exception &e) { \
             THREAD_ERROR_BOX(QString("%1").arg(e.what())); \
-            threadLock.lock(); \
-            threadLock.unlock(); \
+            /*threadLock.lock();*/ \
+            /*threadLock.unlock();*/ \
             Instr.close(); \
             emit threadProcess(End_Except); \
             emit done(); \
@@ -82,8 +82,6 @@ void Q_Thread::run()
     KASE_TRY
 
     kase();
-    threadLock.lock();
-    threadLock.unlock();
     Instr.close();
     emit done();
     return;

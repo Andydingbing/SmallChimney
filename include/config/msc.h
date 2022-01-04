@@ -189,4 +189,4 @@
 
 #define ZERO_OBJ(obj) { memset(&obj,0,sizeof(obj)); } NEED_SEMICOLON
 
-#endif // INCLUDE_CONFIG_MSC_H
+#endif
