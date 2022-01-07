@@ -9,6 +9,8 @@ log \
 driver \
 instrument \
 report \
+sequence \
+sequence_compiler \
 RTS \
 DDT \
 $$DEVICES
