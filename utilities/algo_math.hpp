@@ -13,12 +13,25 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef RD_UTILITIES_ALGO_MATH_HPP
-#define RD_UTILITIES_ALGO_MATH_HPP
+#ifndef UTILITIES_ALGO_MATH_HPP
+#define UTILITIES_ALGO_MATH_HPP
 
 #include "exception.hpp"
 #include "traits.hpp"
 #include <boost/math/constants/constants.hpp>
+
+template<typename T,
+template<typename _Tp = T,typename allocator_t = std::allocator<_Tp>> class containter_t>
+T sum(containter_t<T> &x)
+{
+    T x_sum = 0;
+    typename containter_t<T>::const_iterator iter = x.cbegin();
+
+    for (;iter != x.cend();++iter) {
+        x_sum += *iter;
+    }
+    return x_sum;
+}
 
 double API round(double x,uint32_t digit);
 SYM_INLINE double round(double x) { return round(x,0); }
@@ -342,4 +355,4 @@ SYM_INLINE T conv(const std::vector<T> &a,
 //     return 0;
 // }
 
-#endif // RD_UTILITIES_ALGO_MATH_HPP
+#endif

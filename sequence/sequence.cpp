@@ -1,5 +1,6 @@
 #include "sequence.h"
 #include "preprocessor/prefix.h"
+#include "algo_math.hpp"
 #include <vector>
 #include <cstdarg>
 
@@ -14,7 +15,7 @@
 using namespace std;
 
 template<typename T,
-template<typename _Tp = T, typename allocator_t = std::allocator<_Tp>> class container_t>
+template<typename _Tp = T,typename allocator_t = std::allocator<_Tp>> class container_t>
 uint32_t trim_front(char **str,container_t<T> &args)
 {
     typename container_t<T>::const_iterator iter;
@@ -39,8 +40,6 @@ uint32_t trim_front(char **str,container_t<T> &args)
 uint32_t trim_front(char **str,const uint32_t n,...)
 {
     vector<char> args;
-    uint32_t sum = 0;
-    size_t arg_idx = 0;
     va_list ap;
 
     va_start(ap,n);
@@ -65,6 +64,53 @@ void trim_back(char **str)
         *ptr = '\0';
         ptr --;
     }
+}
+
+void first_meaningful(char *str,char *ptr)
+{
+    ptr = str;
+
+    while (*ptr == ' ' || *ptr == '\t') {
+        ptr ++;
+    }
+}
+
+void first_meaningful(char *str,char *ptr,list<string> &args,list<uint32_t> &num)
+{
+    ptr = str;
+
+    list<string>::const_iterator iter_args;
+    list<uint32_t>::iterator iter_num;
+
+    for (size_t i = 0;i < args.size();++i) {
+        num.push_back(0);
+    }
+
+    iter_args = args.cbegin();
+    iter_num = num.begin();
+
+    while (1) {
+        for (;iter_args != args.cend();++iter_args,++iter_num) {
+            if (strlen(ptr) >= iter_args->length() && strncmp(ptr,iter_args->c_str(),iter_args->length())) {
+                (*iter_num) ++;
+                ptr += iter_args->length();
+                break;
+            }
+        }
+        if (iter_args == args.cend()) {
+            break;
+        }
+    }
+}
+
+char last_meaningful(char *str)
+{
+    char *ptr = str + strlen(str) - 1;
+
+    while (*ptr == '\n' || *ptr == ' ' || *ptr == '\t') {
+        ptr --;
+    }
+    return *ptr;
 }
 
 bool is_empty_line(char *str)
@@ -94,6 +140,7 @@ int32_t sequence::parse()
     char *str = _buf;
 
     read_one_line(&str,false,true);
+
 
     if (strlen(str) == 0 || *str == ' ') {
         COMPILER_ERR("The tree must begin with a root node.");
@@ -131,7 +178,7 @@ int32_t sequence::parse_vendor()
     trim_front(&str);
     trim_back(&str);
     vendor = str;
-
+    add_line(Vendor,&vendor);
     return 0;
 }
 
@@ -178,6 +225,7 @@ int32_t sequence::parse_product()
     }
 
     product.push_back(left);
+    add_line(Product,&product);
     return 0;
 }
 
@@ -242,7 +290,10 @@ int32_t sequence::read_one_line(char **str,const bool trim_front,const bool trim
         if (is_empty_line(str_temp)) {
             if (err_if_empty) {
                 err_lf = true;
+                add_line(Error);
                 break;
+            } else {
+                add_line(Empty);
             }
         } else {
             break;
@@ -252,5 +303,61 @@ int32_t sequence::read_one_line(char **str,const bool trim_front,const bool trim
     if (str != nullptr && (*str) != nullptr) {
         (*str) = str_temp;
     }
-    return err_lf ? -2 : 0;
+
+    if (last_meaningful(str_temp) == ';') {
+        COMPILER_ERR("Unknown expression with the end of \';\'.");
+    }
+
+    if (err_lf) {
+        return -2;
+    }
+
+    if (_cur_line < 3) {
+        return 0;
+    }
+
+}
+
+sequence::syntax_t sequence::syntax(char *str)
+{
+    if (last_meaningful(str) == ':') {
+        return sequence::Config_Node_Header;
+    }
+
+    char *ptr = str;
+
+    first_meaningful(str,ptr);
+
+    if (strchr(ptr,':')) {
+
+    }
+}
+
+int32_t sequence::syntax_config(char *str)
+{
+    list<string> args = {"    ","\t"};
+    list<uint32_t> num;
+    uint32_t sum_args = 0;
+    list<list<string>>::const_iterator iter_tree = tree.cbegin();
+
+    char *ptr = str;
+
+    first_meaningful(str,ptr,args,num);
+    sum_args = sum(num);
+
+    if (*str == ' ') {
+        add_line(Error);
+        COMPILER_ERR("Invalid " + string(sum_args ? "sub" : "root") + "config prefix.");
+    }
+
+    if (sum_args == 0) {
+
+    }
+}
+
+int32_t sequence::syntax_config_header(char *str)
+{
+    list<list<string>>::const_iterator iter_tree = tree.cbegin();
+
+    return 0;
 }

@@ -5,8 +5,35 @@
 #include <list>
 #include "preprocessor/preprocessor.h"
 
+struct config_node {
+    uint32_t floor;
+    std::string str;
+    std::list<config_node *> sub_node;
+};
+
 class API sequence
 {
+public:
+    enum syntax_t {
+        Vendor,
+        Product,
+        Include,
+        Tree_Node,
+        Config_Node_Header,
+        Config_Node_Config,
+        Config_Other_Header,
+        Config_Other_Config,
+        Annotation,
+        Empty,
+        Error
+    };
+
+    struct line_t {
+        line_t(const syntax_t s,void *d = nullptr) : syntax(s),data(d) {}
+        syntax_t syntax;
+        void *data;
+    };
+
 public:
     sequence(const std::string &path);
 
@@ -19,12 +46,20 @@ public:
     int32_t parse();
 
 private:
+    void add_line(const syntax_t s,void *d = nullptr)
+    { lines.push_back(line_t(s,d)); }
+
     uint32_t tree_node_floor();
     int32_t read_one_line(char **str = nullptr,const bool trim_front = true,const bool trim_back = true,const bool err_if_empty = false);
+    syntax_t syntax(char *str);
+    int32_t syntax_config(char *str);
+    int32_t syntax_config_header(char *str);
 
 public:
+    std::list<line_t> lines;
     std::string vendor;
     std::list<std::string> product;
+    std::list<sequence> sub_sequence;
     std::list<std::list<std::string>> tree;
 
 private:
