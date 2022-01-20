@@ -1,6 +1,8 @@
 #include "sequence.h"
 #include "preprocessor/prefix.h"
 #include "algo_math.hpp"
+#include "string_util.hpp"
+#include <fmt/core.h>
 #include <vector>
 #include <cstdarg>
 
@@ -13,58 +15,6 @@
 }
 
 using namespace std;
-
-template<typename T,
-template<typename _Tp = T,typename allocator_t = std::allocator<_Tp>> class container_t>
-uint32_t trim_front(char **str,container_t<T> &args)
-{
-    typename container_t<T>::const_iterator iter;
-    uint32_t sum = 0;
-    bool reach_other = false;
-
-    while (!reach_other) {
-        for (iter = args.cbegin();iter != args.cend();++iter) {
-            if (**str == *iter) {
-                sum ++;
-                (*str) ++;
-                break;
-            }
-        }
-        if (iter == args.cend()) {
-            break;
-        }
-    }
-    return sum;
-}
-
-uint32_t trim_front(char **str,const uint32_t n,...)
-{
-    vector<char> args;
-    va_list ap;
-
-    va_start(ap,n);
-
-    for (uint32_t i = 0;i < n;++i) {
-        args.push_back(char(va_arg(ap,int)));
-    }
-
-    return trim_front<char>(str,args);
-}
-
-SYM_INLINE uint32_t trim_front(char **str)
-{
-    return trim_front(str,2,' ','\t');
-}
-
-void trim_back(char **str)
-{
-    char *ptr = (*str) + strlen(*str) - 1;
-
-    while (*ptr == '\n' || *ptr == ' ' || *ptr == '\t') {
-        *ptr = '\0';
-        ptr --;
-    }
-}
 
 void first_meaningful(char *str,char *ptr)
 {
@@ -91,7 +41,7 @@ void first_meaningful(char *str,char *ptr,list<string> &args,list<uint32_t> &num
 
     while (1) {
         for (;iter_args != args.cend();++iter_args,++iter_num) {
-            if (strlen(ptr) >= iter_args->length() && strncmp(ptr,iter_args->c_str(),iter_args->length())) {
+            if (strlen(ptr) >= iter_args->length() && strncmp(ptr,iter_args->c_str(),iter_args->length()) == 0) {
                 (*iter_num) ++;
                 ptr += iter_args->length();
                 break;
@@ -141,16 +91,11 @@ int32_t sequence::parse()
 
     read_one_line(&str,false,true);
 
+    syntax(str);
+
 
     if (strlen(str) == 0 || *str == ' ') {
         COMPILER_ERR("The tree must begin with a root node.");
-    }
-
-    list<string> node;
-
-
-    while (read_one_line(&str,false,false) == 0) {
-
     }
 }
 
@@ -168,7 +113,7 @@ int32_t sequence::parse_vendor()
 
     str += strlen(header_vendor);
 
-    trim_front(&str,2,' ','\t');
+    trim_front(&str);
 
     if (*str != ':') {
         COMPILER_ERR("Missing \":\" after \"Vendor\".");
@@ -176,7 +121,7 @@ int32_t sequence::parse_vendor()
 
     str += 1;
     trim_front(&str);
-    trim_back(&str);
+    trim_back(str);
     vendor = str;
     add_line(Vendor,&vendor);
     return 0;
@@ -208,12 +153,13 @@ int32_t sequence::parse_product()
 
     str += 1;
     trim_front(&str);
-    trim_back(&str);
+    trim_back(str);
 
     left = str;
     while ((right = strchr(left,';')) != nullptr) {
         ZERO_ARRAY(each_product);
         strncpy(each_product,left,right - left);
+        trim_back(each_product);
         product.push_back(each_product);
         left = right + 1;
 
@@ -284,8 +230,8 @@ int32_t sequence::read_one_line(char **str,const bool trim_front,const bool trim
 
         _cur_line ++;
 
-        if (trim_front) { ::trim_front(&str_temp); }
-        if (trim_back)  { ::trim_back(&str_temp);  }
+        if (trim_front) { this->trim_front(&str_temp); }
+        if (trim_back)  { this->trim_back(str_temp);  }
 
         if (is_empty_line(str_temp)) {
             if (err_if_empty) {
@@ -318,10 +264,10 @@ int32_t sequence::read_one_line(char **str,const bool trim_front,const bool trim
 
 }
 
-sequence::syntax_t sequence::syntax(char *str)
+int32_t sequence::syntax(char *str)
 {
     if (last_meaningful(str) == ':') {
-        return sequence::Config_Node_Header;
+        syntax_config(str);
     }
 
     char *ptr = str;
@@ -331,6 +277,108 @@ sequence::syntax_t sequence::syntax(char *str)
     if (strchr(ptr,':')) {
 
     }
+    return 0;
+}
+
+int32_t sequence::syntax_tree(char *str)
+{
+    list<string> args = {"    ","\t"};
+    list<uint32_t> num;
+    uint32_t sum_args = 0;
+    list<list<string>>::const_iterator iter_tree = tree.cbegin();
+
+    char *ptr = str;
+
+    first_meaningful(str,ptr,args,num);
+    sum_args = sum(num);
+
+    if (*str == ' ') {
+        add_line(Error);
+        COMPILER_ERR("Invalid " + string(sum_args ? "sub" : "root") + "tree.");
+    }
+
+    if (sum_args == 0) {
+        syntax_config_header(ptr);
+    } else {
+        syntax_config_config(ptr,sum_args);
+    }
+
+    return 0;
+}
+
+int32_t sequence::syntax_tree_header(char *str)
+{
+    char invalid_char[] = {',','.','`','~','!','?',';',':'};
+    list<string> node;
+    list<list<string>>::const_iterator iter_tree = tree.cbegin();
+
+    trim_back(str);
+
+    for (size_t i = 0;i < strlen(invalid_char);++i) {
+        if (strchr(str,invalid_char[i])) {
+            COMPILER_ERR(fmt::format("Invalid char : \"{:c}\".",invalid_char[i]));
+        }
+    }
+
+    for (;iter_tree != tree.cend();++iter_tree) {
+        if (strcmp(str,iter_tree->front().c_str()) == 0) {
+            COMPILER_ERR("Conflicted tree root node defination found.");
+        }
+    }
+
+    node.push_back(str);
+    tree.push_back(node);
+    add_line(Tree_Node,&tree.back());
+    return 0;
+}
+
+int32_t sequence::syntax_tree_tree(char *str,const uint32_t floor)
+{
+//    const list<string> seperator = {":"};
+//    list<string> seperated_config;
+//    line_t last_line = lines.back();
+
+//    if (last_line.syntax == Empty) {
+//        COMPILER_ERR(fmt::format("Extra empty line {:d};",_cur_line - 1));
+//    }
+
+//    if (last_line.syntax != Tree_Node) {
+//        COMPILER_ERR("Sub tree node must have a parent node.");
+//    }
+
+//    config_node_t node;
+//    config_node_t *last_node = nullptr;
+//    config_node_t *parent_node = nullptr;
+
+//    last_config_node(last_node,parent_node);
+
+//    if (last_node == nullptr) {
+//        COMPILER_ERR("No root config found.");
+//    }
+
+//    uint32_t floor_jump = floor - last_node->floor;
+
+//    if (floor_jump > 1) {
+//        COMPILER_ERR("Too deep config.");
+//    }
+
+//    split(str,seperator,seperated_config);
+
+//    if (seperated_config.size() != 2) {
+//        COMPILER_ERR("Too many \":\".");
+//    }
+
+//    node.floor = floor;
+//    node.str = seperated_config.front();
+//    node.config = seperated_config.back();
+
+//    if (floor_jump == 0) {
+//        parent_node->sub_node.push_back(node);
+//    } else {
+//        last_node->sub_node.push_back(node);
+//    }
+
+    return 0;
 }
 
 int32_t sequence::syntax_config(char *str)
@@ -351,13 +399,145 @@ int32_t sequence::syntax_config(char *str)
     }
 
     if (sum_args == 0) {
-
+        syntax_config_header(ptr);
+    } else {
+        syntax_config_config(ptr,sum_args);
     }
+
+    return 0;
 }
 
 int32_t sequence::syntax_config_header(char *str)
 {
+    config_root_node_t root_node;
+
+    const list<string> seperator = {":"};
+    list<string> config_nodes;
     list<list<string>>::const_iterator iter_tree = tree.cbegin();
+    list<string>::const_iterator iter_each_tree;
+    list<string>::iterator iter_config_nodes;
+
+    uint32_t match_sum = 0;
+
+    trim_back(str);
+    split(str,seperator,config_nodes);
+
+    trim_front(config_nodes.back());
+    trim_back(config_nodes.back());
+
+    if (config_nodes.back().empty()) {
+        config_nodes.pop_back();
+    }
+
+    for (iter_config_nodes = config_nodes.begin();iter_config_nodes != config_nodes.end();++iter_config_nodes) {
+        trim_front(*iter_config_nodes);
+        trim_back(*iter_config_nodes);
+
+        if (iter_config_nodes->empty()) {
+            COMPILER_ERR("Error syntax with continuous \":\".");
+        }
+    }
+
+    root_node.floor = 0;
+    root_node.str = str;
+
+    for (;iter_tree != tree.cend();++iter_tree) {
+        for (iter_each_tree = iter_tree->cbegin();iter_each_tree != iter_tree->cend();++iter_each_tree) {
+            if (*iter_config_nodes == *iter_each_tree) {
+                iter_config_nodes ++;
+
+                if (iter_config_nodes == config_nodes.cend()) {
+                    match_sum ++;
+                }
+            }
+        }
+    }
+
+    if (match_sum > 1) {
+        COMPILER_ERR("Conflicted defination found.");
+    }
+
+    config_root_node.push_back(root_node);
+    add_line(match_sum ? Config_Node_Header : Config_Other_Header,&config_root_node.back());
+    return 0;
+}
+
+int32_t sequence::syntax_config_config(char *str,const uint32_t floor)
+{
+    const list<string> seperator = {":"};
+    list<string> seperated_config;
+    line_t last_line = lines.back();
+
+    if (last_line.syntax == Empty) {
+        COMPILER_ERR(fmt::format("Extra empty line {:d};",_cur_line - 1));
+    }
+
+    if (last_line.syntax < Config_Node_Header || last_line.syntax > Config_Other_Config) {
+        COMPILER_ERR("Sub config must have a parent config.");
+    }
+
+    config_node_t node;
+    config_node_t *last_node = nullptr;
+    config_node_t *parent_node = nullptr;
+
+    last_config_node(last_node,parent_node);
+
+    if (last_node == nullptr) {
+        COMPILER_ERR("No root config found.");
+    }
+
+    uint32_t floor_jump = floor - last_node->floor;
+
+    if (floor_jump > 1) {
+        COMPILER_ERR("Too deep config.");
+    }
+
+    split(str,seperator,seperated_config);
+
+    if (seperated_config.size() != 2) {
+        COMPILER_ERR("Too many \":\".");
+    }
+
+    node.floor = floor;
+    node.str = seperated_config.front();
+    node.config = seperated_config.back();
+
+    if (floor_jump == 0) {
+        parent_node->sub_node.push_back(node);
+    } else {
+        last_node->sub_node.push_back(node);
+    }
 
     return 0;
 }
+
+void sequence::last_config_node(config_node_t *node, config_node_t *parent)
+{
+    if (config_root_node.empty()) {
+        node = nullptr;
+        parent = nullptr;
+        return;
+    }
+
+    node = &config_root_node.back();
+
+    while (!node->sub_node.empty()) {
+        parent = node;
+        node = &node->sub_node.back();
+    }
+}
+
+uint32_t sequence::trim_front(char **ptr)
+{ return ::trim_front(ptr,2,' ','\t'); }
+
+uint32_t sequence::trim_front(char *ptr)
+{ return ::trim_front(ptr,2,' ','\t'); }
+
+uint32_t sequence::trim_front(string &str)
+{ return ::trim_front<string>(str,2,' ','\t'); }
+
+uint32_t sequence::trim_back(char *ptr)
+{ return ::trim_back(ptr,3,'\n',' ','\t'); }
+
+uint32_t sequence::trim_back(string &str)
+{ return ::trim_back(str,3,'\n',' ','\t'); }

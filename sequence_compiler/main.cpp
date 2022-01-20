@@ -22,5 +22,7 @@ int main()
         cout << "Product : " << *iter << endl;
     }
 
+    s.parse();
+
     getchar();
 }

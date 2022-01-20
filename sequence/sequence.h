@@ -2,13 +2,21 @@
 #define SEQUENCE_SEQUENCE_H
 
 #include <string>
+#include <vector>
 #include <list>
 #include "preprocessor/preprocessor.h"
 
-struct config_node {
+struct config_node_t
+{
     uint32_t floor;
     std::string str;
-    std::list<config_node *> sub_node;
+    std::string config;
+    std::list<config_node_t> sub_node;
+};
+
+struct config_root_node_t : config_node_t
+{
+    size_t tree_line;
 };
 
 class API sequence
@@ -51,9 +59,23 @@ private:
 
     uint32_t tree_node_floor();
     int32_t read_one_line(char **str = nullptr,const bool trim_front = true,const bool trim_back = true,const bool err_if_empty = false);
-    syntax_t syntax(char *str);
+    int32_t syntax(char *str);
+
+    int32_t syntax_tree(char *str);
+    int32_t syntax_tree_header(char *str);
+    int32_t syntax_tree_tree(char *str,const uint32_t floor);
+
     int32_t syntax_config(char *str);
     int32_t syntax_config_header(char *str);
+    int32_t syntax_config_config(char *str,const uint32_t floor);
+
+    void last_config_node(config_node_t *node,config_node_t *parent);
+
+    uint32_t trim_front(char **ptr);
+    uint32_t trim_front(char *ptr);
+    uint32_t trim_front(std::string &str);
+    uint32_t trim_back(char *ptr);
+    uint32_t trim_back(std::string &str);
 
 public:
     std::list<line_t> lines;
@@ -61,6 +83,7 @@ public:
     std::list<std::string> product;
     std::list<sequence> sub_sequence;
     std::list<std::list<std::string>> tree;
+    std::list<config_root_node_t> config_root_node;
 
 private:
     std::string _path;

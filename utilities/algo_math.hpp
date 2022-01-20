@@ -22,7 +22,7 @@
 
 template<typename T,
 template<typename _Tp = T,typename allocator_t = std::allocator<_Tp>> class containter_t>
-T sum(containter_t<T> &x)
+T sum(const containter_t<T> &x)
 {
     T x_sum = 0;
     typename containter_t<T>::const_iterator iter = x.cbegin();
