@@ -3,6 +3,7 @@
 #include "algo_math.hpp"
 #include "string_util.hpp"
 #include <fmt/core.h>
+#include <iostream>
 #include <vector>
 #include <cstdarg>
 
@@ -25,9 +26,9 @@ void first_meaningful(char *str,char *ptr)
     }
 }
 
-void first_meaningful(char *str,char *ptr,list<string> &args,list<uint32_t> &num)
+void first_meaningful(char *str,char **ptr,list<string> &args,list<uint32_t> &num)
 {
-    ptr = str;
+    *ptr = str;
 
     list<string>::const_iterator iter_args;
     list<uint32_t>::iterator iter_num;
@@ -41,9 +42,9 @@ void first_meaningful(char *str,char *ptr,list<string> &args,list<uint32_t> &num
 
     while (1) {
         for (;iter_args != args.cend();++iter_args,++iter_num) {
-            if (strlen(ptr) >= iter_args->length() && strncmp(ptr,iter_args->c_str(),iter_args->length()) == 0) {
+            if (strlen(*ptr) >= iter_args->length() && strncmp(*ptr,iter_args->c_str(),iter_args->length()) == 0) {
                 (*iter_num) ++;
-                ptr += iter_args->length();
+                *ptr += iter_args->length();
                 break;
             }
         }
@@ -85,18 +86,23 @@ sequence::sequence(const std::string &path)
     _err_line = 0;
 }
 
+sequence::~sequence()
+{
+    if (_fp != nullptr) {
+        fclose(_fp);
+        _fp = nullptr;
+    }
+}
+
 int32_t sequence::parse()
 {
     char *str = _buf;
 
-    read_one_line(&str,false,true);
-
-    syntax(str);
-
-
-    if (strlen(str) == 0 || *str == ' ') {
-        COMPILER_ERR("The tree must begin with a root node.");
+    while (!read_one_line(&str,false,true)) {
+        syntax(str);
     }
+
+    return 0;
 }
 
 int32_t sequence::parse_vendor()
@@ -205,27 +211,19 @@ uint32_t sequence::tree_node_floor()
     return sum;
 }
 
-int32_t sequence::parse_tree_node(char **str)
-{
-    char *ptr = *str;
-
-//    if (ptr[strlen(ptr) - 1] == ':') {
-//        _err
-//    }
-
-
-    return 0;
-}
-
 int32_t sequence::read_one_line(char **str,const bool trim_front,const bool trim_back,const bool err_if_empty)
 {
     ZERO_ARRAY(_buf);
     char *str_temp = _buf;
     bool err_lf = false;
 
+    if (feof(_fp)) {
+        return -1;
+    }
+
     while (!feof(_fp)) {
         if (fgets(_buf,sizeof(_buf),_fp) == nullptr) {
-            return -1;
+            return -2;
         }
 
         _cur_line ++;
@@ -255,28 +253,54 @@ int32_t sequence::read_one_line(char **str,const bool trim_front,const bool trim
     }
 
     if (err_lf) {
-        return -2;
+        return -3;
     }
 
-    if (_cur_line < 3) {
-        return 0;
-    }
-
+    return 0;
 }
 
 int32_t sequence::syntax(char *str)
 {
-    if (last_meaningful(str) == ':') {
-        syntax_config(str);
-    }
-
     char *ptr = str;
+    char keyword_include[] = "include";
+
+    if (strchr(str,':')) {
+        return syntax_config(str);
+    }
 
     first_meaningful(str,ptr);
 
-    if (strchr(ptr,':')) {
-
+    if (strncmp(ptr,keyword_include,strlen(keyword_include)) == 0) {
+        return syntax_include(str);
     }
+
+    return syntax_tree(str);
+}
+
+int32_t sequence::syntax_include(char *str)
+{
+    const char keyword[] = "include";
+    string sub_path;
+
+    str += strlen(keyword);
+
+    trim_front(&str);
+
+    if (*str != '(') {
+        COMPILER_ERR("Missing \'(\' after keyword " + string(keyword));
+    }
+
+    if (str[strlen(str) - 1] != ')') {
+        COMPILER_ERR("Missing \')\' at the end of \"" + string(keyword) + ("\" statement."));
+    }
+
+    if (strlen(str) == 2) {
+        COMPILER_ERR("Empty sub sequence path.");
+    }
+
+    sub_path.assign(str + 1,str + strlen(str) - 1);
+    sub_sequence.push_back(sequence(sub_path));
+
     return 0;
 }
 
@@ -285,11 +309,10 @@ int32_t sequence::syntax_tree(char *str)
     list<string> args = {"    ","\t"};
     list<uint32_t> num;
     uint32_t sum_args = 0;
-    list<list<string>>::const_iterator iter_tree = tree.cbegin();
 
     char *ptr = str;
 
-    first_meaningful(str,ptr,args,num);
+    first_meaningful(str,&ptr,args,num);
     sum_args = sum(num);
 
     if (*str == ' ') {
@@ -298,9 +321,9 @@ int32_t sequence::syntax_tree(char *str)
     }
 
     if (sum_args == 0) {
-        syntax_config_header(ptr);
+        syntax_tree_header(ptr);
     } else {
-        syntax_config_config(ptr,sum_args);
+        syntax_tree_tree(ptr,sum_args);
     }
 
     return 0;
@@ -314,7 +337,7 @@ int32_t sequence::syntax_tree_header(char *str)
 
     trim_back(str);
 
-    for (size_t i = 0;i < strlen(invalid_char);++i) {
+    for (size_t i = 0;i < ARRAY_SIZE(invalid_char);++i) {
         if (strchr(str,invalid_char[i])) {
             COMPILER_ERR(fmt::format("Invalid char : \"{:c}\".",invalid_char[i]));
         }
@@ -334,50 +357,30 @@ int32_t sequence::syntax_tree_header(char *str)
 
 int32_t sequence::syntax_tree_tree(char *str,const uint32_t floor)
 {
-//    const list<string> seperator = {":"};
-//    list<string> seperated_config;
-//    line_t last_line = lines.back();
+    list<line_t>::const_reverse_iterator iter_lines = lines.crbegin();
+    list<string>::const_iterator iter_tree;
 
-//    if (last_line.syntax == Empty) {
-//        COMPILER_ERR(fmt::format("Extra empty line {:d};",_cur_line - 1));
-//    }
+    for (;iter_lines != lines.crend();iter_lines ++) {
+        if (iter_lines->syntax == Empty) { continue; }
+        if (iter_lines->syntax == Tree_Node) { break; }
 
-//    if (last_line.syntax != Tree_Node) {
-//        COMPILER_ERR("Sub tree node must have a parent node.");
-//    }
+        COMPILER_ERR("Can not find the parent tree node.");
+    }
 
-//    config_node_t node;
-//    config_node_t *last_node = nullptr;
-//    config_node_t *parent_node = nullptr;
+    if (tree.back().size() - 1 < floor) {
+        tree.back().push_back(str);
+    } else {
+        list<string> node;
+        iter_tree = tree.back().cbegin();
 
-//    last_config_node(last_node,parent_node);
+        for (uint32_t i = 0;i < floor;++i,++iter_tree) {
+            node.push_back(*iter_tree);
+        }
+        node.push_back(str);
+        tree.push_back(node);
+    }
 
-//    if (last_node == nullptr) {
-//        COMPILER_ERR("No root config found.");
-//    }
-
-//    uint32_t floor_jump = floor - last_node->floor;
-
-//    if (floor_jump > 1) {
-//        COMPILER_ERR("Too deep config.");
-//    }
-
-//    split(str,seperator,seperated_config);
-
-//    if (seperated_config.size() != 2) {
-//        COMPILER_ERR("Too many \":\".");
-//    }
-
-//    node.floor = floor;
-//    node.str = seperated_config.front();
-//    node.config = seperated_config.back();
-
-//    if (floor_jump == 0) {
-//        parent_node->sub_node.push_back(node);
-//    } else {
-//        last_node->sub_node.push_back(node);
-//    }
-
+    add_line(Tree_Node,&tree.back());
     return 0;
 }
 
@@ -386,11 +389,10 @@ int32_t sequence::syntax_config(char *str)
     list<string> args = {"    ","\t"};
     list<uint32_t> num;
     uint32_t sum_args = 0;
-    list<list<string>>::const_iterator iter_tree = tree.cbegin();
 
     char *ptr = str;
 
-    first_meaningful(str,ptr,args,num);
+    first_meaningful(str,&ptr,args,num);
     sum_args = sum(num);
 
     if (*str == ' ') {
@@ -438,20 +440,24 @@ int32_t sequence::syntax_config_header(char *str)
         }
     }
 
+    ::trim_back(str,2,' ',':');
     root_node.floor = 0;
     root_node.str = str;
 
-    for (;iter_tree != tree.cend();++iter_tree) {
-        for (iter_each_tree = iter_tree->cbegin();iter_each_tree != iter_tree->cend();++iter_each_tree) {
-            if (*iter_config_nodes == *iter_each_tree) {
-                iter_config_nodes ++;
+    iter_config_nodes = config_nodes.begin();
 
-                if (iter_config_nodes == config_nodes.cend()) {
-                    match_sum ++;
-                }
-            }
-        }
-    }
+//    for (;iter_tree != tree.cend();++iter_tree) {
+//        for (iter_each_tree = (*iter_tree).cbegin();iter_each_tree != (*iter_tree).cend();++iter_each_tree) {
+//            if (*iter_config_nodes == *iter_each_tree) {
+//                iter_config_nodes ++;
+
+//                if (iter_config_nodes == config_nodes.cend()) {
+//                    match_sum ++;
+//                    iter_config_nodes --;
+//                }
+//            }
+//        }
+//    }
 
     if (match_sum > 1) {
         COMPILER_ERR("Conflicted defination found.");
@@ -478,15 +484,19 @@ int32_t sequence::syntax_config_config(char *str,const uint32_t floor)
 
     config_node_t node;
     config_node_t *last_node = nullptr;
-    config_node_t *parent_node = nullptr;
+    config_node_t *parent_node = &config_root_node.back();
 
-    last_config_node(last_node,parent_node);
+    while (floor - parent_node->floor != 1) {
+        parent_node = &(parent_node->sub_node.back());
+    }
+
+    last_config_node(&last_node,nullptr);
 
     if (last_node == nullptr) {
         COMPILER_ERR("No root config found.");
     }
 
-    uint32_t floor_jump = floor - last_node->floor;
+    int32_t floor_jump = floor - last_node->floor;
 
     if (floor_jump > 1) {
         COMPILER_ERR("Too deep config.");
@@ -494,36 +504,37 @@ int32_t sequence::syntax_config_config(char *str,const uint32_t floor)
 
     split(str,seperator,seperated_config);
 
-    if (seperated_config.size() != 2) {
-        COMPILER_ERR("Too many \":\".");
-    }
-
     node.floor = floor;
     node.str = seperated_config.front();
     node.config = seperated_config.back();
 
-    if (floor_jump == 0) {
-        parent_node->sub_node.push_back(node);
-    } else {
-        last_node->sub_node.push_back(node);
-    }
+    parent_node->sub_node.push_back(node);
 
     return 0;
 }
 
-void sequence::last_config_node(config_node_t *node, config_node_t *parent)
+void sequence::last_config_node(config_node_t **node, config_node_t **parent)
 {
-    if (config_root_node.empty()) {
-        node = nullptr;
-        parent = nullptr;
+    if (node == nullptr) {
         return;
     }
 
-    node = &config_root_node.back();
+    if (parent != nullptr) {
+        *parent = nullptr;
+    }
 
-    while (!node->sub_node.empty()) {
-        parent = node;
-        node = &node->sub_node.back();
+    if (config_root_node.empty()) {
+        *node = nullptr;
+        return;
+    }
+
+    *node = &config_root_node.back();
+
+    while (!(*node)->sub_node.empty()) {
+        if (parent != nullptr) {
+            *parent = *node;
+        }
+        *node = &(*node)->sub_node.back();
     }
 }
 
@@ -541,3 +552,72 @@ uint32_t sequence::trim_back(char *ptr)
 
 uint32_t sequence::trim_back(string &str)
 { return ::trim_back(str,3,'\n',' ','\t'); }
+
+void sequence::print_vendor()
+{
+    cout << "Vendor : " << vendor << endl;
+}
+
+void sequence::print_product()
+{
+    list<string>::const_iterator iter = product.cbegin();
+
+    for (;iter != product.cend();++iter) {
+        cout << "Product : " << *iter << endl;
+    }
+    cout << endl;
+}
+
+void sequence::print_include()
+{
+    list<sequence>::const_iterator iter;
+
+    for (iter = sub_sequence.cbegin();iter != sub_sequence.cend();++iter) {
+        cout << "include(" << iter->path() << ")" << endl;
+    }
+    cout << endl;
+}
+
+void sequence::print_tree()
+{
+    list<list<string>>::const_iterator iter_tree = tree.cbegin();
+    list<string>::const_iterator iter_each_tree;
+
+    for (;iter_tree != tree.cend();++iter_tree) {
+        iter_each_tree = iter_tree->cbegin();
+        cout << *iter_each_tree;
+
+        iter_each_tree ++;
+
+        for (;iter_each_tree != iter_tree->cend();++iter_each_tree) {
+            cout << " << " << *iter_each_tree;
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void print_sub_config(const config_node_t *node)
+{
+    list<config_node_t>::const_iterator iter;
+
+    for (uint32_t i = 0;i < node->floor;++i) {
+        cout << "\t";
+    }
+
+    cout << node->str << " : " << node->config << endl;;
+
+    for (iter = node->sub_node.cbegin();iter != node->sub_node.cend();++iter) {
+        print_sub_config(&(*iter));
+    }
+}
+
+void sequence::print_config()
+{
+    list<config_root_node_t>::const_iterator iter;
+
+    for (iter = config_root_node.cbegin();iter != config_root_node.cend();++iter) {
+        print_sub_config(&(*iter));
+        cout << endl;
+    }
+}

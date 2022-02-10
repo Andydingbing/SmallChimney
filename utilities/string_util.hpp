@@ -116,9 +116,11 @@ uint32_t trim_back(char *ptr,const T n,...);
 uint32_t trim_back(std::string &str,std::list<char> &args)
 {
     char *ptr = const_cast<char *>(str.c_str());
-    uint32_t n = trim_back(&ptr,args);
+    uint32_t n = trim_back(ptr,args);
 
-    str.erase(ptr - str.c_str(),n);
+    for (uint32_t i = 0;i < n;++i) {
+        str.pop_back();
+    }
     return n;
 }
 

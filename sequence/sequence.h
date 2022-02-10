@@ -44,13 +44,14 @@ public:
 
 public:
     sequence(const std::string &path);
+    ~sequence();
 
+    std::string path() const { return _path; }
     std::string err() const { return _err; }
     size_t err_line() const { return _err_line; }
 
     int32_t parse_vendor();
     int32_t parse_product();
-    int32_t parse_tree_node(char **str);
     int32_t parse();
 
 private:
@@ -61,6 +62,8 @@ private:
     int32_t read_one_line(char **str = nullptr,const bool trim_front = true,const bool trim_back = true,const bool err_if_empty = false);
     int32_t syntax(char *str);
 
+    int32_t syntax_include(char *str);
+
     int32_t syntax_tree(char *str);
     int32_t syntax_tree_header(char *str);
     int32_t syntax_tree_tree(char *str,const uint32_t floor);
@@ -69,13 +72,20 @@ private:
     int32_t syntax_config_header(char *str);
     int32_t syntax_config_config(char *str,const uint32_t floor);
 
-    void last_config_node(config_node_t *node,config_node_t *parent);
+    void last_config_node(config_node_t **node,config_node_t **parent);
 
     uint32_t trim_front(char **ptr);
     uint32_t trim_front(char *ptr);
     uint32_t trim_front(std::string &str);
     uint32_t trim_back(char *ptr);
     uint32_t trim_back(std::string &str);
+
+public:
+    void print_vendor();
+    void print_product();
+    void print_include();
+    void print_tree();
+    void print_config();
 
 public:
     std::list<line_t> lines;
@@ -96,7 +106,6 @@ private:
     size_t _cur_line;
     size_t _err_line;
     std::string _err;
-
 };
 
 #endif

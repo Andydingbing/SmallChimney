@@ -138,7 +138,7 @@ uint32_t trim_back(char **ptr,const T n,...)
     }
 
     va_end(ap);
-    return trim_back<char>(ptr,args);
+    return trim_back(ptr,args);
 }
 
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
