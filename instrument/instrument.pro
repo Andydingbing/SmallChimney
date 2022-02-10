@@ -30,5 +30,4 @@ pm_rs_nrp.cpp \
 ps.cpp \
 sa.cpp \
 sa_rs_fsup.cpp \
-sg.cpp \
-python.cpp
+sg.cpp

@@ -33,12 +33,10 @@ win32-g++ {
     VAR_LIB_ROOT = C:/msys64/mingw$$VAR_ARCH_BIT/lib
 
     LIBS += \
-        -lpython3.9.dll \
         -lboost_timer-mt \
         -lboost_chrono-mt \
         -lboost_system-mt \
         -lboost_filesystem-mt \
-        -lboost_python39-mt \
         -lfmt
 }
 
@@ -49,12 +47,10 @@ win32-clang-g++ {
     VAR_LIB_ROOT = C:/msys64/clang$$VAR_ARCH_BIT/lib
 
     LIBS += \
-        -lpython3.9.dll \
         -lboost_timer-mt \
         -lboost_chrono-mt \
         -lboost_system-mt \
         -lboost_filesystem-mt \
-        -lboost_python39-mt \
         -lfmt
 }
 
@@ -93,7 +89,6 @@ linux-g++ {
         -lboost_chrono \
         -lboost_system \
         -lboost_filesystem \
-        -lboost_python \
         -lfmt
 }
 
@@ -140,8 +135,6 @@ INCLUDEPATH += \
     ../../utilities \
     ../../utilities/ctd \
     ../Qt
-
-DEFINES += BOOST_PYTHON_STATIC_LIB
 
 contains(DEFINES,product) {
     DESTDIR = ../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
