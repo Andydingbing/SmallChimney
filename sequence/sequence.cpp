@@ -545,7 +545,7 @@ uint32_t sequence::trim_front(char *ptr)
 { return ::trim_front(ptr,2,' ','\t'); }
 
 uint32_t sequence::trim_front(string &str)
-{ return ::trim_front<string>(str,2,' ','\t'); }
+{ return ::trim_front(str,2,' ','\t'); }
 
 uint32_t sequence::trim_back(char *ptr)
 { return ::trim_back(ptr,3,'\n',' ','\t'); }

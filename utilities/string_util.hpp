@@ -19,6 +19,7 @@
 #include "global_header.h"
 #include "traits.hpp"
 #include <string>
+#include "stdarg.h"
 #include "stdio.h"
 /*
  * trim_front(&ptr,args) :
@@ -69,15 +70,14 @@ uint32_t trim_front(str_t &str,container_t<char> &args)
     return n;
 }
 
-template<typename str_t,typename T = int32_t,typename traits_t = traits_int<T>>
-uint32_t trim_front(std::string &str,const T n,...)
+uint32_t trim_front(std::string &str,const size_t n,...)
 {
     std::list<char> args;
     va_list ap;
 
     va_start(ap,n);
 
-    for (T i = 0;i < n;++i) {
+    for (size_t i = 0;i < n;++i) {
         args.push_back(char(va_arg(ap,int)));
     }
 
@@ -124,15 +124,14 @@ uint32_t trim_back(std::string &str,std::list<char> &args)
     return n;
 }
 
-template<typename T = int32_t,typename traits_t = traits_int<T>>
-uint32_t trim_back(std::string &str,const T n,...)
+uint32_t trim_back(std::string &str,const size_t n,...)
 {
     std::list<char> args;
     va_list ap;
 
     va_start(ap,n);
 
-    for (T i = 0;i < n;++i) {
+    for (size_t i = 0;i < n;++i) {
         args.push_back(char(va_arg(ap,int)));
     }
 

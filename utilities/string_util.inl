@@ -51,15 +51,14 @@ uint32_t trim_front(const char* const src,const char **ptr,container_t<char> &ar
     return trim_front(&ptr,args);
 }
 
-template<typename T,typename traits_t>
-uint32_t trim_front(char **ptr,const T n,...)
+uint32_t trim_front(char **ptr,const size_t n,...)
 {
     std::list<char> args;
     va_list ap;
 
     va_start(ap,n);
 
-    for (T i = 0;i < n;++i) {
+    for (size_t i = 0;i < n;++i) {
         args.push_back(char(va_arg(ap,int)));
     }
 
@@ -77,15 +76,14 @@ uint32_t trim_front(char *ptr,container_t<char> &args)
     return n;
 }
 
-template<typename T,typename traits_t>
-uint32_t trim_front(char *ptr,const T n,...)
+uint32_t trim_front(char *ptr,const size_t n,...)
 {
     std::list<char> args;
     va_list ap;
 
     va_start(ap,n);
 
-    for (T i = 0;i < n;++i) {
+    for (size_t i = 0;i < n;++i) {
         args.push_back(char(va_arg(ap,int)));
     }
 
@@ -125,15 +123,14 @@ uint32_t trim_back(const char* const src,const char **ptr,container_t<char> &arg
     return trim_back(&ptr,args);
 }
 
-template<typename T,typename traits_t>
-uint32_t trim_back(char **ptr,const T n,...)
+uint32_t trim_back(char **ptr,const size_t n,...)
 {
     std::list<char> args;
     va_list ap;
 
     va_start(ap,n);
 
-    for (T i = 0;i < n;++i) {
+    for (size_t i = 0;i < n;++i) {
         args.push_back(char(va_arg(ap,int)));
     }
 
@@ -154,15 +151,14 @@ uint32_t trim_back(char *ptr,container_t<char> &args)
     return n;
 }
 
-template<typename T,typename traits_t>
-uint32_t trim_back(char *ptr,const T n,...)
+uint32_t trim_back(char *ptr,const size_t n,...)
 {
     std::list<char> args;
     va_list ap;
 
     va_start(ap,n);
 
-    for (T i = 0;i < n;++i) {
+    for (size_t i = 0;i < n;++i) {
         args.push_back(char(va_arg(ap,int)));
     }
 
