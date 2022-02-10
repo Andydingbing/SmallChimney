@@ -21,6 +21,7 @@
 #include <string>
 #include "stdarg.h"
 #include "stdio.h"
+
 /*
  * trim_front(&ptr,args) :
  * trim_front(src,&ptr,args) :
@@ -50,14 +51,12 @@ uint32_t trim_front(char **ptr,container_t<char> &args);
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_front(const char* const src,const char **ptr,container_t<char> &args);
 
-template<typename T = int32_t,typename traits_t = traits_int<T>>
-uint32_t trim_front(char **ptr,const T n,...);
+uint32_t trim_front(char **ptr,const size_t n,...);
 
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_front(char *ptr,container_t<char> &args);
 
-template<typename T = int32_t,typename traits_t = traits_int<T>>
-uint32_t trim_front(char *ptr,const T n,...);
+uint32_t trim_front(char *ptr,const size_t n,...);
 
 template<typename str_t,
          template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
@@ -104,14 +103,12 @@ uint32_t trim_back(char **ptr,container_t<char> &args);
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_back(const char* const src,const char **ptr,container_t<char> &args);
 
-template<typename T = int32_t,typename traits_t = traits_int<T>>
-uint32_t trim_back(char **ptr,const T n,...);
+uint32_t trim_back(char **ptr,const size_t n,...);
 
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_back(char *ptr,container_t<char> &args);
 
-template<typename T = int32_t,typename traits_t = traits_int<T>>
-uint32_t trim_back(char *ptr,const T n,...);
+uint32_t trim_back(char *ptr,const size_t n,...);
 
 uint32_t trim_back(std::string &str,std::list<char> &args)
 {
