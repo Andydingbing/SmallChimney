@@ -12,7 +12,14 @@
     _err_line = _cur_line; \
     if (!_continue_when_err) { \
         return -1; \
-    }; \
+    } \
+}
+
+#define ASSERT(func) \
+{   int32_t ret = (func); \
+    if (ret && !_continue_when_err) { \
+        return ret; \
+    } \
 }
 
 using namespace std;
@@ -96,10 +103,13 @@ sequence::~sequence()
 
 int32_t sequence::parse()
 {
+    ASSERT(parse_vendor());
+    ASSERT(parse_product());
+
     char *str = _buf;
 
     while (!read_one_line(&str,false,true)) {
-        syntax(str);
+        ASSERT(syntax(str));
     }
 
     return 0;
@@ -555,7 +565,9 @@ uint32_t sequence::trim_back(string &str)
 
 void sequence::print_vendor()
 {
-    cout << "Vendor : " << vendor << endl;
+    if (!vendor.empty()) {
+        cout << "Vendor : " << vendor << endl;
+    }
 }
 
 void sequence::print_product()

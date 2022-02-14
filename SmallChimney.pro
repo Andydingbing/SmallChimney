@@ -17,8 +17,10 @@ $$DEVICES
 
 instrument.depends = driver
 report.depends = log
+sequence_compiler.depends = sequence
 
 DDT.depends = log driver
 RTS.depends = \
+    sequence \
     instrument \
     $$DEVICES

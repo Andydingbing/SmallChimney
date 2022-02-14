@@ -6,9 +6,7 @@ TEMPLATE = lib
 DEFINES += DLL_EXPORT
 
 HEADERS += \
-    sequence.h \
-    parser.h
+    sequence.h
 
 SOURCES += \
-    sequence.cpp \
-    parser.cpp
+    sequence.cpp
