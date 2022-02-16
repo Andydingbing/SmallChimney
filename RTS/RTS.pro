@@ -23,6 +23,7 @@ LIBS += \
 -ldriver \
 -linstrument \
 -lreport \
+-lsequence \
 -lEricsson_Radio_4415 \
 -lEricsson_Air_3268
 
@@ -50,6 +51,7 @@ HEADERS += \
     ../Qt/thread_widget.h \
     ../Qt/qwt_plot_helper.h \
     main_thread.h \
+    main_dialog.h \
     mainwindow.h \
     log_model.hpp \
     child_widget_helper.h \
@@ -64,12 +66,14 @@ SOURCES += \
     global.cpp \
     main.cpp \
     main_thread.cpp \
+    main_dialog.cpp \
     mainwindow.cpp \
     child_widget_helper.cpp \
     device_init_thread.cpp \
     winthread.cpp
 
 FORMS += \
+    main_dialog.ui \
     mainwindow.ui \
     common/sp1403_r1a.ui \
     common/config_result.ui

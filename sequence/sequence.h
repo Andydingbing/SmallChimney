@@ -47,12 +47,12 @@ public:
     ~sequence();
 
     std::string path() const { return _path; }
-    std::string err() const { return _err; }
+    std::string err() const;
     size_t err_line() const { return _err_line; }
 
+    int32_t compile();
     int32_t parse_vendor();
     int32_t parse_product();
-    int32_t parse();
 
 private:
     void add_line(const syntax_t s,void *d = nullptr)

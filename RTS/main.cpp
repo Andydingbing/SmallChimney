@@ -1,15 +1,24 @@
 #include "mainwindow.h"
+#include "main_dialog.h"
 #include <QApplication>
 #include <QStyleFactory>
 #include <QStyle>
 
-void addMsgListCallback() {g_MainW->addMsgListCallback();}
+void addMsgListCallback() { g_MainW->addMsgListCallback(); }
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     LoggerMsg.init(addMsgListCallback);
+
+    MainDialog *mainDialog = new MainDialog;
+    mainDialog->setWindowTitle(QString("Mode Select"));
+    mainDialog->exec();
+
+    if (mainDialog->result() == QDialog::Rejected) {
+        return 0;
+    }
 
     g_MainW = new MainWindow;
     g_MainW->setWindowTitle(QString("Radio Test System"));

@@ -101,7 +101,12 @@ sequence::~sequence()
     }
 }
 
-int32_t sequence::parse()
+string sequence::err() const
+{
+    return _err.size() ? fmt::format("Line {:d}:",_err_line) + _err : "";
+}
+
+int32_t sequence::compile()
 {
     ASSERT(parse_vendor());
     ASSERT(parse_product());
@@ -121,7 +126,7 @@ int32_t sequence::parse_vendor()
     const char header_vendor[] = "Vendor";
 
     fseek(_fp,0,SEEK_SET);
-    read_one_line(&str);
+    ASSERT(read_one_line(&str));
 
     if (strncmp(str,header_vendor,strlen(header_vendor))) {
         COMPILER_ERR("Must start with \"Vendor\".");
@@ -223,6 +228,10 @@ uint32_t sequence::tree_node_floor()
 
 int32_t sequence::read_one_line(char **str,const bool trim_front,const bool trim_back,const bool err_if_empty)
 {
+    if (_fp == nullptr) {
+        COMPILER_ERR("Can not open " + _path);
+    }
+
     ZERO_ARRAY(_buf);
     char *str_temp = _buf;
     bool err_lf = false;

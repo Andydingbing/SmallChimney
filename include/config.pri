@@ -130,6 +130,8 @@ INCLUDEPATH += \
     ../report \
     ../../report \
     ../instrument \
+    ../sequence \
+    ../../sequence \
     ../utilities \
     ../utilities/ctd \
     ../../utilities \

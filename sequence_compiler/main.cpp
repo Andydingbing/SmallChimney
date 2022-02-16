@@ -9,7 +9,7 @@ int main(int argv,char *argc[])
 {
     sequence s("C:\\test_sequence.ts");
 
-    s.parse();
+    s.compile();
     COMPILER_ERR;
 
     s.print_vendor();
