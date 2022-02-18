@@ -3,6 +3,7 @@
 #include <QTreeWidgetItem>
 
 Project project = Ericsson_Radio_4415_B3;
+Mode mode = Sequence;
 
 quint32 RFIdx = 0;
 quint32 RFUIdx = 0;

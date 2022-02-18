@@ -12,6 +12,7 @@
 
 #include "thread_widget.h"
 #include "device_init_thread.h"
+#include "sequence.h"
 
 class ChildWidgetHelper;
 
@@ -22,6 +23,12 @@ class QMenu;
 class QAction;
 
 class QMsgLogModel;
+
+struct MapProjectMenu {
+    Project project;
+    QStringList menu;
+    MapProjectMenu(const Project p, const QString &m);
+};
 
 class MainWindow : public QMainWindow
 {
@@ -73,9 +80,13 @@ public slots:
     bool ftpRetryBox() { return ::ftpRetryBox(); }
 
 public:
+    bool verifySequence(const QString &path);
+    void addMapProjectMenu(const Project project,const QString &menu);
     void addMsgListCallback() { emit addMsgList(int(Log.msgs())); }
 
 private:
+    void initMenu();
+    void initToolBar();
     void initStatusBar();
     void initMainTreeWidget();
     void initMainTabWidget();
@@ -93,6 +104,9 @@ private slots:
     void runThread(const int idx);
 
     void mainTab_currentChanged(int index);
+
+public:
+    QList<MapProjectMenu> mapProjectMenu;
 
 public:
     Ui::MainWindow *ui;
@@ -116,5 +130,6 @@ public:
 
 extern MainWindow *g_MainW;
 extern Project project;
+extern sequence mainSequence;
 
-#endif // MAIN_WINDOW_H
+#endif

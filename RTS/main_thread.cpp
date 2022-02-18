@@ -20,12 +20,12 @@ void Q_Main_Thread::run()
 {
     QList<bool> checkList = g_MainW->currentWidgets->checkList();
     QList<bool>::const_iterator iterCheckList = checkList.constBegin();
-    QList<ChildWidgetHelper::TreeChildItem *> *items = &(g_MainW->currentWidgets->_items);
-    QList<ChildWidgetHelper::TreeChildItem *>::const_iterator iterChildItem = items->constBegin();
+//    QList<ChildWidgetHelper::TreeChildItem *> *items = &(g_MainW->currentWidgets->_items);
+//    QList<ChildWidgetHelper::TreeChildItem *>::const_iterator iterChildItem = items->constBegin();
 
     int i = 0;
 
-    for (;iterCheckList != checkList.constEnd();++iterCheckList,++iterChildItem) {
+    for (;iterCheckList != checkList.constEnd();++iterCheckList/*,++iterChildItem*/) {
         if (*iterCheckList) {
             emit prepare(i);
             waitChildThread(0,i);

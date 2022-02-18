@@ -303,7 +303,7 @@ int32_t basic_report<item_table_t>::load()
 
             iter_tables->second->freq_sequence()->clear();
             iter_tables->second->map_from(convert_buf.buf,(*iter_th).pts);
-            sequence::parse(iter_th->freq_str,iter_tables->second->freq_sequence());
+            ns_sequence::parse(iter_th->freq_str,iter_tables->second->freq_sequence());
 
             Log.stdprintf("freq string %s : \n",iter_th->freq_str);
         }

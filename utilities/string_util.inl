@@ -171,15 +171,15 @@ template<typename seperator_string_t,
          typename result_string_t,
          template<typename _Tp = seperator_string_t,typename allocator_t = std::allocator<_Tp>> class seperator_container_t,
          template<typename _Tp = result_string_t,   typename allocator_t = std::allocator<_Tp>> class result_container_t>
-void split(char *ptr,const seperator_container_t<seperator_string_t> &seperator,result_container_t<result_string_t> &result)
+void split(const char *ptr,const seperator_container_t<seperator_string_t> &seperator,result_container_t<result_string_t> &result)
 {
     if (ptr == nullptr) {
         return;
     }
 
     result_string_t each_string;
-    char *left = ptr;
-    char *right = ptr;
+    char *left = const_cast<char *>(ptr);
+    char *right = const_cast<char *>(ptr);
     typename seperator_container_t<seperator_string_t>::const_iterator iter;
 
     while (right < ptr + strlen(ptr)) {

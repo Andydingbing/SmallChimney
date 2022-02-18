@@ -81,16 +81,31 @@ bool is_empty_line(char *str)
     return true;
 }
 
+bool contain(const list<string> *l,const list<list<string>> *ll)
+{
+    if (l == nullptr || ll == nullptr) {
+        return false;
+    }
+
+    list<list<string>>::const_iterator iter_ll;
+
+    for (iter_ll = ll->cbegin();iter_ll != ll->cend();++iter_ll) {
+        if (*iter_ll == *l) {
+            return true;
+        }
+    }
+    return false;
+}
+
+sequence::sequence()
+{
+    init();
+}
+
 sequence::sequence(const std::string &path)
 {
-    _path = path;
-    _fp = fopen(path.c_str(),"r");
-
-    ZERO_ARRAY(_buf);
-
-    _continue_when_err = false;
-    _cur_line = 0;
-    _err_line = 0;
+    init();
+    set_path(path);
 }
 
 sequence::~sequence()
@@ -101,9 +116,31 @@ sequence::~sequence()
     }
 }
 
+void sequence::init()
+{
+    ZERO_ARRAY(_buf);
+
+    _fp = nullptr;
+    _continue_when_err = false;
+    _cur_line = 0;
+    _err_line = 0;
+
+    tree_builtin = nullptr;
+}
+
 string sequence::err() const
 {
     return _err.size() ? fmt::format("Line {:d}:",_err_line) + _err : "";
+}
+
+void sequence::set_path(const string &path)
+{
+    _path = path;
+
+    if (_fp) {
+        fclose(_fp);
+    }
+    _fp = fopen(path.c_str(),"r");
 }
 
 int32_t sequence::compile()
@@ -118,6 +155,24 @@ int32_t sequence::compile()
     }
 
     return 0;
+}
+
+void sequence::resort(const list<list<string>> &t,list<list<string *>> &sorted_tree)
+{
+    list<string *> each_list;
+    list<string>::iterator iter_l;
+    list<list<string>>::iterator iter_ll;
+
+    for (iter_ll = tree.begin();iter_ll != tree.end();++iter_ll) {
+        if (contain(&(*iter_ll),&t)) {
+            each_list.clear();
+
+            for (iter_l = iter_ll->begin();iter_l != iter_ll->end();++iter_l) {
+                each_list.push_back(&(*iter_l));
+            }
+            sorted_tree.push_back(each_list);
+        }
+    }
 }
 
 int32_t sequence::parse_vendor()
@@ -378,6 +433,7 @@ int32_t sequence::syntax_tree_tree(char *str,const uint32_t floor)
 {
     list<line_t>::const_reverse_iterator iter_lines = lines.crbegin();
     list<string>::const_iterator iter_tree;
+    list<string> node;
 
     for (;iter_lines != lines.crend();iter_lines ++) {
         if (iter_lines->syntax == Empty) { continue; }
@@ -389,17 +445,22 @@ int32_t sequence::syntax_tree_tree(char *str,const uint32_t floor)
     if (tree.back().size() - 1 < floor) {
         tree.back().push_back(str);
     } else {
-        list<string> node;
         iter_tree = tree.back().cbegin();
 
         for (uint32_t i = 0;i < floor;++i,++iter_tree) {
             node.push_back(*iter_tree);
         }
         node.push_back(str);
+
+//        if (!contain(&tree.back(),tree_builtin)) {
+//            COMPILER_ERR("Not defined tree node.");
+//        }
+
         tree.push_back(node);
     }
 
     add_line(Tree_Node,&tree.back());
+
     return 0;
 }
 

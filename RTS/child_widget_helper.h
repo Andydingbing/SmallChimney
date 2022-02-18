@@ -8,17 +8,17 @@
 namespace Ui { class MainWindow; }
 
 #define DECL_TREE(list,kase_class,n) \
-    { \
-        QList<kase_class *> * kase_class##s = new QList<kase_class *>; \
-        QStringList str; \
-        _items.append(new TreeChildItem(str << list,Qt::Checked,kase_class##s)); \
-        for (size_t i = 0;i < n;i ++) { \
-            kase_class##s->push_back(new kase_class(parent->mainTab)); \
-            kase_class##s->at(i)->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding); \
-            kase_class##s->at(i)->setVisible(false); \
-            MainWindow::childDlgLayout.addWidget(kase_class##s->at(i)); \
-        } \
-    }
+{ \
+    QList<kase_class *> * kase_class##s = new QList<kase_class *>; \
+    std::string str = list; \
+    treeChildItemsBuiltIn.append(new TreeChildItem(str,Qt::Checked,kase_class##s)); \
+    for (size_t i = 0;i < n;i ++) { \
+        kase_class##s->push_back(new kase_class(parent->mainTab)); \
+        kase_class##s->at(i)->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding); \
+        kase_class##s->at(i)->setVisible(false); \
+        MainWindow::childDlgLayout.addWidget(kase_class##s->at(i)); \
+    } \
+}
 
 
 class QMenu;
@@ -31,17 +31,19 @@ class ChildWidgetHelper : public QObject
 
 public:
     struct TreeChildItem {
-        QStringList stringList;
+        std::list<std::string> stringList;
         Qt::CheckState checkState;
         QList<Q_Widget *> *tabWidgets;
 
-        TreeChildItem(QStringList &_stringList,Qt::CheckState _checkState,void *_tabWidgets = nullptr);
+        TreeChildItem(std::string &str,Qt::CheckState _checkState,void *_tabWidgets = nullptr);
     };
 
     ChildWidgetHelper(MainWindow *_parent);
     Q_Widget *currentWidget();
     Qt::CheckState currentTreeItemCheckState();
 
+    TreeChildItem *containTreeChildItem(const std::list<std::string> &l) const;
+    void reSortTreeChildItem(const sequence &s);
     void setMainTree(const QList<TreeChildItem *> childItems);
     void mainTreeItemClicked(QTreeWidgetItem *item, int column);
     QList<bool> checkList();
@@ -67,9 +69,10 @@ public:
     MainWindow *parent;
     Ui::MainWindow *ui;
 
-    QList<TreeChildItem *> _items;
+    QList<TreeChildItem *> treeChildItemsBuiltIn;
+    QList<TreeChildItem *> treeChildItems;
 
     int _selectedItems;
 };
 
-#endif // CHILD_WIDGET_HELPER_HPP
+#endif

@@ -1,12 +1,18 @@
 #include "child_widget_helper.h"
 #include "mainwindow.h"
+#include "string_util.hpp"
 #include <QString>
 #include <QMenu>
 #include <QAction>
 
-ChildWidgetHelper::TreeChildItem::TreeChildItem(QStringList &_stringList, Qt::CheckState _checkState, void *_tabWidgets)
+using namespace std;
+
+ChildWidgetHelper::TreeChildItem::TreeChildItem(string &str,Qt::CheckState _checkState,void *_tabWidgets)
 {
-    stringList = _stringList;
+    list<string> seperator = {","};
+
+    split(str.c_str(),seperator,stringList);
+
     checkState = _checkState;
 
     if (_tabWidgets != nullptr) {
@@ -59,8 +65,9 @@ quint32 parents(const QTreeWidgetItem *item)
     return i;
 }
 
-bool compare(const QStringList &stringList,const QTreeWidgetItem *item)
+bool compare(const list<string> &stringList,const QTreeWidgetItem *item)
 {
+    list<string>::const_reverse_iterator iter = stringList.crbegin();
     const QTreeWidgetItem *parent = item;
     quint32 i = parents(item);
 
@@ -68,8 +75,8 @@ bool compare(const QStringList &stringList,const QTreeWidgetItem *item)
         return false;
     }
 
-    for (quint32 j = 0;j <= i;j ++) {
-        if (parent->text(0) != stringList.at(i - j)) {
+    for (quint32 j = 0;j <= i;++ j,++ iter) {
+        if (parent->text(0).toStdString() != *iter) {
             return false;
         }
         parent = parent->parent();
@@ -125,13 +132,13 @@ void setCheckStateParent(QTreeWidgetItem *item)
 
 Q_Widget *ChildWidgetHelper::currentWidget()
 {
-    if (_items.empty()) {
+    if (treeChildItems.empty()) {
         return nullptr;
     }
 
     QList<TreeChildItem *>::const_iterator iterItems;
 
-    for (iterItems = _items.constBegin();iterItems != _items.constEnd();++iterItems) {
+    for (iterItems = treeChildItems.constBegin();iterItems != treeChildItems.constEnd();++iterItems) {
         if (compare((*iterItems)->stringList,g_MainW->mainTree->currentItem())) {
             return (*iterItems)->tabWidgets->at(RFIdx);
         }
@@ -141,13 +148,13 @@ Q_Widget *ChildWidgetHelper::currentWidget()
 
 Qt::CheckState ChildWidgetHelper::currentTreeItemCheckState()
 {
-    if (_items.empty()) {
+    if (treeChildItems.empty()) {
         return Qt::Unchecked;
     }
 
     QList<TreeChildItem *>::const_iterator iterItems;
 
-    for (iterItems = _items.constBegin();iterItems != _items.constEnd();++iterItems) {
+    for (iterItems = treeChildItems.constBegin();iterItems != treeChildItems.constEnd();++iterItems) {
         if (compare((*iterItems)->stringList,g_MainW->mainTree->currentItem())) {
             return (*iterItems)->checkState;
         }
@@ -155,21 +162,46 @@ Qt::CheckState ChildWidgetHelper::currentTreeItemCheckState()
     return Qt::Unchecked;
 }
 
+ChildWidgetHelper::TreeChildItem * ChildWidgetHelper::containTreeChildItem(const list<string> &l) const
+{
+    QList<TreeChildItem *>::const_iterator iterItems;
+
+    for (iterItems = treeChildItemsBuiltIn.cbegin();iterItems != treeChildItemsBuiltIn.cend();++iterItems) {
+        if ((*iterItems)->stringList == l) {
+            return *iterItems;
+        }
+    }
+    return nullptr;
+}
+
+void ChildWidgetHelper::reSortTreeChildItem(const sequence &s)
+{
+    list<list<string>>::const_iterator iterLL = s.tree.cbegin();
+    TreeChildItem *item;
+
+    for (;iterLL != s.tree.cend();++iterLL) {
+        if ((item = containTreeChildItem((*iterLL))) != nullptr) {
+            treeChildItems.push_back(item);
+        }
+    }
+}
+
 void ChildWidgetHelper::setMainTree(const QList<TreeChildItem *> childItems)
 {
     QList<TreeChildItem *>::const_iterator iterCI;
     QList<QTreeWidgetItem *>::iterator iterItem;
     QList<QTreeWidgetItem *> rootItems;
-    QStringList::const_iterator iterStr;
+    list<string>::const_iterator iterStr;
 
     for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
         for (iterItem = rootItems.begin();iterItem != rootItems.end();++iterItem) {
-            if (*(*iterCI)->stringList.begin() == (*iterItem)->text(0)) {
+            if (*(*iterCI)->stringList.begin() == (*iterItem)->text(0).toStdString()) {
                 break;
             }
         }
         if (iterItem == rootItems.end()) {
-            QTreeWidgetItem *rootItem = new QTreeWidgetItem(parent->mainTree,QStringList(*((*iterCI)->stringList.begin())));
+            QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
+            QTreeWidgetItem *rootItem = new QTreeWidgetItem(parent->mainTree,QStringList(rootItemText));
             rootItem->setFlags(rootItem->flags() | Qt::ItemIsAutoTristate);
             rootItem->setCheckState(0,Qt::Unchecked);
             rootItems.append(rootItem);
@@ -177,9 +209,13 @@ void ChildWidgetHelper::setMainTree(const QList<TreeChildItem *> childItems)
     }
 
     for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
-        QTreeWidgetItem *root = rootItem(*(*iterCI)->stringList.begin(),rootItems);
-        for (iterStr = (*iterCI)->stringList.constBegin() + 1;iterStr != (*iterCI)->stringList.constEnd();++iterStr) {
-            root = addTreeItem(*iterStr,root);
+        QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
+        QTreeWidgetItem *root = rootItem(rootItemText,rootItems);
+
+        iterStr = (*iterCI)->stringList.cbegin();
+        iterStr ++;
+        for (;iterStr != (*iterCI)->stringList.cend();++iterStr) {
+            root = addTreeItem(QString::fromStdString(*iterStr),root);
         }
     }
 
@@ -193,7 +229,7 @@ void ChildWidgetHelper::mainTreeItemClicked(QTreeWidgetItem *item, int column)
 //    setCheckStateChild(item,item->checkState(0));
 //    setCheckStateParent(item);
 
-    for (iterItems = _items.constBegin();iterItems != _items.constEnd();++iterItems) {
+    for (iterItems = treeChildItems.constBegin();iterItems != treeChildItems.constEnd();++iterItems) {
         if (compare((*iterItems)->stringList,item)) {
             if (item->checkState(0) != (*iterItems)->checkState) {
                 break;
@@ -215,7 +251,7 @@ void ChildWidgetHelper::initChildWidgets()
     QList<Q_Widget *> *tabWidgets;
     QList<Q_Widget *>::iterator iterWidget;
 
-    for (iterTreeItem = _items.begin();iterTreeItem != _items.end();++iterTreeItem) {
+    for (iterTreeItem = treeChildItems.begin();iterTreeItem != treeChildItems.end();++iterTreeItem) {
         tabWidgets = (*iterTreeItem)->tabWidgets;
         for (iterWidget = tabWidgets->begin();iterWidget != tabWidgets->end();++iterWidget) {
             (*iterWidget)->init();
@@ -225,9 +261,9 @@ void ChildWidgetHelper::initChildWidgets()
 
 void ChildWidgetHelper::printItems()
 {
-    QList<TreeChildItem *>::const_iterator iterTCI = _items.constBegin();
+    QList<TreeChildItem *>::const_iterator iterTCI = treeChildItems.constBegin();
 
-    for (;iterTCI != _items.constEnd();++iterTCI) {
+    for (;iterTCI != treeChildItems.constEnd();++iterTCI) {
         LoggerMsg.stdprintf("%s\n",(*iterTCI)->checkState == Qt::Checked ? "checked" : "unchecked");
     }
     LoggerMsg.stdprintf("\n");
@@ -251,7 +287,7 @@ void ChildWidgetHelper::updateCheckState(const QTreeWidgetItem *item, QList<Tree
 
 void ChildWidgetHelper::updateCheckState()
 {
-    QList<TreeChildItem *>::iterator iterTCI = _items.begin();
+    QList<TreeChildItem *>::iterator iterTCI = treeChildItems.begin();
 
     for (int i = 0;i < parent->mainTree->topLevelItemCount();++i) {
         updateCheckState(parent->mainTree->topLevelItem(i),&iterTCI);
@@ -280,7 +316,7 @@ QList<bool> ChildWidgetHelper::checkList()
 {
     QList<bool> list;
 
-    for (int i = 0;i < _items.size();++ i) {
+    for (int i = 0;i < treeChildItems.size();++ i) {
         list.push_back(false);
     }
 
@@ -313,7 +349,7 @@ QList<QTreeWidgetItem *> ChildWidgetHelper::treeWidgetItemList()
 {
     QList<QTreeWidgetItem *> list;
 
-    for (int i = 0;i < _items.size();++ i) {
+    for (int i = 0;i < treeChildItems.size();++ i) {
         list.push_back(nullptr);
     }
 

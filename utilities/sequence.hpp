@@ -22,7 +22,7 @@
 #include <set>
 #include <boost/any.hpp>
 
-namespace sequence {
+namespace ns_sequence {
 
 template<typename T>
 struct arithmetic_sequence_t
@@ -97,9 +97,9 @@ template<typename E = arithmetic_sequence_t<T>> class container_t>
 SYM_INLINE std::string parse(const container_t<arithmetic_sequence_t<T>> &in)
 { return parse<T,container_t<arithmetic_sequence_t<T>>>(in); }
 
-} // namespace sequence
+} // namespace ns_sequence
 
 #include "sequence.inline.hpp"
 
-#endif // RD_UTILITIES_SEQUENCE_HPP
+#endif
 

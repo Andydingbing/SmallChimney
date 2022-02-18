@@ -1,5 +1,5 @@
 #include "main_dialog.h"
-#include "sequence.h"
+#include "mainwindow.h"
 #include <QFileDialog>
 
 MainDialog::MainDialog(QWidget *parent) :
@@ -36,11 +36,10 @@ void MainDialog::on_pushButtonSelectSequence_clicked()
 
 void MainDialog::on_pushButtonCompile_clicked()
 {
-    sequence s(ui->lineEditSequencePath->text().toStdString());
-    int32_t r = s.compile();
+    bool ret = g_MainW->verifySequence(ui->lineEditSequencePath->text());
 
-    ui->textEditCompileError->setText(QString::fromStdString(s.err()));
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!r);
+    ui->textEditCompileError->setText(QString::fromStdString(mainSequence.err()));
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!ret);
 }
 
 void MainDialog::on_checkBoxManualMode_clicked(bool checked)
@@ -54,7 +53,7 @@ void MainDialog::on_checkBoxManualMode_clicked(bool checked)
 
 void MainDialog::on_buttonBox_accepted()
 {
-
+    mode = ui->checkBoxSequenceMode->isChecked() ? Sequence : Manual;
 }
 
 void MainDialog::on_buttonBox_rejected()

@@ -58,15 +58,16 @@ void ChildWidgets::init()
     Radio.set_sn("0001");
     Radio.set_init_callback(initCallback);
 
-    DECL_TREE("Radio" << "Overview",Q_4415_Widget,Radio.channels());
+    DECL_TREE("Radio,Overview",Q_4415_Widget,Radio.channels());
 
-    DECL_TREE("Test" << "TX-ACLR",Q_Test_TX_ACLR_Widget,Radio.channels());
-    DECL_TREE("Test" << "RX-Gain Accuracy",Q_Test_RX_Gain_Accuracy_Widget,Radio.channels());
+    DECL_TREE("Test,TX-ACLR",Q_Test_TX_ACLR_Widget,Radio.channels());
+    DECL_TREE("Test,RX-Gain Accuracy",Q_Test_RX_Gain_Accuracy_Widget,Radio.channels());
 
-    DECL_TREE("Calibration" << "TX-VGA",Q_Cal_TX_VGA_Widget,Radio.channels());
-    DECL_TREE("Calibration" << "RX-RF VGA",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,TX-VGA",Q_Cal_TX_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,RX-RF VGA",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
 
-    setMainTree(_items);
+    treeChildItems = treeChildItemsBuiltIn;
+    setMainTree(treeChildItemsBuiltIn);
 
     initMenu();
     initMainLogTabWidget();

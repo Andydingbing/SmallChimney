@@ -43,6 +43,7 @@ public:
     };
 
 public:
+    sequence();
     sequence(const std::string &path);
     ~sequence();
 
@@ -50,11 +51,18 @@ public:
     std::string err() const;
     size_t err_line() const { return _err_line; }
 
+    void set_path(const std::string &path);
+    void set_tree(std::list<std::list<std::string>> *t)
+    { tree_builtin = t; }
+
     int32_t compile();
     int32_t parse_vendor();
     int32_t parse_product();
 
+    void resort(const std::list<std::list<std::string>> &t,std::list<std::list<std::string *>> &sorted_tree);
+
 private:
+    void init();
     void add_line(const syntax_t s,void *d = nullptr)
     { lines.push_back(line_t(s,d)); }
 
@@ -100,6 +108,8 @@ private:
     FILE *_fp;
 
     char _buf[256];
+
+    std::list<std::list<std::string>> *tree_builtin;
 
 private:
     bool _continue_when_err;

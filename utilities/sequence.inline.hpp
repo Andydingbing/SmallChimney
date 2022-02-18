@@ -15,7 +15,7 @@
 
 #include "sequence.hpp"
 
-namespace sequence {
+namespace ns_sequence {
 
 template<typename T>
 size_t arithmetic_sequence_t<T>::pts() const
@@ -86,4 +86,4 @@ void parse(const container_t &in,std::string &str)
     }
 }
 
-} // namespace sequence
+} // namespace ns_sequence

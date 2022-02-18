@@ -23,6 +23,11 @@ enum Project {
     PROJECTS
 };
 
+enum Mode {
+    Sequence,
+    Manual
+};
+
 #define CLR_PROTECT_EYE QColor(199,237,204)
 
 #define COMBOBOX_MAP_FROM_BETTER_ENUM(box,better_enum) \
@@ -76,8 +81,9 @@ QTreeWidgetItem* selectFirst(QTreeWidget *tree);
 
 // Common
 extern Project project;
+extern Mode mode;
 
 extern quint32 RFIdx;
 extern quint32 RFUIdx;
 
-#endif // DEFINE_H
+#endif

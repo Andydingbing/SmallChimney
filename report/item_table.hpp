@@ -14,7 +14,7 @@
 class API item_table_base
 {
 public:
-    typedef sequence::arithmetic_sequence_t<int64_t> sequence_t;
+    typedef ns_sequence::arithmetic_sequence_t<int64_t> sequence_t;
 
     struct time_t {
         uint16_t year;
@@ -55,7 +55,7 @@ public:
     { return &_freq_sequence; }
 
     std::string freq_sequence_string()
-    { return sequence::parse(_freq_sequence); }
+    { return ns_sequence::parse(_freq_sequence); }
 
     virtual char *data_f(uint32_t idx) = 0;
 

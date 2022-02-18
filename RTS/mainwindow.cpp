@@ -23,11 +23,35 @@
 
 QHBoxLayout MainWindow::childDlgLayout;
 MainWindow *g_MainW = nullptr;
+sequence mainSequence;
 
 double QFreqScrollLineEdit::stepDefault = 1e6;
 double QFreqScrollLineEdit::stepCtrl    = 5e6;
 double QFreqScrollLineEdit::stepShift   = 10e6;
 
+
+MapProjectMenu::MapProjectMenu(const Project p, const QString &m)
+{
+    project = p;
+    menu = m.split(',');
+}
+
+QMenu* hasMenu(const QString &str,const QMenu *menu)
+{
+    QObjectList child = menu->children();
+    QObjectList::const_iterator iter;
+    QMenu *subMenu;
+
+    child.pop_front();
+
+    for (iter = child.cbegin();iter != child.cend();++iter) {
+        subMenu = (QMenu *)(*iter);
+        if (subMenu->title() == str) {
+            return subMenu;
+        }
+    }
+    return nullptr;
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -39,40 +63,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Q_Thread::registerMetaType();
 
-    actionSPC = new QAction;
-    actionSPC->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    connect(actionSPC,SIGNAL(triggered()),this,SLOT(threadSPC()));
-
-    actionStop = new QAction;
-    actionStop->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-    connect(actionStop,SIGNAL(triggered()),this,SLOT(threadStop()));
-
-    QToolBar *toolBar = addToolBar("");
-    toolBar->addAction(actionSPC);
-    toolBar->addAction(actionStop);
-
-
-    menuProject = new QMenu("Project(&P)",ui->menuBar);
-
-    QList<QStringList> menus;
-    menus.push_back({"Ericsson",
-                     "Radio 4415 B3",
-                     "Air 3268 B47"});
-
-    for (int i = 0;i < menus.size();++ i) {
-        QMenu *menu = new QMenu(menus.at(i).at(0));
-        menuProject->addMenu(menu);
-
-        for (int j = 1;j < menus.at(i).size();++ j) {
-            QAction *action = new QAction(menus.at(i).at(j),menu);
-            action->setCheckable(true);
-            menu->addAction(action);
-            connect(action,SIGNAL(triggered()),this,SLOT(switchProject()));
-        }
-    }
-
-    ui->menuBar->addMenu(menuProject);
-
     Log.en(log_t::RD_LOG_ALL_ON,false);
 
     childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(this));
@@ -81,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mainSplitter  = new QSplitter(Qt::Horizontal,ui->centralWidget);
     rightSplitter = new QSplitter(Qt::Vertical);
 
+    initMenu();
+    initToolBar();
     initMsgLogDlg();
     initStatusBar();
     initMainTreeWidget();
@@ -115,13 +107,20 @@ MainWindow::~MainWindow()
 void MainWindow::switchProject()
 {
     QAction *action = (QAction *)(sender());
+    QStringList str;
+    QList<MapProjectMenu>::const_iterator iter = mapProjectMenu.cbegin();
     QMenu *menu = (QMenu *)(action->parent());
 
-    if (menu->title() == "Ericsson") {
-        if (action->text() == "Radio 4415 B3") {
-            project = Ericsson_Radio_4415_B3;
-        } else if (action->text() == "Air 3268 B47") {
-            project = Ericsson_Air_3268_B47;
+    str.push_front(action->text());
+
+    while (menu != nullptr && menu->inherits("QMenu")) {
+        str.push_front(menu->title());
+        menu = (QMenu *)(menu->parent());
+    }
+
+    for (;iter != mapProjectMenu.cend();++iter) {
+        if (iter->menu == str) {
+            project = iter->project;
         }
     }
 
@@ -163,6 +162,65 @@ void MainWindow::deviceInitSilent()
 void MainWindow::exit()
 {
     QApplication::exit();
+}
+
+bool MainWindow::verifySequence(const QString &path)
+{
+    mainSequence.set_path(path.toStdString());
+    int32_t r = mainSequence.compile();
+
+    return r;
+}
+
+void MainWindow::addMapProjectMenu(const Project project,const QString &menu)
+{
+    mapProjectMenu.push_back(MapProjectMenu(project,menu));
+}
+
+void MainWindow::initMenu()
+{
+    menuProject = new QMenu("Project(&P)",ui->menuBar);
+
+    ui->menuBar->addMenu(menuProject);
+
+    addMapProjectMenu(Ericsson_Radio_4415_B3,"Ericsson,Radio 4415 B3");
+    addMapProjectMenu(Ericsson_Air_3268_B47,"Ericsson,Air 3268 B47");
+
+    QList<MapProjectMenu>::const_iterator iterMap = mapProjectMenu.cbegin();
+
+    for (;iterMap != mapProjectMenu.cend();++iterMap) {
+        QMenu *parent = menuProject;
+        QMenu *subMenu = nullptr;
+        QAction *action = nullptr;
+        int i = 0;
+
+        for (;i < iterMap->menu.size() - 1;++i) {
+            if ((subMenu = hasMenu(iterMap->menu.at(i),parent)) == nullptr) {
+                subMenu = new QMenu(iterMap->menu.at(i),parent);
+                parent->addMenu(subMenu);
+            }
+            parent = subMenu;
+        }
+
+        action = new QAction(iterMap->menu.at(i),parent);
+        connect(action,SIGNAL(triggered()),this,SLOT(switchProject()));
+        parent->addAction(action);
+    }
+}
+
+void MainWindow::initToolBar()
+{
+    actionSPC = new QAction;
+    actionSPC->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    connect(actionSPC,SIGNAL(triggered()),this,SLOT(threadSPC()));
+
+    actionStop = new QAction;
+    actionStop->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+    connect(actionStop,SIGNAL(triggered()),this,SLOT(threadStop()));
+
+    QToolBar *toolBar = addToolBar("");
+    toolBar->addAction(actionSPC);
+    toolBar->addAction(actionStop);
 }
 
 void MainWindow::initStatusBar()
