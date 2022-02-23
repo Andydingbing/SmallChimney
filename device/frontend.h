@@ -2,7 +2,6 @@
 #define FRONTEND_H
 
 #include "global_header.h"
-#include "common/cal_table.h"
 #include "freq_string.hpp"
 #include <list>
 #include <boost/smart_ptr.hpp>
@@ -57,10 +56,6 @@ public:
     bool is_rx_en_tc() const { return _en_rx_tc; }
 
 public:
-    template <typename ftp_call_back_t>
-    static void set_ftp_retry_call_back(ftp_call_back_t f) { _ftp_retry_call_back = f; }
-
-public:
     uint32_t _rf_idx;
     uint32_t _rfu_idx;
 
@@ -69,8 +64,6 @@ public:
 
     bool _en_tx_tc;
     bool _en_rx_tc;
-
-    static boost::function<bool()> _ftp_retry_call_back;
 };
 
-#endif // FRONTEND_H
+#endif

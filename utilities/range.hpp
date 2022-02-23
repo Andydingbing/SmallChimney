@@ -34,5 +34,5 @@ public:
 };
 
 
-#endif // UTILITIES_RANGE_HPP
+#endif
 

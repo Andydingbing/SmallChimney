@@ -4,7 +4,6 @@ CONFIG += shared
 CONFIG -= qt
 TEMPLATE = lib
 DEFINES += DLL_EXPORT
-LIBS += -llog
 
 win32 { LIBS += -lws2_32 }
 

@@ -201,7 +201,7 @@ public:
                      size_t n)
     {
         if (iter_a - a.begin() + n >= a.size() || iter_b - b.begin() + n >= b.size()) {
-            throw index_error(RD_THROW_SITE_INFO("Out of range"));
+            throw index_err(RD_THROW_SITE_INFO("Out of range"));
         }
 
         return sumxmul(iter_a,iter_b,n);

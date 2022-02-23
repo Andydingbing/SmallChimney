@@ -2,6 +2,7 @@
 #define DEVICE_ERICSSON_AIR_3268_3268_H
 
 #include "../frontend.h"
+#include "libdriver.h"
 #include "cal_file.h"
 
 namespace ns_ericsson {

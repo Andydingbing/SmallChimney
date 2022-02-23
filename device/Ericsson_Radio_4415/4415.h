@@ -2,6 +2,7 @@
 #define DEVICE_ERICSSON_RADIO_4415_H
 
 #include "../frontend.h"
+#include "libdriver.h"
 #include "cal_file.h"
 
 namespace ns_ericsson {

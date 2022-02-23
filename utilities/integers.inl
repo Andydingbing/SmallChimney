@@ -24,7 +24,7 @@ template <typename T,typename data_type>
 void integers::integers_t::auto_notation(const std::string &str,T &out)
 {
     if (str.length() < 1) {
-        throw syntax_error("Invalid string : \"" + str + "\",it's empty.");
+        throw syntax_err("Invalid string : \"" + str + "\",it's empty.");
     }
 
     std::string str_copy = boost::trim_copy(str);

@@ -58,7 +58,7 @@ uint32_t set_helper::set_helper_t<T,container_t>::sections(const std::string &st
         if (pos < length - 1) {
             next = str.at(pos + 1);
             if ((next == ',') || (next == ';')) {
-                throw syntax_error("Invalid string : \"" + str + "\",with continuously separator.");
+                throw syntax_err("Invalid string : \"" + str + "\",with continuously separator.");
             }
         }
         sections ++;
@@ -68,7 +68,7 @@ uint32_t set_helper::set_helper_t<T,container_t>::sections(const std::string &st
         if (pos < length - 1) {
             next = str.at(pos + 1);
             if ((next == ',') || (next == ';')) {
-                throw syntax_error("Invalid string : \"" + str + "\",with continuously separator.");
+                throw syntax_err("Invalid string : \"" + str + "\",with continuously separator.");
             }
         }
         sections ++;
@@ -99,7 +99,7 @@ uint32_t set_helper::set_helper_t<T,container_t>::sections(const char *str)
         if (size_t(str_temp - str) < length - 1) {
             next = *(str_temp + 1);
             if ((next == ',') || (next == ';')) {
-                throw syntax_error("Invalid string : \"" + std::string(str) + "\",with continuously separator.");
+                throw syntax_err("Invalid string : \"" + std::string(str) + "\",with continuously separator.");
             }
         }
         sections ++;
@@ -111,7 +111,7 @@ uint32_t set_helper::set_helper_t<T,container_t>::sections(const char *str)
         if (size_t(str_temp - str) < length - 1) {
             next = *(str_temp + 1);
             if ((next == ',') || (next == ';')) {
-                throw syntax_error("Invalid string : \"" + std::string(str) + "\",with continuously separator.");
+                throw syntax_err("Invalid string : \"" + std::string(str) + "\",with continuously separator.");
             }
         }
         sections ++;
@@ -383,7 +383,7 @@ void set_helper::set_helper_t<T,container_t>::split(const std::string &str,range
     }
 
     if ((pos_step = str.find(':',pos_star + 1)) == std::string::npos) {
-        throw syntax_error("Invalid string : \"" + str + "\".");
+        throw syntax_err("Invalid string : \"" + str + "\".");
     }
 
     out.star = str.substr(0,pos_star);
@@ -391,7 +391,7 @@ void set_helper::set_helper_t<T,container_t>::split(const std::string &str,range
     out.stop = str.substr(pos_step + 1);
 
     if ((pos_step = str.find(':',pos_step + 1)) != std::string::npos) {
-        throw syntax_error("Invalid string : \"" + str + "\".");
+        throw syntax_err("Invalid string : \"" + str + "\".");
     }
 }
 

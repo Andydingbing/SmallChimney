@@ -81,35 +81,35 @@ struct expt : std::runtime_error
     };
 
 // Raised when an assert statement fails,such as RD_ASSERT_THROW().
-DECL_RD_EXCEPTION(assertion_error, expt, "AssertionError")
+DECL_RD_EXCEPTION(assertion_err, expt, "AssertionError")
 
 // Raised when a key or index is invalid.
-DECL_RD_EXCEPTION(lookup_error, expt, "LookupError")
+DECL_RD_EXCEPTION(lookup_err, expt, "LookupError")
 // Raised when a key or index is invalid.
-DECL_RD_EXCEPTION(index_error, lookup_error, "IndexError")
+DECL_RD_EXCEPTION(index_err, lookup_err, "IndexError")
 // Raised when a dictionary-like object is trying to be indexed by an invalid key.
-DECL_RD_EXCEPTION(key_error, lookup_error, "KeyError")
+DECL_RD_EXCEPTION(key_err, lookup_err, "KeyError")
 
 // Raised when an operation or function is executed with a value of incorrect type.
-DECL_RD_EXCEPTION(type_error, expt, "TypeError")
+DECL_RD_EXCEPTION(type_err, expt, "TypeError")
 
 // Raised when an argument has the right type but invalid value.
-DECL_RD_EXCEPTION(value_error, expt, "ValueError")
+DECL_RD_EXCEPTION(value_err, expt, "ValueError")
 // Raised when a value is inappropriate because it can't be narrowed.
-DECL_RD_EXCEPTION(narrowing_error, value_error, "NarrowingError")
+DECL_RD_EXCEPTION(narrowing_err, value_err, "NarrowingError")
 
 // Raised when an error is detected that doesn't fall into any of the categories.
-DECL_RD_EXCEPTION(runtime_error, expt, "RuntimeError")
+DECL_RD_EXCEPTION(runtime_err, expt, "RuntimeError")
 
 // Base class for errors that occur outside of UHD.
-DECL_RD_EXCEPTION(environment_error, expt, "EnvironmentError")
+DECL_RD_EXCEPTION(environment_err, expt, "EnvironmentError")
 // Raised when an I/O operation fails for an I/O-related reason.
-DECL_RD_EXCEPTION(io_error, environment_error, "IOError")
+DECL_RD_EXCEPTION(io_err, environment_err, "IOError")
 // Raised when a function returns a system-related error.
-DECL_RD_EXCEPTION(os_error, environment_error, "OSError")
+DECL_RD_EXCEPTION(os_err, environment_err, "OSError")
 
 // Raised when a parser encounters a syntax error.
-DECL_RD_EXCEPTION(syntax_error, expt, "SyntaxError")
+DECL_RD_EXCEPTION(syntax_err, expt, "SyntaxError")
 
 /*
  * Create a formatted string with throw-site information.
@@ -129,7 +129,7 @@ DECL_RD_EXCEPTION(syntax_error, expt, "SyntaxError")
  */
 #define RD_ASSERT_THROW(code) { \
     if (!(code)) \
-        throw assertion_error(RD_THROW_SITE_INFO(#code)); \
+        throw assertion_err(RD_THROW_SITE_INFO(#code)); \
     }
 
-#endif // RD_UTILITIES_EXCEPTION_HPP
+#endif

@@ -1,11 +1,6 @@
-DEFINES += product DLL_EXPORT
+DEFINES += product
 
 include(../../include/config.pri)
-
-CONFIG += shared
-CONFIG -= qt
-TEMPLATE = lib
-LIBS += -ldriver -llog -lreport
 
 HEADERS += \
     ../frontend.h \

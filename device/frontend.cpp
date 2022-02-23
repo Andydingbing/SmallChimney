@@ -6,8 +6,6 @@ using namespace std;
 using namespace boost;
 using namespace boost::filesystem;
 
-boost::function<bool()> frontend::_ftp_retry_call_back = boost::function<bool()>();
-
 frontend::frontend()
 {
     _rf_idx = 0;

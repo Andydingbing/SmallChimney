@@ -2,7 +2,7 @@
 #define EUTRA_BAND_H
 
 #include "global_header.h"
-#include "range.hpp"
+#include "../utilities/range.hpp"
 #include "freq_string.hpp"
 
 enum band_usage_t {
@@ -197,6 +197,6 @@ private:
 
 } // namespace ns_eutra
 
-#endif // EUTRA_BAND_H
+#endif
 
 

@@ -46,7 +46,7 @@ template <typename T,typename data_type>
 void floating_point_numbers::floating_point_numbers_t::non_unit_notation(const std::string &str,T &out)
 {
     if (str.length() < 1) {
-        throw syntax_error("Invalid string : \"" + str + "\",it's empty.");
+        throw syntax_err("Invalid string : \"" + str + "\",it's empty.");
     }
 
     std::string str_copy = boost::trim_copy(str);
@@ -54,7 +54,7 @@ void floating_point_numbers::floating_point_numbers_t::non_unit_notation(const s
     std::regex reg_scientific("([-+]?)(\\d*)(\\.?)(\\d+)(e|E)(\\d*)(\\.?)(\\d+)");
 
     if (str_copy.find(' ') != std::string::npos) {
-        throw syntax_error("Invalid string : \"" + str_copy + "\",with space character.");
+        throw syntax_err("Invalid string : \"" + str_copy + "\",with space character.");
     }
 
     if (std::regex_match(str_copy,reg_normal)) {
@@ -62,7 +62,7 @@ void floating_point_numbers::floating_point_numbers_t::non_unit_notation(const s
     } else if (std::regex_match(str_copy,reg_scientific)) {
         scientific_notation<T>(str_copy,out);
     } else {
-        throw syntax_error("Invalid string : \""  + str_copy + "\".");
+        throw syntax_err("Invalid string : \""  + str_copy + "\".");
     }
 }
 
@@ -81,7 +81,7 @@ template <typename T,typename data_type>
 void floating_point_numbers::floating_point_numbers_t::auto_notation(const std::string &str,T &out)
 {
     if (str.length() < 1) {
-        throw syntax_error("Invalid string : \"" + str + "\",it's empty.");
+        throw syntax_err("Invalid string : \"" + str + "\",it's empty.");
     }
 
     std::string str_copy = boost::trim_copy(str);

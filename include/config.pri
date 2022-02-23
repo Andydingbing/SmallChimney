@@ -29,8 +29,13 @@ CONFIG(debug,debug|release) {
 win32-g++ {
     make_spec = win32-g++
 
-    VAR_INCLUDE_ROOT = C:/msys64/mingw$$VAR_ARCH_BIT
+    VAR_INCLUDE_ROOT = ..
     VAR_LIB_ROOT = C:/msys64/mingw$$VAR_ARCH_BIT/lib
+    VAR_INCLUDE_SYSTEM = C:/msys64/mingw$$VAR_ARCH_BIT
+
+    INCLUDEPATH += \
+        $$VAR_INCLUDE_SYSTEM/include/boost \
+        $$VAR_INCLUDE_SYSTEM/include/qwt-qt5 \
 
     LIBS += \
         -lboost_timer-mt \
@@ -107,38 +112,49 @@ unix {
 }
 
 INCLUDEPATH += \
-    $$VAR_INCLUDE_ROOT/include \
-    $$VAR_INCLUDE_ROOT/include/python3.9 \
-    $$VAR_INCLUDE_ROOT/include/qwt-qt5 \
+          $$VAR_INCLUDE_ROOT/include \
+       ../$$VAR_INCLUDE_ROOT/include \
+    ../../$$VAR_INCLUDE_ROOT/include \
+          $$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
+       ../$$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
+    ../../$$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
+          $$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
+       ../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
+    ../../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
+          $$VAR_INCLUDE_ROOT/log \
+       ../$$VAR_INCLUDE_ROOT/log \
+    ../../$$VAR_INCLUDE_ROOT/log \
+          $$VAR_INCLUDE_ROOT/driver \
+       ../$$VAR_INCLUDE_ROOT/driver \
+    ../../$$VAR_INCLUDE_ROOT/driver \
+          $$VAR_INCLUDE_ROOT/utilities \
+       ../$$VAR_INCLUDE_ROOT/utilities \
+    ../../$$VAR_INCLUDE_ROOT/utilities \
+          $$VAR_INCLUDE_ROOT/device \
+       ../$$VAR_INCLUDE_ROOT/device \
+    ../../$$VAR_INCLUDE_ROOT/device \
+          $$VAR_INCLUDE_ROOT/device/common \
+       ../$$VAR_INCLUDE_ROOT/device/common \
+    ../../$$VAR_INCLUDE_ROOT/device/common \
     $$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
-    $$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
-    $$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
-    ../$$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
-    ../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
-    ../include \
-    ../../include \
     ./chip \
     ../device/chip \
     ./common \
-    ../device/common \
     ./common/analyzer \
     ../device/common/analyzer \
-    ../driver \
-    ../../driver \
-    ../log \
-    ../../log \
     ../report \
     ../../report \
     ../instrument \
     ../sequence \
     ../../sequence \
-    ../utilities \
-    ../utilities/ctd \
-    ../../utilities \
-    ../../utilities/ctd \
     ../Qt
 
 contains(DEFINES,product) {
+    DEFINES += DLL_EXPORT
+    CONFIG += shared
+    CONFIG -= qt
+    TEMPLATE = lib
+    LIBS += -ldriver -llog -lreport
     DESTDIR = ../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
 } else {
     DESTDIR = ../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
@@ -147,18 +163,24 @@ contains(DEFINES,product) {
 OBJECTS_DIR = ./$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
 
 LIBS += \
-    -L../lib/$$VAR_ARCH/ \
-    -L$$VAR_LIB_ROOT \
+          -L../lib/$$VAR_ARCH \
+       -L../../lib/$$VAR_ARCH \
+    -L../../../lib/$$VAR_ARCH \
+          -L$$VAR_LIB_ROOT \
+       -L../$$VAR_LIB_ROOT \
+    -L../../$$VAR_LIB_ROOT \
+          -L$$LIB_DIR_FFTW \
+       -L../$$LIB_DIR_FFTW \
+    -L../../$$LIB_DIR_FFTW \
+          -L$$LIB_DIR_BOOST \
+       -L../$$LIB_DIR_BOOST \
+    -L../../$$LIB_DIR_BOOST \
+          -L$$LIB_DIR_FMTLIB \
+       -L../$$LIB_DIR_FMTLIB \
+    -L../../$$LIB_DIR_FMTLIB \
     -L$$DESTDIR \
-    -L$$LIB_DIR_QWT \
-    -L$$LIB_DIR_FFTW \
-    -L$$LIB_DIR_BOOST \
-    -L$$LIB_DIR_PYTHON \
-    -L$$LIB_DIR_FMTLIB \
-    -L../../lib/$$VAR_ARCH/ \
     -L../$$DESTDIR \
-    -L../$$LIB_DIR_BOOST \
-    -L../$$LIB_DIR_FMTLIB
+    -L$$LIB_DIR_QWT
 
 
 message("$$VAR_ARCH $$make_spec")
@@ -171,5 +193,3 @@ message($$LIB_DIR_PYTHON)
 message($$LIB_DIR_FMTLIB)
 message($$DESTDIR)
 message($$OBJECTS_DIR)
-
-

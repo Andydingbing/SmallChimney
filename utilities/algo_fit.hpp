@@ -184,7 +184,7 @@ void polynomial(std::vector<typename data_type::data_t> x,
     const size_t n_y = y.size();
 
     if (n_y * n_y != n_x) {
-        throw index_error(RD_THROW_SITE_INFO("Not matched array size of x and y"));
+        throw index_err(RD_THROW_SITE_INFO("Not matched array size of x and y"));
     }
 
     typedef typename data_type::data_t data_t;

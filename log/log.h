@@ -14,7 +14,7 @@
 
 #define Log log_t::instance()
 
-class API log_t : noncopyable
+class API log_t : ::noncopyable
 {
 public:
     struct API msg_log_t {

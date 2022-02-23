@@ -84,7 +84,7 @@ int logger_msg::add(int32_t result,const char *fmt,...)
     unlock();
 
     if (result && _en_expt) {
-        throw ::runtime_error(msg->msg);
+        throw ::runtime_err(msg->msg);
     }
 
     return result;
