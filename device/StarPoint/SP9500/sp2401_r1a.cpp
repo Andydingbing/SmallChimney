@@ -16,9 +16,8 @@
 #define NCO_DDC_64 1
 
 using namespace std;
-using namespace rd;
-using namespace rd::ns_sp9500;
-using namespace rd::ns_sp2401;
+using namespace ns_sp9500;
+using namespace ns_sp2401;
 
 sp2401_r1a::sp2401_r1a(uint32_t rf_idx)
 {

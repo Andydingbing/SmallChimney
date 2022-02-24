@@ -7,10 +7,9 @@
 #include "sp1401.h"
 
 using namespace std;
-using namespace rd;
-using namespace rd::ns_sp9500;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
-using namespace rd::ns_sp2401;
+using namespace ns_sp2401;
 
 boost::shared_ptr<x9119_table> cal_file::g_cal_table_x9119 = nullptr;
 cal_file::item_buf_t cal_file::g_cal_item_buf = cal_file::item_buf_t();

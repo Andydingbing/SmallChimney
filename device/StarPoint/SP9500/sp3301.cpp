@@ -7,10 +7,9 @@
 #include <string>
 
 using namespace std;
-using namespace rd;
-using namespace rd::ns_sp9500;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
-using namespace rd::ns_sp2401;
+using namespace ns_sp2401;
 
 double sp3301::temp_cal_star = 25.0;
 double sp3301::temp_cal_stop = 60.0;

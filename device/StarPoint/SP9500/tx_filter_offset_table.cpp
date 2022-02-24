@@ -1,7 +1,6 @@
 #include "tx_filter_offset_table.h"
 #include "algo_math.hpp"
 
-using namespace rd;
 using namespace ns_sp1401;
 
 tx_filter_offset_table::data_f_t::data_f_t()

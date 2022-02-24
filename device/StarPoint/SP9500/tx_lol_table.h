@@ -3,8 +3,6 @@
 
 #include "../cal_table.h"
 
-namespace rd {
-
 class API tx_lol_table_r1ab
 {
 public:
@@ -71,7 +69,5 @@ private:
     data_t *m_data_f;
     data_t m_data_m[1];
 };
-
-} //namespace rd
 
 #endif

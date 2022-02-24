@@ -7,8 +7,6 @@
 #define NIVISA_PXI
 #endif
 
-using namespace rd;
-
 static ViSession g_vi_drm = 0;
 
 uint32_t memory_physical::_size_granularity_min = 1024 * 64;

@@ -7,8 +7,6 @@
 #include "liblog.h"
 #include "libdriver.h"
 
-namespace rd {
-
 class API sp3501 : boost::noncopyable
 {
 public:
@@ -62,7 +60,5 @@ public:
     pci_dev_vi *m_s6;
     uint32_t _fan_group_speed[4];
 };
-
-} //namespace rd
 
 #endif

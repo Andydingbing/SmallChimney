@@ -7,8 +7,6 @@
 /*all backward converting functions just return zero at the version right now
   so note that only support convert to the next version now!!!,remember to backup the file!!!*/
 
-namespace rd {
-
 class cal_file;
 class cal_file_r1ab;
 class cal_file_r1cd;
@@ -33,6 +31,4 @@ private:
     cal_file *m_file;
 };
 
-} //namespace rd
-
-#endif // CFV_CTRL_H
+#endif

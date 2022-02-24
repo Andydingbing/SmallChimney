@@ -181,4 +181,4 @@ public: \
     } \
 };
 
-#endif // Q_TABLE_MODEL_H
+#endif

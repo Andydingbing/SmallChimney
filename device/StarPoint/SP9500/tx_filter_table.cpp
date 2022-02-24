@@ -1,9 +1,8 @@
 #include "tx_filter_table.h"
 #include "algo_math.hpp"
 
-using namespace rd;
 using namespace ns_sp1401;
-using namespace rd::ns_sp2401;
+using namespace ns_sp2401;
 
 // rf frequency response
 tx_rf_fr_table::data_f_t::data_f_t()

@@ -8,8 +8,7 @@
 #include <boost/function.hpp>
 
 using namespace std;
-using namespace rd;
-using namespace rd::ns_sp9500;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 using namespace boost::gregorian;
 using namespace boost::filesystem;

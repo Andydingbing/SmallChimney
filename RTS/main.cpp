@@ -4,6 +4,8 @@
 #include <QStyleFactory>
 #include <QStyle>
 
+#include "algo_chip_pll.inl.hpp"
+
 void addMsgListCallback() { g_MainW->addMsgListCallback(); }
 
 int main(int argc, char *argv[])

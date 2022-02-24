@@ -10,7 +10,6 @@
     #include <unistd.h>
 #endif
 
-using namespace rd;
 using namespace ns_sp1401;
 using namespace ns_sp1401::r1a;
 

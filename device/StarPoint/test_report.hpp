@@ -21,8 +21,6 @@
 #include <fstream>
 #include <boost/filesystem.hpp>
 
-namespace rd {
-
 // List all test items,value only allowed to accumulate.
 enum test_item_t : unsigned {
     TI_RF_TX_FREQ_RES,
@@ -444,8 +442,6 @@ private: \
     }
 
 #define DECL_TEST_REPORT_E(class_name) };
-
-} // namespace rd
 
 #endif
 

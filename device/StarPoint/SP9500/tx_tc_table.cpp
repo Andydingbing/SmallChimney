@@ -3,7 +3,6 @@
 #include "sp1401.h"
 
 using namespace std;
-using namespace rd;
 using namespace ns_sp1401;
 
 using namespace descriptive_statistics;

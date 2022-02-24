@@ -6,8 +6,6 @@
 
 #define AVERAGE_TIMES 1
 
-namespace rd {
-
 class API rx_ref_table_r1ab
 {
 public:
@@ -130,7 +128,5 @@ class API rx_ref_io_table_r1cd : public rx_ref_table_r1cd
     DECLARE_RX_REF_TABLE_R1CD
     DECLARE_CAL_ITEM_TABLE(rx_ref_io_table_r1cd,ns_sp1401::r1c::rx_freqs_called)
 };
-
-} // namespace rd
 
 #endif

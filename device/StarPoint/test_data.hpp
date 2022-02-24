@@ -36,8 +36,6 @@ public: \
     name *##r_##name() const { return _##r_##name.get(); } \
 protected: boost::shared_ptr<name> _##r_##name;
 
-namespace rd {
-
 struct test_common_data
 {
     enum result_t {
@@ -680,8 +678,5 @@ void map_from(std::ifstream &stream, const tr_header_t &header)
 }
 DECL_TEST_REPORT_E(rx_ref_cal)
 
-
-} // namespace rd
-
-#endif // UTILITIES_TEST_DATA_HPP
+#endif
 

@@ -14,12 +14,13 @@
 #include "qwt_series_data.h"
 
 #include "config_table.h"
-
+#include "complex_sequence.h"
 #include <QCheckBox>
 
 enum Project {
     Ericsson_Radio_4415_B3,
     Ericsson_Air_3268_B47,
+    StarPoint_SP9500,
     PROJECTS
 };
 
@@ -85,5 +86,6 @@ extern Mode mode;
 
 extern quint32 RFIdx;
 extern quint32 RFUIdx;
+extern complex_sequence *complexSequence;
 
 #endif

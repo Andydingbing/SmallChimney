@@ -3,8 +3,6 @@
 
 #include "../cal_table.h"
 
-namespace rd {
-
 class API tx_pwr_table_r1ab
 {
 public:
@@ -121,7 +119,5 @@ class API tx_pwr_io_table_r1c : public tx_pwr_table_r1c
     DECLARE_TX_PWR_TABLE_R1C
     DECLARE_CAL_ITEM_TABLE(tx_pwr_io_table_r1c,ns_sp1401::tx_freqs_called)
 };
-
-} // namespace rd
 
 #endif

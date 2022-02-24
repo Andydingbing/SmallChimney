@@ -11,11 +11,11 @@
 #include "sp2401_r1a.h"
 #include "../sp9500/dma_mgr.h"
 
-#define SP3301_0 rd::sp3301::instance(0)
-#define SP3301_1 rd::sp3301::instance(1)
-#define SP3301_2 rd::sp3301::instance(2)
-#define SP3301_3 rd::sp3301::instance(3)
-#define SP3301_4 rd::sp3301::instance(4)
+#define SP3301_0 sp3301::instance(0)
+#define SP3301_1 sp3301::instance(1)
+#define SP3301_2 sp3301::instance(2)
+#define SP3301_3 sp3301::instance(3)
+#define SP3301_4 sp3301::instance(4)
 
 /*
  * RF_0 RF_1 RF_2 RF_3
@@ -24,8 +24,6 @@
  *    K7_1      K7_0
  */
 #define K7_IDX(idx) ((ns_sp9500::g_max_rf - 1 - idx) / 2)
-
-namespace rd {
 
 /*
  * RF_0 RF_1 RF_2 RF_3
@@ -195,7 +193,5 @@ private:
     static double tx_tc_coef[12][6];
     static double rx_tc_coef[12][6];
 };
-
-} // namespace rd
 
 #endif

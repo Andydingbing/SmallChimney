@@ -3,8 +3,6 @@
 
 #include "sp3301.h"
 
-namespace rd {
-
 class API self_cal_helper
 {
 public:
@@ -85,6 +83,4 @@ public:
     uint16_t am_q_r;
 };
 
-} //namespace rd
-
-#endif // SP9500_SELF_CAL_HELPER_HPP
+#endif

@@ -12,8 +12,6 @@
  * 4. the file should be placed directly in the module path
  */
 
-namespace rd {
-
 class gen_ini_file
 {
 public:
@@ -26,6 +24,4 @@ private:
     char _path[256];
 };
 
-} //namespace rd
-
-#endif // GEN_INI_FILE_H
+#endif

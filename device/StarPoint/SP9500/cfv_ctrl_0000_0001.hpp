@@ -6,8 +6,6 @@
 #include <string.h>
 #include <errno.h>
 
-using namespace rd;
-
 int32_t for_0000_0001(cal_file *file)
 {
     struct item_info_v0000_t {

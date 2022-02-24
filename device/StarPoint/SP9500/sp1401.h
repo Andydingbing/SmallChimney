@@ -16,8 +16,6 @@
 #include "freq_string.hpp"
 #include "traits.hpp"
 
-namespace rd {
-
 const static float g_temp_star = 20.0f;
 const static float g_temp_stop = 70.0f;
 const static float g_temp_step = 0.25f;
@@ -339,7 +337,5 @@ protected:
     bool en_tx_tc; // Enable T/Rx power temperature compansate?
     bool en_rx_tc;
 };
-
-} // namespace rd
 
 #endif

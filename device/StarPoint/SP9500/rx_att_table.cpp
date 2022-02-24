@@ -1,7 +1,6 @@
 #include "rx_att_table.h"
 #include "algo_math.hpp"
 
-using namespace rd;
 using namespace ns_sp1401;
 
 // r1c/d output mode

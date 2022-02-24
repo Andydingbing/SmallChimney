@@ -30,7 +30,7 @@ int32_t for_0005_0006(cal_file *file)
         uint32_t  tail;
     public:
         file_info_v0005_t() {
-            item_info = new item_info_v0005_t[rd::cal_file::CAL_TOTAL_ITEMS];
+            item_info = new item_info_v0005_t[cal_file::CAL_TOTAL_ITEMS];
         }
         ~file_info_v0005_t() {
             SAFE_DEL(item_info);

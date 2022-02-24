@@ -3,8 +3,6 @@
 
 #include "../cal_table.h"
 
-namespace rd {
-
 class API rx_att_op_table_r1cd
 {
 public:
@@ -56,7 +54,5 @@ public:
     void get(uint64_t freq,data_m_t *data);
     void get(uint64_t freq,data_f_t *data);
 };
-
-} //namespace rd
 
 #endif

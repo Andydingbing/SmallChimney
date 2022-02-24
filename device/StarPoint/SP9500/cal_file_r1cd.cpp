@@ -21,9 +21,8 @@
 
 using namespace std;
 using namespace boost;
-using namespace rd;
 using namespace ns_sp1401;
-using namespace rd::ns_sp2401;
+using namespace ns_sp2401;
 
 cal_file_r1cd::cal_file_r1cd(hw_ver_t ver, uint32_t rf_idx, uint32_t rfu_idx) :
     cal_file(ver,rf_idx,rfu_idx),

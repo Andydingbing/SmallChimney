@@ -7,8 +7,6 @@
 #include "cfv_ctrl_0005_0006.hpp"
 #include "cfv_ctrl_0006_0007.hpp"
 
-using namespace rd;
-
 typedef int32_t (cfv_ctrl::*for_conv)();
 typedef int32_t (cfv_ctrl::*bck_conv)();
 

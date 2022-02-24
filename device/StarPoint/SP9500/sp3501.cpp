@@ -6,8 +6,7 @@
 #include "../cal_table.h"
 #include "sleep_common.h"
 
-using namespace rd;
-using namespace rd::ns_sp9500;
+using namespace ns_sp9500;
 
 sp3501::sp3501()
 {

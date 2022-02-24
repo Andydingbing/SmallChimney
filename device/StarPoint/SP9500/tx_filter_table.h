@@ -3,8 +3,6 @@
 
 #include "../cal_table.h"
 
-namespace rd {
-
 // rf frequency response
 class API tx_rf_fr_table
 {
@@ -117,7 +115,5 @@ class API tx_filter_160m_table : public tx_filter_table
     DECLARE_TX_FILTER_TABLE
     DECLARE_CAL_ITEM_TABLE(tx_filter_160m_table,ns_sp1401::tx_freqs_called)
 };
-
-} //namespace rd
 
 #endif

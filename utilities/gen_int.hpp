@@ -9,8 +9,6 @@
 #include <stddef.h>
 #include <math.h>
 
-namespace rd {
-
 // A general integer class
 class API gen_int
 {
@@ -425,6 +423,4 @@ private:
     char _sign;
 };
 
-} //namespace rd
-
-#endif // GEN_INT_HPP
+#endif

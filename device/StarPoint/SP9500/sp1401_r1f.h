@@ -3,8 +3,6 @@
 
 #include "sp1401_r1e.h"
 
-namespace rd {
-
 class API sp1401_r1f : public sp1401_r1e
 {
 public:
@@ -43,7 +41,5 @@ public:
     void rx_att_states(std::vector<common_atts_t> &states);
     void rx_att_states(std::vector<common_atts_t> &states,std::vector<bool> &checked);
 };
-
-} // namespace rd
 
 #endif

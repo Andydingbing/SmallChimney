@@ -3,8 +3,6 @@
 
 #include "cal_file.h"
 
-namespace rd {
-
 class API cal_file_r1cd : public cal_file
 {
     DECLARE_CAL_FILE()
@@ -62,6 +60,4 @@ public:
     boost::shared_ptr<rx_tp_table>              _rx_tp;
 };
 
-} //namespace rd
-
-#endif // CAL_FILE_R1CD_H
+#endif

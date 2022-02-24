@@ -3,8 +3,6 @@
 
 #include "sp1401_r1c.h"
 
-namespace rd {
-
 class API sp1401_r1e : public sp1401_r1c
 {
 public:
@@ -69,6 +67,4 @@ public:
     virtual int32_t set_rx_att2(double att);
 };
 
-} // namespace rd
-
-#endif // SP1401_R1E_H
+#endif

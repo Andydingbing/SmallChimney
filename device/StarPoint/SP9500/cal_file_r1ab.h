@@ -3,9 +3,7 @@
 
 #include "cal_file.h"
 
-namespace rd {
-
-class API cal_file_r1ab : public rd::cal_file
+class API cal_file_r1ab : public cal_file
 {
     DECLARE_CAL_FILE()
 
@@ -33,7 +31,5 @@ public:
     boost::shared_ptr<rx_ref_table_r1ab> m_rx_ref;
     boost::shared_ptr<tx_att_table_r1ab> m_tx_att_io;
 };
-
-} //namespace rd
 
 #endif

@@ -4,8 +4,6 @@
 #include "sp1401.h"
 #include "cal_file_r1cd.h"
 
-namespace rd {
-
 class sp1401_r1c;
 
 typedef int32_t (sp1401_r1c::*r1c_set_lo_reg)(uint32_t);
@@ -280,7 +278,5 @@ public:
     int32_t get_tx_chain_state(tx_chain_state_all_t  &tx_chain_state);
     int32_t get_rx_chain_state(rx_chain_state_all_t  &rx_chain_state);
 };
-
-} // namespace rd
 
 #endif

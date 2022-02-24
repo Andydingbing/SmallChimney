@@ -74,8 +74,6 @@
 //! Add data from (d) to item(table)'s data buf
 #define ADD_DATAF(table,d) { table->add((d *)data);return 0; }
 
-namespace rd {
-
 class API cal_file : ::noncopyable
 {
 public:
@@ -217,7 +215,5 @@ public: \
     virtual int32_t load(file_info_t &info); \
     virtual int32_t get_item_size(cal_item_t item,uint32_t &pos,uint32_t &size);
 };
-
-} //namespace rd
 
 #endif

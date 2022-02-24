@@ -4,8 +4,6 @@
 #include "sp1401.h"
 #include "cal_file_r1ab.h"
 
-namespace rd {
-
 class sp1401_r1a;
 
 typedef int32_t (sp1401_r1a::*r1a_set_lo_reg)(uint32_t);
@@ -25,7 +23,7 @@ typedef int32_t (sp1401_r1a::*r1a_det_lo_lock)(bool &);
         &sp1401_r1a::det_rx_lo1_lock,       \
         &sp1401_r1a::det_rx_lo2_lock };
 
-class API sp1401_r1a : public rd::sp1401
+class API sp1401_r1a : public sp1401
 {
 public:
     typedef boost::shared_ptr<sp1401_r1a> sptr;
@@ -149,6 +147,4 @@ public:
     int32_t set_rx_if1_hmc694_vgg2(double vol);
 };
 
-} // namespace rd
-
-#endif // SP1401_R1A_H
+#endif

@@ -6,8 +6,6 @@
 #include <string.h>
 #include <errno.h>
 
-using namespace rd;
-
 int32_t for_0006_0007(cal_file *file)
 {
     struct file_ver_v0006_t {
@@ -32,7 +30,7 @@ int32_t for_0006_0007(cal_file *file)
         uint32_t  tail;
     public:
         file_info_v0006_t() {
-            item_info = new item_info_v0006_t[rd::cal_file::CAL_TOTAL_ITEMS];
+            item_info = new item_info_v0006_t[cal_file::CAL_TOTAL_ITEMS];
         }
         ~file_info_v0006_t() {
             SAFE_DEL(item_info);
@@ -63,4 +61,4 @@ int32_t for_0006_0007(cal_file *file)
     return 0;
 }
 
-#endif // CFV_CTRL_0006_0007_HPP
+#endif

@@ -2,7 +2,6 @@
 #include "sleep_common.h"
 #include "liblog.h"
 
-using namespace rd;
 using namespace ns_sp1401;
 
 self_cal_helper::self_cal_helper(sp3301 *SP3301,uint32_t rf_idx)

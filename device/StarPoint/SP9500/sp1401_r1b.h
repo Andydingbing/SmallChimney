@@ -3,10 +3,6 @@
 
 #include "sp1401_r1a.h"
 
-namespace rd {
+typedef sp1401_r1a sp1401_r1b;
 
-typedef rd::sp1401_r1a sp1401_r1b;
-
-} //namespace rd
-
-#endif // SP1401_R1B_H
+#endif

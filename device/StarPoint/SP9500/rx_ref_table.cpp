@@ -1,8 +1,7 @@
 #include "rx_ref_table.h"
 #include "algo_math.hpp"
 
-using namespace rd;
-using namespace rd::ns_sp9500;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 
 // R1A/B

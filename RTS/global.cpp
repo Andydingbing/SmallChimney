@@ -8,6 +8,9 @@ Mode mode = Sequence;
 quint32 RFIdx = 0;
 quint32 RFUIdx = 0;
 
+complex_sequence *complexSequence;
+
+
 int checkedItems(const QTreeWidget *tree)
 {
     return 0;

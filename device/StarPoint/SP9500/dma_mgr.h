@@ -11,8 +11,6 @@
 class pci_dev_vi;
 class vi_mem_io;
 
-namespace rd {
-
 namespace ns_sp9500 {
 
 class API dma_mgr
@@ -58,6 +56,5 @@ private:
 };
 
 } // namespace ns_sp9500
-} // namespace rd
 
-#endif // SP9500_DMA_MGR_H
+#endif

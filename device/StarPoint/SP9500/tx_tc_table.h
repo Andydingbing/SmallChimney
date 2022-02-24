@@ -3,8 +3,6 @@
 
 #include "../cal_table.h"
 
-namespace rd {
-
 template<uint8_t states,uint32_t temps>
 class tp_table
 {
@@ -74,7 +72,5 @@ public:
 
     DECLARE_CAL_ITEM_TABLE(tx_tc_table,ns_sp1401::r1c::tx_temp_comp_freqs)
 } rx_tc_table;
-
-} // namespace rd
 
 #endif

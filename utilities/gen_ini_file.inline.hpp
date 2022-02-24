@@ -7,7 +7,6 @@
 bool compare(const char *str1,const char *str2);
 bool get_key_value(FILE *fp,const char *key,char *value);
 
-using namespace rd;
 using namespace boost;
 
 gen_ini_file::gen_ini_file(const char *file_name)

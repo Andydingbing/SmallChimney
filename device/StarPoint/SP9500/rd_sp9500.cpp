@@ -8,8 +8,7 @@
 #include <vector>
 
 using namespace std;
-using namespace rd;
-using namespace rd::ns_sp9500;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 
 typedef struct available_rf_board_t {

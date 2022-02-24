@@ -3,8 +3,6 @@
 
 #include "../cal_table.h"
 
-namespace rd {
-
 // rf frequency response
 class API rx_rf_fr_table
 {
@@ -99,7 +97,5 @@ public:
     void get(uint64_t freq,data_m_t *data);
     void get(uint64_t freq,data_f_t *data);
 };
-
-} // namespace rd
 
 #endif

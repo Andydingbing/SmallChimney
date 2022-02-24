@@ -1,7 +1,6 @@
 #include "tx_pwr_table.h"
 #include "algo_math.hpp"
 
-using namespace rd;
 using namespace ns_sp1401;
 
 // R1A/B

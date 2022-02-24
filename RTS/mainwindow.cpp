@@ -13,6 +13,7 @@
 #include "device.h"
 #include "Ericsson/Radio_4415/ericsson_radio_4415_b3_child_widget.h"
 #include "Ericsson/Air_3268/ericsson_air_3268_b42_child_widget.h"
+#include "StarPoint/SP9500/starpoint_sp9500_child_widget.h"
 #include "log_model.hpp"
 #include "device_init_thread.h"
 #include "scroll_lineedit.h"
@@ -67,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(this));
     childWidgets.push_back(new ns_ericsson::ns_air_3268::ChildWidgets(this));
+    childWidgets.push_back(new ns_sp9500::ChildWidgets(this));
 
     mainSplitter  = new QSplitter(Qt::Horizontal,ui->centralWidget);
     rightSplitter = new QSplitter(Qt::Vertical);
@@ -117,6 +119,8 @@ void MainWindow::switchProject()
         str.push_front(menu->title());
         menu = (QMenu *)(menu->parent());
     }
+
+    str.pop_front();
 
     for (;iter != mapProjectMenu.cend();++iter) {
         if (iter->menu == str) {
@@ -185,6 +189,7 @@ void MainWindow::initMenu()
 
     addMapProjectMenu(Ericsson_Radio_4415_B3,"Ericsson,Radio 4415 B3");
     addMapProjectMenu(Ericsson_Air_3268_B47,"Ericsson,Air 3268 B47");
+    addMapProjectMenu(StarPoint_SP9500,"StarPoint,SP9500");
 
     QList<MapProjectMenu>::const_iterator iterMap = mapProjectMenu.cbegin();
 

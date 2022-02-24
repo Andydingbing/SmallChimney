@@ -4,8 +4,6 @@
 #include <string>
 #include "ftplib.h"
 
-namespace rd {
-
 #define FTP_CHECK(func) \
     if ( (ret = func) != 1 ) { \
         return false; \
@@ -87,6 +85,4 @@ private:
     std::string _pwd;
 };
 
-} // namespace rd
-
-#endif // FTP_H
+#endif

@@ -93,8 +93,6 @@
 #define R1F_RX_REF_IO_PTS \
     SERIE_SIZE(R1F_RX_REF_IO_STAR,R1F_RX_REF_IO_STOP,R1F_RX_REF_STEP)
 
-namespace rd {
-
 STRUCT_ALIGN_S(coef_complex_t,2)
     int16_t real : 16;
     int16_t imag : 16;
@@ -173,7 +171,6 @@ static const uint16_t ul_cf_tap = 196;
 namespace ns_sp9500x {
 static const uint32_t g_max_fan = 16;
 } // namespace ns_sp9500x
-} // namespace rd
 
 
 

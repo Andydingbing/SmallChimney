@@ -6,8 +6,6 @@
 #include "rx_filter_table.h"
 #include <boost/smart_ptr.hpp>
 
-namespace rd {
-
 class API sp2401_r1a : ::noncopyable
 {
 public:
@@ -154,6 +152,4 @@ private:
     pci_dev_vi *m_s6;
 };
 
-} // namespace rd
-
-#endif // SP2401_R1A_H
+#endif
