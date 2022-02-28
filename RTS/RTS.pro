@@ -60,7 +60,8 @@ HEADERS += \
     log_model.hpp \
     child_widget_helper.h \
     device_init_thread.h \
-    winthread.h
+    winthread.h \
+    signal_analyzer_freq_widget.h
 
 SOURCES += \
     ../Qt/config_table.cpp \
@@ -74,7 +75,8 @@ SOURCES += \
     mainwindow.cpp \
     child_widget_helper.cpp \
     device_init_thread.cpp \
-    winthread.cpp
+    winthread.cpp \
+    signal_analyzer_freq_widget.cpp
 
 FORMS += \
     main_dialog.ui \

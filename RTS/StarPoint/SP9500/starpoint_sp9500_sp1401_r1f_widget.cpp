@@ -1,6 +1,5 @@
 #include "starpoint_sp9500_sp1401_r1f_widget.h"
 
-using namespace ns_sp1401;
 using namespace ns_sp1401::r1f;
 
 Q_StarPoint_SP9500_SP1401_R1F_Widget::Q_StarPoint_SP9500_SP1401_R1F_Widget(QWidget *parent) :

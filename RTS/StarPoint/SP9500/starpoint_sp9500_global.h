@@ -23,6 +23,11 @@
 #include "ui_starpoint_sp9500_sp1401_r1c_adv.h"
 #include "ui_starpoint_sp9500_sp1401_r1f_adv.h"
 #include "ui_starpoint_sp9500_sp2401_r1a.h"
+#include "ui_starpoint_sp9500_fpga.h"
+
+using namespace ns_sp9500;
+using namespace ns_sp1401;
+using namespace ns_sp2401;
 
 extern sp3301 *SP3301;
 

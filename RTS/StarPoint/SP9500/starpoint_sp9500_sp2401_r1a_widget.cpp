@@ -1,10 +1,6 @@
 #include "starpoint_sp9500_sp2401_r1a_widget.h"
 #include "algo_math.hpp"
 
-using namespace ns_sp9500;
-using namespace ns_sp1401;
-using namespace ns_sp2401;
-
 void QString2Coef(const QString strCoef,double *coef,qint32 order)
 {
     int idxStar = 0;

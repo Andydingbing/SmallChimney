@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Q_SA_Widget</class>
- <widget class="QWidget" name="Q_SA_Widget">
+ <class>Q_StarPoint_SA_Widget</class>
+ <widget class="QWidget" name="Q_StarPoint_SA_Widget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -175,15 +175,15 @@
     </layout>
    </item>
    <item>
-    <widget class="Q_SA_Plot" name="plot" native="true"/>
+    <widget class="QwtPlot" name="plot" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Q_SA_Plot</class>
+   <class>QwtPlot</class>
    <extends>QWidget</extends>
-   <header>rddt_plot.hpp</header>
+   <header>qwt_plot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

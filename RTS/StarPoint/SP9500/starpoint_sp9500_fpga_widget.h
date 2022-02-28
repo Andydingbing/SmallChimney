@@ -1,21 +1,15 @@
-#ifndef Q_SP9500_FPGA_WIDGET_H
-#define Q_SP9500_FPGA_WIDGET_H
+#ifndef Q_STARPOINT_SP9500_FPGA_WIDGET_H
+#define Q_STARPOINT_SP9500_FPGA_WIDGET_H
 
-#include "global.h"
+#include "starpoint_sp9500_global.h"
 
-namespace Ui {
-class Q_SP9500_FPGA_Widget;
-}
-
-namespace NS_SP9500 {
-
-class Q_FPGA_Widget : public QWidget
+class Q_StarPoint_SP9500_FPGA_Widget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Q_FPGA_Widget(QWidget *parent = nullptr);
-    ~Q_FPGA_Widget();
+    Q_StarPoint_SP9500_FPGA_Widget(QWidget *parent = nullptr);
+    ~Q_StarPoint_SP9500_FPGA_Widget();
 
 private slots:
     void on_pushButtonWriteK7_0_clicked();
@@ -43,9 +37,7 @@ private slots:
     void on_pushButtonProgramK7_1_clicked();
 
 private:
-    Ui::Q_SP9500_FPGA_Widget *ui;
+    Ui::Q_StarPoint_SP9500_FPGA_Widget *ui;
 };
 
-} // namespace NS_SP9500
-
-#endif // Q_SP9500_FPGA_WIDGET_H
+#endif

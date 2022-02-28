@@ -1,4 +1,5 @@
-#include "sp9500_iq_cap_config_widget.h"
+#include "starpoint_sp9500_iq_cap_config_widget.h"
+#include "starpoint_sp9500_global.h"
 
 namespace NS_SP9500 {
 

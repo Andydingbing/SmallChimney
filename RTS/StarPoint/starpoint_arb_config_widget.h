@@ -20,4 +20,4 @@ protected:
     Q_Config_Table_Delegate *delegate;
 };
 
-#endif // Q_ARB_CONFIG_WIDGET_H
+#endif

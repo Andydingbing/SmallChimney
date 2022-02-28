@@ -1,6 +1,6 @@
-#include "arb_config_widget.h"
-#include "arb_widget.h"
-#include "ui_arb.h"
+#include "starpoint_arb_config_widget.h"
+#include "starpoint_arb_widget.h"
+#include "ui_starpoint_arb.h"
 
 void Q_ARB_Config_Widget_Helper::init()
 {

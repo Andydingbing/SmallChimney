@@ -38,7 +38,7 @@ void Q_Cal_RX_RF_VGA_Widget::init()
     result->checkBoxMonotonic->setChecked(false);
     result->lineEditDyRange->setText("");
 
-    ::init(ui->plot,0,32,70.0,110.0);
+    initPlot(ui->plot,0,32,70.0,110.0);
     ui->plot->setTitle("Att bit/Power");
 
     curve.curve.setPen(Qt::green);

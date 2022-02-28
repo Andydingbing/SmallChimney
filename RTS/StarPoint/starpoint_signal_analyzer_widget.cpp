@@ -1,9 +1,9 @@
-#include "signal_analyzer_widget.h"
-#include "ui_signal_analyzer.h"
-#include "sp9500_iq_cap_config_widget.h"
-#include "dt3308_iq_cap_config_widget.h"
-#include "sp9500x_iq_cap_config_widget.h"
+#include "starpoint_signal_analyzer_widget.h"
+#include "ui_starpoint_signal_analyzer.h"
+#include "SP9500/starpoint_sp9500_iq_cap_config_widget.h"
+//#include "sp9500x_iq_cap_config_widget.h"
 #include "signal_analyzer_freq_widget.h"
+#include "qwt_plot_helper.h"
 #include "qwt_plot_canvas.h"
 #include "qwt_plot_grid.h"
 #include "qwt_plot_picker.h"
@@ -16,14 +16,13 @@
 #include "mainwindow.h"
 
 Q_SA_Widget::Q_SA_Widget(QWidget *parent) :
-    Q_RD_Widget(parent),
-    ui(new Ui::Q_SA_Widget)
+    Q_Widget(parent),
+    ui(new Ui::Q_StarPoint_SA_Widget)
 {
     ui->setupUi(this);
 
-    widget_Config[SP9500]  = new NS_SP9500::Q_IQ_Cap_Config_Widget_Helper(this);
-    widget_Config[DT3308]  = new NS_DT3308::Q_IQ_Cap_Config_Widget_Helper(this);
-    widget_Config[SP9500X] = new NS_SP9500X::Q_IQ_Cap_Config_Widget_Helper(this);
+    widget_Config[StarPoint_SP9500]  = new NS_SP9500::Q_IQ_Cap_Config_Widget_Helper(this);
+//    widget_Config[SP9500X] = new NS_SP9500X::Q_IQ_Cap_Config_Widget_Helper(this);
     tableView_Config = new Q_Config_Table_View(ui->tab);
 
     widget_Freq = new Q_SA_Freq_Widget_Helper(this);
@@ -32,7 +31,7 @@ Q_SA_Widget::Q_SA_Widget(QWidget *parent) :
     ui->tab->addTab(tableView_Config,QString("Config"));
     ui->tab->addTab(tableView_Freq,QString("Frequency"));
 
-    ui->plot->init();
+    initPlot(ui->plot);
 
 
 //    _data_Magnitude._sequence = &_finalSequence;
@@ -86,23 +85,23 @@ void Q_SA_Widget::plotToFreqDomain()
 
 void Q_SA_Widget::updatePlotFromBuf()
 {
-    if (g_MainW == nullptr) {
-        return;
-    }
+//    if (g_MainW == nullptr) {
+//        return;
+//    }
 
-    quint32 samples = complexSequence->samples();
+//    quint32 samples = complexSequence->samples();
 
-    if (project == SP9500) {
-        INT_CHECKV(SP3301->iq_cap_iq2buf(RFIdx,samples));
-    } else if (project == DT3308) {
-        DT3308_BB_F->ddr()->iq2buf(complexSequence->i(),complexSequence->q());
-    }
+//    if (project == StarPoint_SP9500) {
+//        INT_CHECKV(SP3301->iq_cap_iq2buf(RFIdx,samples));
+//    } else if (project == DT3308) {
+//        DT3308_BB_F->ddr()->iq2buf(complexSequence->i(),complexSequence->q());
+//    }
 
-    if (showingDFT) {
-        complexSequence->dft();
-    }
+//    if (showingDFT) {
+//        complexSequence->dft();
+//    }
 
-    ui->plot->replot();
+//    ui->plot->replot();
 }
 
 void Q_SA_Widget::init()
@@ -123,24 +122,24 @@ void Q_SA_Widget::updatePlot()
 
 void Q_SA_Widget::on_pushButtonCap_clicked()
 {
-    if (project == SP9500) {
-        INT_CHECKV(SP3301->iq_cap(RFIdx));
-    } else if (project == DT3308) {
-        INT_CHECKV(DT3308_BB_F->ddr()->fpga_w());
-    } else if (project == SP9500X) {
-        INT_CHECKV(NS_SP9500X::SP2406->set_iq_cap_abort());
-        INT_CHECKV(NS_SP9500X::SP2406->set_iq_cap_start());
-//        INT_CHECKV(NS_SP9500X::SP2406->ddr()->dump("c:\\iq.txt"));
-    }
-    updatePlotFromBuf();
+//    if (project == SP9500) {
+//        INT_CHECKV(SP3301->iq_cap(RFIdx));
+//    } else if (project == DT3308) {
+//        INT_CHECKV(DT3308_BB_F->ddr()->fpga_w());
+//    } else if (project == SP9500X) {
+//        INT_CHECKV(NS_SP9500X::SP2406->set_iq_cap_abort());
+//        INT_CHECKV(NS_SP9500X::SP2406->set_iq_cap_start());
+////        INT_CHECKV(NS_SP9500X::SP2406->ddr()->dump("c:\\iq.txt"));
+//    }
+//    updatePlotFromBuf();
 }
 
 
 void Q_SA_Widget::on_pushButtonAbort_clicked()
 {
-    if (project == SP9500X) {
-        NS_SP9500X::SP2406->set_iq_cap_abort();
-    }
+//    if (project == SP9500X) {
+//        NS_SP9500X::SP2406->set_iq_cap_abort();
+//    }
 }
 
 //void Q_SA_Widget::on_pushButtonSetPath_clicked()
@@ -221,32 +220,32 @@ void Q_SA_Widget::on_checkBoxMinHold_clicked()
 
 void Q_SA_Widget::sweepOnce()
 {
-    quint64 freq = 0;
-    quint32 sample = complexSequence->samples();
-    quint32 sampleInBand = sample * 10000 / 24576;
-    quint32 seg_idx = 0;
+//    quint64 freq = 0;
+//    quint32 sample = complexSequence->samples();
+//    quint32 sampleInBand = sample * 10000 / 24576;
+//    quint32 seg_idx = 0;
 
-    _finalSequence._new(SERIE_SIZE(ns_sp1401::rx_freq_star,ns_sp1401::rx_freq_stop,FREQ_M(100)) * sampleInBand);
+//    _finalSequence._new(SERIE_SIZE(ns_sp1401::rx_freq_star,ns_sp1401::rx_freq_stop,FREQ_M(100)) * sampleInBand);
 
-    for (quint32 i = 0;i < _finalSequence.samples();++i) {
-        _finalSequence._normalized_freq[i] = ns_sp1401::rx_freq_star + i * complexSequence->rbw();
-        _finalSequence._magnitude[i] = double(_finalSequence.samples() - i) / -100.0;
-    }
+//    for (quint32 i = 0;i < _finalSequence.samples();++i) {
+//        _finalSequence._normalized_freq[i] = ns_sp1401::rx_freq_star + i * complexSequence->rbw();
+//        _finalSequence._magnitude[i] = double(_finalSequence.samples() - i) / -100.0;
+//    }
 
-//    SP3301->rf_set_rx_freq(RFIdx,FREQ_G(2));
-//    SP3301->rf_set_rx_level(RFIdx,-10.0);
-    SP3301->set_iq_cap_samples(RFIdx,sample);
+////    SP3301->rf_set_rx_freq(RFIdx,FREQ_G(2));
+////    SP3301->rf_set_rx_level(RFIdx,-10.0);
+//    SP3301->set_iq_cap_samples(RFIdx,sample);
 
-    for (freq = ns_sp1401::rx_freq_star;freq <= ns_sp1401::rx_freq_stop;freq += FREQ_M(100)) {
-        SP1401->set_rx_freq(freq);
+//    for (freq = ns_sp1401::rx_freq_star;freq <= ns_sp1401::rx_freq_stop;freq += FREQ_M(100)) {
+//        SP1401->set_rx_freq(freq);
 
-        SP3301->iq_cap(RFIdx);
-        SP3301->iq_cap_iq2buf(RFIdx,sample);
-        complexSequence->dft();
+//        SP3301->iq_cap(RFIdx);
+//        SP3301->iq_cap_iq2buf(RFIdx,sample);
+//        complexSequence->dft();
 
-        memcpy(_finalSequence.magnitude() + seg_idx * sampleInBand,
-               complexSequence->magnitude(-50e6),sampleInBand * sizeof(double));
-        ++seg_idx;
-    }
-    ui->plot->replot();
+//        memcpy(_finalSequence.magnitude() + seg_idx * sampleInBand,
+//               complexSequence->magnitude(-50e6),sampleInBand * sizeof(double));
+//        ++seg_idx;
+//    }
+//    ui->plot->replot();
 }

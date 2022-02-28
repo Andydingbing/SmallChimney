@@ -1,5 +1,5 @@
 #include "signal_analyzer_freq_widget.h"
-#include "signal_analyzer_widget.h"
+//#include "signal_analyzer_widget.h"
 #include <QStandardItemModel>
 #include <QLineEdit>
 #include <QTableView>
@@ -54,8 +54,8 @@ Q_SA_Freq_Widget_Helper::Q_SA_Freq_Widget_Helper(QWidget *parent)
 
 void Q_SA_Freq_Widget_Helper::init()
 {
-    Q_SA_Widget *p = dynamic_cast<Q_SA_Widget *>(parent);
+//    Q_SA_Widget *p = dynamic_cast<Q_SA_Widget *>(parent);
 
-    p->tableView_Freq->setItemDelegate(delegate);
-    p->tableView_Freq->setModel(model);
+//    p->tableView_Freq->setItemDelegate(delegate);
+//    p->tableView_Freq->setModel(model);
 }

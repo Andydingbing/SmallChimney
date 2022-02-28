@@ -2,12 +2,13 @@
 #define Q_SA_Widget_H
 
 #include "global.h"
+#include "table_model.h"
 #include "qwt_plot_curve.h"
 
-class Qwt_I_Data : public Qwt_Data
+class Qwt_I_Data : public Qwt_Series_Data
 {
 public:
-    Qwt_I_Data() : Qwt_Data() { _sequence = nullptr; }
+    Qwt_I_Data() : Qwt_Series_Data() { _sequence = nullptr; }
 
     size_t size() const
     { return _sequence != nullptr ? _sequence->samples() : 0; }
@@ -19,10 +20,10 @@ public:
     complex_sequence *_sequence;
 };
 
-class Qwt_Q_Data : public Qwt_Data
+class Qwt_Q_Data : public Qwt_Series_Data
 {
 public:
-    Qwt_Q_Data() : Qwt_Data() { _sequence = nullptr; }
+    Qwt_Q_Data() : Qwt_Series_Data() { _sequence = nullptr; }
 
     size_t size() const
      { return _sequence != nullptr ? _sequence->samples() : 0; }
@@ -34,10 +35,10 @@ public:
     complex_sequence *_sequence;
 };
 
-class Qwt_DFT_Data : public Qwt_Data
+class Qwt_DFT_Data : public Qwt_Series_Data
 {
 public:
-    Qwt_DFT_Data() : Qwt_Data() { _sequence = nullptr; }
+    Qwt_DFT_Data() : Qwt_Series_Data() { _sequence = nullptr; }
 
     size_t size() const
      { return _sequence != nullptr ? _sequence->samples() : 0; }
@@ -51,7 +52,7 @@ public:
 
 
 namespace Ui {
-class Q_SA_Widget;
+class Q_StarPoint_SA_Widget;
 }
 
 class Qwt_I_Data;
@@ -60,12 +61,9 @@ class Qwt_DFT_Data;
 class Q_IQ_Cap_Config_Widget_Helper;
 class Q_SA_Freq_Widget_Helper;
 
-class Q_SA_Widget : public Q_RD_Widget
+class Q_SA_Widget : public Q_Widget
 {
     Q_OBJECT
-
-    friend class Q_IQ_Cap_Config_Widget_Helper;
-    friend class Q_SA_Freq_Widget_Helper;
 
 public:
     explicit Q_SA_Widget(QWidget *parent = nullptr);
@@ -118,7 +116,7 @@ public:
     Q_IQ_Cap_Config_Widget_Helper *widget_Config[PROJECTS];
     Q_SA_Freq_Widget_Helper *widget_Freq;
 
-    Ui::Q_SA_Widget *ui;
+    Ui::Q_StarPoint_SA_Widget *ui;
 };
 
-#endif // Q_SA_Widget_H
+#endif

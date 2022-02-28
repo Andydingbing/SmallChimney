@@ -32,4 +32,4 @@ protected:
     Q_SA_Freq_Delegate *delegate;
 };
 
-#endif // Q_SIGNAL_ANALYZER_FREQ_WIDGET_H
+#endif

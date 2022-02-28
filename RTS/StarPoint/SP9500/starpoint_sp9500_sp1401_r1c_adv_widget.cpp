@@ -1,7 +1,6 @@
 #include "starpoint_sp9500_sp1401_r1c_adv_widget.h"
 #include "freq_string.hpp"
 
-using namespace ns_sp1401;
 using namespace ns_sp1401::r1c;
 
 Q_StarPoint_SP9500_SP1401_R1C_Adv_Widget::Q_StarPoint_SP9500_SP1401_R1C_Adv_Widget(QWidget *parent) :

@@ -1,5 +1,5 @@
-#include "iq_cap_config_widget.h"
-#include "signal_analyzer_widget.h"
+#include "starpoint_signal_analyzer_config_widget.h"
+#include "starpoint_signal_analyzer_widget.h"
 #include <QTableView>
 #include <QStyledItemDelegate>
 #include <QHeaderView>

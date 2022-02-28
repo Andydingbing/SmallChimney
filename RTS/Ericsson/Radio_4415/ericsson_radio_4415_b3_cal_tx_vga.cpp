@@ -80,7 +80,7 @@ void Q_Cal_TX_VGA_Widget::init()
     config->textEditFreq->setText("1842.5M");
     result->lineEditDyRange->setText("");
 
-    ::init(ui->plot,0,4000,-5,35.0);
+    initPlot(ui->plot,0,4000,-5,35.0);
     ui->plot->setTitle("DAC/Range");
 
     curve.curve.setPen(Qt::green,3);

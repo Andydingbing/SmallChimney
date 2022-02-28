@@ -1,3 +1,4 @@
+#include "starpoint_sp9500_global.h"
 #include "starpoint_sp9500_child_widget.h"
 #include "starpoint_sp9500_sp1401_container_widget.h"
 #include "starpoint_sp9500_sp1401_r1a_widget.h"
@@ -7,16 +8,13 @@
 #include "starpoint_sp9500_sp1401_r1c_adv_widget.h"
 #include "starpoint_sp9500_sp1401_r1f_adv_widget.h"
 #include "starpoint_sp9500_sp2401_r1a_widget.h"
-//#include "arb_widget.h"
-//#include "sp9500_iq_cap_config_widget.h"
-//#include "signal_analyzer_widget.h"
-//#include "sp9500_fpga_widget.h"
+#include "../starpoint_arb_widget.h"
+#include "../starpoint_signal_analyzer_widget.h"
+#include "starpoint_sp9500_fpga_widget.h"
 
 typedef Q_SP1401_Container_Widget<Q_StarPoint_SP9500_SP1401_R1A_Widget> Q_SP1401_R1A_Container_Widget;
 typedef Q_SP1401_Container_Widget<Q_StarPoint_SP9500_SP1401_R1C_Widget> Q_SP1401_R1C_Container_Widget;
 typedef Q_SP1401_Container_Widget<Q_StarPoint_SP9500_SP1401_R1F_Widget> Q_SP1401_R1F_Container_Widget;
-
-using namespace ns_sp9500;
 
 ChildWidgets::ChildWidgets(MainWindow *parent) :
     ChildWidgetHelper(parent)
@@ -26,8 +24,8 @@ ChildWidgets::ChildWidgets(MainWindow *parent) :
 
 void ChildWidgets::init()
 {
-    DECL_TREE("RF-R1F,Overview",Q_SP1401_R1F_Container_Widget,ns_sp9500::g_max_rf);
-    DECL_TREE("RF-R1F,Advance",Q_StarPoint_SP9500_SP1401_R1F_Adv_Widget,ns_sp9500::g_max_rf);
+    DECL_TREE("RF-R1F,Overview",Q_SP1401_R1F_Container_Widget,g_max_rf);
+    DECL_TREE("RF-R1F,Advance",Q_StarPoint_SP9500_SP1401_R1F_Adv_Widget,g_max_rf);
 //    DECL_TREE("RF-R1F,Test",widget_Test_R1C);
 //    DECL_TREE("RF-R1F,Calibration",widget_Cal_R1C);
 //    DECL_TREE("RF-R1F,Calibration,TX-LOLeakage",widget_Cal_R1C_TX_LOLeak);
@@ -43,13 +41,13 @@ void ChildWidgets::init()
 //    DECL_TREE("RF-R1F,Calibration,TX-TempComp",widget_Cal_R1C_TX_TempComp);
 //    DECL_TREE("RF-R1F,Calibration,RX-TempComp",widget_Cal_R1C_RX_TempComp);
 
-    DECL_TREE("BB-Debug,OverView",Q_StarPoint_SP9500_SP2401_R1A_Widget,ns_sp9500::g_max_rf);
-//    DECL_TREE("BB-Debug,Arb",Q_ARB_Widget,ns_sp9500::g_max_rf);
-//    DECL_TREE("BB-Debug,IQ-Capture",Q_SA_Widget,ns_sp9500::g_max_rf);
-//    DECL_TREE("BB-Debug,FPGA",Q_FPGA_Widget,1);
+    DECL_TREE("BB-Debug,OverView",Q_StarPoint_SP9500_SP2401_R1A_Widget,g_max_rf);
+    DECL_TREE("BB-Debug,Arb",Q_ARB_Widget,g_max_rf);
+    DECL_TREE("BB-Debug,IQ-Capture",Q_SA_Widget,g_max_rf);
+    DECL_TREE("BB-Debug,FPGA",Q_StarPoint_SP9500_FPGA_Widget,1);
 
-    DECL_TREE("RF-R1C/D/E,Overview",Q_SP1401_R1C_Container_Widget,ns_sp9500::g_max_rf);
-    DECL_TREE("RF-R1C/D/E,Advance",Q_StarPoint_SP9500_SP1401_R1C_Adv_Widget,ns_sp9500::g_max_rf);
+    DECL_TREE("RF-R1C/D/E,Overview",Q_SP1401_R1C_Container_Widget,g_max_rf);
+    DECL_TREE("RF-R1C/D/E,Advance",Q_StarPoint_SP9500_SP1401_R1C_Adv_Widget,g_max_rf);
 //    DECL_TREE("RF-R1C/D/E,Test",widget_Test_R1C);
 //    DECL_TREE("RF-R1C/D/E,Calibration,TX-LOLeakage",widget_Cal_R1C_TX_LOLeak);
 //    DECL_TREE("RF-R1C/D/E,Calibration,TX-Sideband",widget_Cal_R1C_TX_SB);
@@ -64,8 +62,8 @@ void ChildWidgets::init()
 //    DECL_TREE("RF-R1C/D/E,Calibration,TX-TempComp",widget_Cal_R1C_TX_TempComp);
 //    DECL_TREE("RF-R1C/D/E,Calibration,RX-TempComp",widget_Cal_R1C_RX_TempComp);
 
-    DECL_TREE("RF-R1A/B,Overview",Q_SP1401_R1A_Container_Widget,ns_sp9500::g_max_rf);
-    DECL_TREE("RF-R1A/B,Advance",Q_StarPoint_SP9500_SP1401_R1A_Adv_Widget,ns_sp9500::g_max_rf);
+    DECL_TREE("RF-R1A/B,Overview",Q_SP1401_R1A_Container_Widget,g_max_rf);
+    DECL_TREE("RF-R1A/B,Advance",Q_StarPoint_SP9500_SP1401_R1A_Adv_Widget,g_max_rf);
 
     treeChildItems = treeChildItemsBuiltIn;
     setMainTree(treeChildItemsBuiltIn);

@@ -30,4 +30,4 @@ protected:
     Q_IQ_Cap_Config_Delegate *delegate;
 };
 
-#endif // Q_IQ_CAP_CONFIG_WIDGET_H
+#endif

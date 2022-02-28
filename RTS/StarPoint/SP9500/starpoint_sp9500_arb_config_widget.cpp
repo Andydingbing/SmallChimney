@@ -1,6 +1,7 @@
-#include "sp9500_arb_config_widget.h"
-#include "arb_widget.h"
-#include "ui_arb.h"
+#include "starpoint_sp9500_arb_config_widget.h"
+#include "starpoint_sp9500_global.h"
+#include "../starpoint_arb_widget.h"
+#include "ui_starpoint_arb.h"
 
 namespace NS_SP9500 {
 
