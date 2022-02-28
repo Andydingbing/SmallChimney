@@ -11,6 +11,7 @@
 #include "../starpoint_arb_widget.h"
 #include "../starpoint_signal_analyzer_widget.h"
 #include "starpoint_sp9500_fpga_widget.h"
+#include "starpoint_sp9500_cal_tx_lo_leak.h"
 
 typedef Q_SP1401_Container_Widget<Q_StarPoint_SP9500_SP1401_R1A_Widget> Q_SP1401_R1A_Container_Widget;
 typedef Q_SP1401_Container_Widget<Q_StarPoint_SP9500_SP1401_R1C_Widget> Q_SP1401_R1C_Container_Widget;
@@ -28,7 +29,7 @@ void ChildWidgets::init()
     DECL_TREE("RF-R1F,Advance",Q_StarPoint_SP9500_SP1401_R1F_Adv_Widget,g_max_rf);
 //    DECL_TREE("RF-R1F,Test",widget_Test_R1C);
 //    DECL_TREE("RF-R1F,Calibration",widget_Cal_R1C);
-//    DECL_TREE("RF-R1F,Calibration,TX-LOLeakage",widget_Cal_R1C_TX_LOLeak);
+    DECL_TREE("RF-R1F,Calibration,TX-LOLeakage",Q_Cal_TX_LO_Leak_Widget,g_max_rf);
 //    DECL_TREE("RF-R1F,Calibration,TX-Sideband",widget_Cal_R1C_TX_SB);
 //    DECL_TREE("RF-R1F,Calibration,TX-Filter",widget_Cal_R1C_TX_Filter);
 //    DECL_TREE("RF-R1F,Calibration,TX-BasePower",widget_Cal_R1C_TX_Pwr);

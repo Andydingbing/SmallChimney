@@ -16,7 +16,8 @@ HEADERS += \
     StarPoint/SP9500/starpoint_sp9500_sp2401_r1a_widget.h \
     StarPoint/SP9500/starpoint_sp9500_arb_config_widget.h \
     StarPoint/SP9500/starpoint_sp9500_iq_cap_config_widget.h \
-    StarPoint/SP9500/starpoint_sp9500_fpga_widget.h
+    StarPoint/SP9500/starpoint_sp9500_fpga_widget.h \
+    StarPoint/SP9500/starpoint_sp9500_cal_tx_lo_leak.h
 
 SOURCES += \
     StarPoint/starpoint_arb_widget.cpp \
@@ -36,7 +37,8 @@ SOURCES += \
     StarPoint/SP9500/starpoint_sp9500_sp2401_r1a_widget.cpp \
     StarPoint/SP9500/starpoint_sp9500_arb_config_widget.cpp \
     StarPoint/SP9500/starpoint_sp9500_iq_cap_config_widget.cpp \
-    StarPoint/SP9500/starpoint_sp9500_fpga_widget.cpp
+    StarPoint/SP9500/starpoint_sp9500_fpga_widget.cpp \
+    StarPoint/SP9500/starpoint_sp9500_cal_tx_lo_leak.cpp
 
 FORMS += \
     StarPoint/../chip/adf5355.ui \
@@ -50,4 +52,5 @@ FORMS += \
     StarPoint/SP9500/starpoint_sp9500_sp1401_r1c_adv.ui \
     StarPoint/SP9500/starpoint_sp9500_sp1401_r1f_adv.ui \
     StarPoint/SP9500/starpoint_sp9500_sp2401_r1a.ui \
-    StarPoint/SP9500/starpoint_sp9500_fpga.ui
+    StarPoint/SP9500/starpoint_sp9500_fpga.ui \
+    StarPoint/SP9500/starpoint_sp9500_cal_tx_lo_leak.ui
