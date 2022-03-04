@@ -19,6 +19,7 @@
 #include "warning.h"
 #include "param_pick/_1_2.h"
 #include "param_pick/_1_3.h"
+#include "param_pick/_2_2.h"
 #include "param_pick/_2_3.h"
 #include "param_pick/first_n.h"
 #include "enum.h"

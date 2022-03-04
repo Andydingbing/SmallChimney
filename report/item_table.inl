@@ -21,7 +21,7 @@ int32_t item_table<data_f_t,data_m_t>::get(const uint64_t &key,data_m_t &data) c
     typename std::vector<data_m_t>::const_iterator iter = _data_m.cbegin();
 
     for (;iter != _data_m.cend();++iter) {
-//      if (iter->key() >= int64_t(key)) {
+//      if (key >= int64_t(key)) {
 //          data = *iter;
 //          return 0;
 //      }

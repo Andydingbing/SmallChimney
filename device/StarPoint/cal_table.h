@@ -93,11 +93,6 @@
 #define R1F_RX_REF_IO_PTS \
     SERIE_SIZE(R1F_RX_REF_IO_STAR,R1F_RX_REF_IO_STOP,R1F_RX_REF_STEP)
 
-STRUCT_ALIGN_S(coef_complex_t,2)
-    int16_t real : 16;
-    int16_t imag : 16;
-STRUCT_ALIGN_E(coef_complex_t,2)
-
 namespace ns_sp2401 {
 static const uint16_t dl_filter_tap_2i = 41;
 static const double   dl_filter_freq_step = 2000000.0;

@@ -34,4 +34,4 @@
 #define PARAM_PICK_1_OF_2_1(...) MACRO_ID(PARAM_PICK_APPLY(sep,prefix,suffix,_1_OF_2_1_VAR_COUNT,PP_COUNT_3(__VA_ARGS__))(__VA_ARGS__))
 #define PARAM_PICK_1_OF_2_2(...) MACRO_ID(PARAM_PICK_APPLY(sep,prefix,suffix,_1_OF_2_2_VAR_COUNT,PP_COUNT_3(__VA_ARGS__))(__VA_ARGS__))
 
-#endif // INCLUDE_PREPROCESSOR_PARAM_PICK_1_2_H
+#endif

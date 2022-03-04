@@ -5,7 +5,6 @@
 
 class API cal_file_r1cd : public cal_file
 {
-    DECLARE_CAL_FILE()
 
 public:
     cal_file_r1cd(ns_sp1401::hw_ver_t ver,uint32_t rf_idx,uint32_t rfu_idx);
@@ -20,19 +19,8 @@ public:
     int32_t gen_rx_filter_coef();
     int32_t update_rx_filter_table();
 
-    tx_lol_table_r1cd *tx_lol() { return m_tx_lol.get(); }
-//    tx_sb_table_r1cd* tx_sb { return m_tx_sb.get(); }
-    tx_tc_table *tx_tc() { return m_tx_tc.get(); }
-    tx_tp_table *tx_tp() { return _tx_tp.get(); }
-
-    rx_tc_table *rx_tc() { return m_rx_tc.get(); }
-    rx_tp_table *rx_tp() { return _rx_tp.get(); }
 
 public:
-    boost::shared_ptr<tx_lol_table_r1cd>        m_tx_lol;
-    boost::shared_ptr<tx_sb_table_r1cd>         m_tx_sb;
-    boost::shared_ptr<tx_pwr_op_table_r1c>      m_tx_pwr_op;
-    boost::shared_ptr<tx_pwr_io_table_r1c>      m_tx_pwr_io;
     boost::shared_ptr<tx_att_op_table_r1cd>     m_tx_att_op;
     boost::shared_ptr<tx_att_io_table_r1cd>     m_tx_att_io;
     boost::shared_ptr<rx_ref_op_table_r1cd>     m_rx_ref_op;

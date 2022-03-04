@@ -133,6 +133,9 @@ INCLUDEPATH += \
           $$VAR_INCLUDE_ROOT/device \
        ../$$VAR_INCLUDE_ROOT/device \
     ../../$$VAR_INCLUDE_ROOT/device \
+          $$VAR_INCLUDE_ROOT/report \
+       ../$$VAR_INCLUDE_ROOT/report \
+    ../../$$VAR_INCLUDE_ROOT/report \
           $$VAR_INCLUDE_ROOT/device/common \
        ../$$VAR_INCLUDE_ROOT/device/common \
     ../../$$VAR_INCLUDE_ROOT/device/common \

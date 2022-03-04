@@ -47,7 +47,6 @@ void basic_report<item_table_t>::set_name(const std::string &name)
     _path += suffix;
 }
 
-
 template<typename item_table_t>
 int32_t basic_report<item_table_t>::make_sure_has(const item_table_t table,item_table_base *t)
 {
@@ -81,7 +80,6 @@ int32_t basic_report<item_table_t>::make_sure_has(const item_table_t table,item_
     }
 
     INT_CHECK(load());
-
 
     _tables[table._to_integral()] = t;
     return 0;

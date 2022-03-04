@@ -57,4 +57,4 @@ public:
 } // namespace ns_radio_4415
 } // namespace ns_ericsson
 
-#endif // DEVICE_ERICSSON_RADIO_4415_CAL_TABLE_RX_RF_VGA_H
+#endif

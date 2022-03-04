@@ -141,7 +141,7 @@ protected:
     virtual std::string each_data_reception(const data_f_t &data,uint32_t row,uint32_t column) const { return ""; }
     virtual uint32_t each_data_reception_rows() const {return 0;}
     virtual uint32_t each_data_reception_columns() const { return 0; }
-    virtual uint32_t each_data_reception_points(const data_f_t &data) const { return 0; }
+    virtual uint32_t each_data_reception_points(const data_f_t &data) const { return 1; }
     virtual double   each_data_reception_x(const data_f_t &data,uint32_t idx) const { return 0.0; }
     virtual double   each_data_reception_y(const data_f_t &data,uint32_t idx) const { return 0.0; }
 
