@@ -3,6 +3,9 @@
 
 #include "sp1401_r1c.h"
 
+namespace ns_starpoint {
+namespace ns_sp9500 {
+
 class API sp1401_r1e : public sp1401_r1c
 {
 public:
@@ -66,5 +69,8 @@ public:
     int32_t set_rx_att1(double att);
     virtual int32_t set_rx_att2(double att);
 };
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif

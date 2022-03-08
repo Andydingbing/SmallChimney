@@ -41,6 +41,9 @@ static SYM_INLINE uint32_t brother_idx(uint32_t rf_idx)
 { return rf_idx / 2 * 2 + (rf_idx + 1) % 2; }
 
 
+namespace ns_starpoint {
+namespace ns_sp9500 {
+
 class API sp3301 : ::noncopyable
 {
 public:
@@ -193,5 +196,8 @@ private:
     static double tx_tc_coef[12][6];
     static double rx_tc_coef[12][6];
 };
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif

@@ -11,6 +11,7 @@
 class pci_dev_vi;
 class vi_mem_io;
 
+namespace ns_starpoint {
 namespace ns_sp9500 {
 
 class API dma_mgr
@@ -56,5 +57,6 @@ private:
 };
 
 } // namespace ns_sp9500
+} // namespace ns_starpoint
 
 #endif

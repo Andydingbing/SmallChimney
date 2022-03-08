@@ -15,16 +15,6 @@ HEADERS += \
     spec.h \
     rf_driver.h \
     cal_file.h \
-    cal_file_r1ab.h \
-    cal_file_r1cd.h \
-    tx_filter_table.h \
-    tx_att_table.h \
-    tx_filter_offset_table.h \
-    rx_filter_table.h \
-    rx_ref_table.h \
-    rx_att_table.h \
-    rx_filter_offset_table.h \
-    tx_tc_table.h \
     dma_mgr.h \
     complex_sequence.h \
     ftp.h \
@@ -40,13 +30,18 @@ HEADERS += \
     sp3501.h \
     self_cal_helper.h \
     rd_sp9500.h \
+    ../../cal_table_freq_response.h \
     cal_table_x9119.h \
     cal_table_tx_lol.h \
     cal_table_tx_sideband.h \
     cal_table_tx_filter.h \
     cal_table_tx_pwr.h \
-    cal_table_tx_att.h
-
+    cal_table_tx_att.h \
+    cal_table_tx_filter_offset.h \
+    cal_table_rx_filter.h \
+    cal_table_rx_ref.h \
+    cal_table_rx_att.h \
+    cal_table_rx_filter_offset.h
 
 SOURCES += \
     ../../frontend.cpp \
@@ -55,19 +50,6 @@ SOURCES += \
     spec.cpp \
     rf_driver.cpp \
     cal_file.cpp \
-    cal_file_r1ab.cpp \
-    cal_file_r1cd.cpp \
-    tx_lol_table.cpp \
-    tx_sb_table.cpp \
-    tx_filter_table.cpp \
-    tx_pwr_table.cpp \
-    tx_att_table.cpp \
-    tx_filter_offset_table.cpp \
-    rx_filter_table.cpp \
-    rx_ref_table.cpp \
-    rx_att_table.cpp \
-    rx_filter_offset_table.cpp \
-    tx_tc_table.cpp \
     dma_mgr.cpp \
     complex_sequence.cpp \
     sp1401.cpp \
@@ -80,9 +62,13 @@ SOURCES += \
     sp3501.cpp \
     self_cal_helper.cpp \
     rd_sp9500.cpp \
+    ../../cal_table_freq_response.cpp \
     cal_table_x9119.cpp \
     cal_table_tx_lol.cpp \
     cal_table_tx_sideband.cpp \
-    cal_table_tx_filter.cpp \
     cal_table_tx_pwr.cpp \
-    cal_table_tx_att.cpp
+    cal_table_tx_att.cpp \
+    cal_table_tx_filter_offset.cpp \
+    cal_table_rx_ref.cpp \
+    cal_table_rx_att.cpp \
+    cal_table_rx_filter_offset.cpp

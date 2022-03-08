@@ -2,6 +2,8 @@
 #include "sleep_common.h"
 #include "liblog.h"
 
+using namespace ns_starpoint;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 
 self_cal_helper::self_cal_helper(sp3301 *SP3301,uint32_t rf_idx)
@@ -72,7 +74,7 @@ int32_t self_cal_tx_lol_helper::run()
     bool result = true;
     int16_t step = 0;
 
-    _sp1401->cf()->m_tx_lol->get(freq,&data);
+//    _sp1401->cf()->m_tx_lol->get(freq,&data);
 
     _sp3301->set_io_mode(_rf_idx,io_mode_t::OUTPUT);
     _sp3301->set_rx_freq(_rf_idx,freq);
@@ -142,7 +144,7 @@ int32_t self_cal_tx_lol_helper::run()
     data.dc_i = dc_i_m;
     data.dc_q = dc_q_m;
     data.pwr  = pwr_lol;
-    data.use_sa = false;
+    data.use_sa_or_loopback = false;
     _sp1401->get_temp(4,data.temp[0]);
     _sp1401->get_temp(5,data.temp[1]);
     _sp1401->get_temp(6,data.temp[2]);
@@ -150,10 +152,9 @@ int32_t self_cal_tx_lol_helper::run()
 
     time_t cur_time;
     time(&cur_time);
-    data.time = *localtime(&cur_time);
 
-    _sp1401->cf()->add(cal_file::TX_LOL,&data);
-    _sp1401->cf()->w(cal_file::TX_LOL);
+//    _sp1401->cf()->add(cal_file::TX_LOL,&data);
+//    _sp1401->cf()->w(cal_file::TX_LOL);
     return 0;
 }
 
@@ -228,7 +229,7 @@ int32_t self_cal_tx_sb_helper::init()
     return 0;
 }
 
-int32_t self_cal_tx_sb_helper::run(tx_sb_table_r1cd::data_f_t *data)
+int32_t self_cal_tx_sb_helper::run(tx_sideband_table_t::data_f_t *data)
 {
     if (is_rf_ver_before(_sp1401->get_hw_ver(),R1B)) {
         return 0;
@@ -239,7 +240,7 @@ int32_t self_cal_tx_sb_helper::run(tx_sb_table_r1cd::data_f_t *data)
     double stepTh = 0.0;
     uint16_t stepAm = 0;
 
-    _sp3301->get_sp1401_r1f(_rf_idx)->cf()->m_tx_sb->get(freq,data);
+//    _sp3301->get_sp1401_r1f(_rf_idx)->cf()->m_tx_sb->get(freq,data);
 
     _sp3301->set_io_mode(_rf_idx,io_mode_t::OUTPUT);
 
@@ -308,7 +309,7 @@ int32_t self_cal_tx_sb_helper::run(tx_sb_table_r1cd::data_f_t *data)
     data->am_i = am_i_m;
     data->am_q = am_q_m;
     data->pwr  = pwr_sb;
-    data->use_sa = false;
+    data->use_sa_or_loopback = false;
     _sp1401->get_temp(4,data->temp[0]);
     _sp1401->get_temp(5,data->temp[1]);
     _sp1401->get_temp(6,data->temp[2]);
@@ -316,10 +317,9 @@ int32_t self_cal_tx_sb_helper::run(tx_sb_table_r1cd::data_f_t *data)
 
     time_t cur_time;
     time(&cur_time);
-    data->time = *localtime(&cur_time);
 
-    _sp1401->cf()->add(cal_file::TX_SB,data);
-    _sp1401->cf()->w(cal_file::TX_SB);
+//    _sp1401->cf()->add(cal_file::TX_SB,data);
+//    _sp1401->cf()->w(cal_file::TX_SB);
     return 0;
 }
 

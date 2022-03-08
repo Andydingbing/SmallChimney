@@ -5,6 +5,7 @@
 #include "mem_io_vi.h"
 #include <boost/timer/timer.hpp>
 
+using namespace ns_starpoint;
 using namespace ns_sp9500;
 
 dma_mgr::dma_mgr(pci_dev_vi *k7) : m_k7(k7)

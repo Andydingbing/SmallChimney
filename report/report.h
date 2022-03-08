@@ -21,6 +21,9 @@ public:
     uint32_t version_current() const { return _ver_current; }
     void set_version_current(const uint32_t ver) { _ver_current = ver; }
 
+    const item_table_base *db(const item_table_t &table) const;
+    const item_table_base *db(const int32_t table) const;
+
 public:
     int32_t make_sure_has(const item_table_t table,item_table_base *t);
 

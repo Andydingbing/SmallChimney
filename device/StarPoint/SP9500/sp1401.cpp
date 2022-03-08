@@ -2,12 +2,12 @@
 #include "../chip/reg_def_sp9500.h"
 #include "sleep_common.h"
 #include "algo_math.hpp"
-#include "ftp.h"
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/function.hpp>
 
 using namespace std;
+using namespace ns_starpoint;
 using namespace ns_sp9500;
 using namespace ns_sp1401;
 using namespace boost::gregorian;
@@ -18,12 +18,9 @@ const double sp1401::temp_max = 100.0;
 const double sp1401::temp_granularity = 0.1;
 const uint32_t sp1401::temps = 1001;
 
-boost::function<bool()> sp1401::_ftp_retry_call_back = boost::function<bool()>();
-
 sp1401::sp1401()
 {
     m_k7 = nullptr;
-    m_arb_reader = boost::make_shared<arb_reader>();
     en_tx_tc = false;
     en_rx_tc = false;
 }
@@ -95,8 +92,8 @@ int32_t sp1401::set_sn_major(const hw_ver_t &ver,const uint32_t &ordinal)
 {
     char sn[32] = {0};
     ZERO_ARRAY(sn);
-    uint32_t rf_idx = m_cal_file->rf_idx();
-    uint32_t rfu_idx = m_cal_file->rfu_idx();
+    uint32_t rf_idx = _cal_file->rf_idx();
+    uint32_t rfu_idx = _cal_file->rfu_idx();
     sprintf(sn,"%9s%08XRFU%dRF%d",
             hw_ver2sn_header(ver).c_str(),
             ass_ordinal(ordinal),
@@ -544,43 +541,3 @@ int32_t sp1401::get_ad7680(uint32_t &det)
     det = RFU_K7_REG_2(0x1612,0x1692).adc;
     return 0;
 }
-
-#define IMPL_FUNC_FTP_PUT(report) \
-int32_t sp1401::ftp_put##report() \
-{   ftp ftp_worker("10.10.0.10","",""); \
-    path p_host(report->full_path()); \
-    path p_remote("rf-driver\\database\\SP9500"); \
-    string file_name_remote(report->get_header().sn); \
-    file_name_remote += "_"; \
-    file_name_remote += p_host.filename().string(); \
-    for (uint32_t i = 0;i < 3;i ++) { \
-        if (ftp_worker.put(p_host.string(),p_remote.string(),file_name_remote)) { \
-            return 0; \
-        } else { \
-            if (sp1401::_ftp_retry_call_back.empty()) { return -1; } \
-            if (sp1401::_ftp_retry_call_back()) continue; \
-            else return -1; \
-        } \
-    } \
-    return -1; \
-}
-
-IMPL_FUNC_FTP_PUT(_tr_rf_tx_freq_res_test)
-IMPL_FUNC_FTP_PUT(_tr_if_tx_freq_res_test)
-IMPL_FUNC_FTP_PUT(_tr_rf_rx_freq_res_test)
-IMPL_FUNC_FTP_PUT(_tr_if_rx_freq_res_test)
-IMPL_FUNC_FTP_PUT(_tr_tx_phase_noise_test)
-IMPL_FUNC_FTP_PUT(_tr_tx_noise_floor_test)
-IMPL_FUNC_FTP_PUT(_tr_tx_lo_ld_test)
-IMPL_FUNC_FTP_PUT(_tr_tx_pwr_mod_sw_test)
-IMPL_FUNC_FTP_PUT(_tr_tx_filter_sw_test)
-IMPL_FUNC_FTP_PUT(_tr_tx_io_sw_test)
-
-IMPL_FUNC_FTP_PUT(_cr_tx_passband_freq_res_160_cal)
-IMPL_FUNC_FTP_PUT(_cr_rx_passband_freq_res_160_cal)
-IMPL_FUNC_FTP_PUT(_cr_tx_base_pwr_cal)
-IMPL_FUNC_FTP_PUT(_cr_tx_pwr_op_cal)
-IMPL_FUNC_FTP_PUT(_cr_tx_pwr_io_cal)
-IMPL_FUNC_FTP_PUT(_cr_rx_ref_cal)
-IMPL_FUNC_FTP_PUT(_cr_rx_pwr_op_cal)
-IMPL_FUNC_FTP_PUT(_cr_rx_pwr_io_cal)

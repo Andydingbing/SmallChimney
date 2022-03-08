@@ -3,6 +3,9 @@
 
 #include "sp3301.h"
 
+namespace ns_starpoint {
+namespace ns_sp9500 {
+
 class API self_cal_helper
 {
 public:
@@ -39,7 +42,7 @@ private:
     int32_t get_min_q(uint16_t step,uint16_t coef);
 
 public:
-    tx_lol_table_r1cd::data_f_t data;
+    tx_lol_table_t::data_f_t data;
 
     double pwr_lol;
     int64_t ad_min;
@@ -59,7 +62,7 @@ class API self_cal_tx_sb_helper : public self_cal_helper
 public:
     self_cal_tx_sb_helper(sp3301 *SP3301,uint32_t rf_idx);
 
-    int32_t run(tx_sb_table_r1cd::data_f_t *data);
+    int32_t run(tx_sideband_table_t::data_f_t *data);
 
 private:
     int32_t init();
@@ -82,5 +85,8 @@ public:
     uint16_t am_q_m;
     uint16_t am_q_r;
 };
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif

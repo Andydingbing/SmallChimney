@@ -48,6 +48,23 @@ void basic_report<item_table_t>::set_name(const std::string &name)
 }
 
 template<typename item_table_t>
+const item_table_base* basic_report<item_table_t>::db(const item_table_t &table) const
+{
+    return db(table._to_integral());
+}
+
+template<typename item_table_t>
+const item_table_base* basic_report<item_table_t>::db(const int32_t table) const
+{
+    std::map<int32_t,item_table_base *>::const_iterator iter;
+
+    if ((iter = _tables.find(table)) != _tables.end()) {
+        return iter->second;
+    }
+    return nullptr;
+}
+
+template<typename item_table_t>
 int32_t basic_report<item_table_t>::make_sure_has(const item_table_t table,item_table_base *t)
 {
     int32_t data_start_pos = 0;

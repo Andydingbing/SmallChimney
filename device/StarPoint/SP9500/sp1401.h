@@ -20,6 +20,9 @@ const static float g_temp_star = 20.0f;
 const static float g_temp_stop = 70.0f;
 const static float g_temp_step = 0.25f;
 
+namespace ns_starpoint {
+namespace ns_sp9500 {
+
 class API sp1401 : boost::noncopyable
 {
 public:
@@ -109,17 +112,17 @@ public:
     virtual int32_t get_io_mode(io_mode_t &mode) = 0;
 
 public:
-    ns_sp1401::bw_t get_bw() const { return m_cal_file->bw(); }
+    ns_sp1401::bw_t get_bw() const { return _cal_file->bw(); }
 
-    ns_sp1401::hw_ver_t get_hw_ver() const { return m_cal_file->hw_ver(); }
+    ns_sp1401::hw_ver_t get_hw_ver() const { return _cal_file->hw_ver(); }
 
-    void set_hw_ver(ns_sp1401::hw_ver_t ver) { m_cal_file->set_hw_ver(ver); }
+    void set_hw_ver(ns_sp1401::hw_ver_t ver) { _cal_file->set_hw_ver(ver); }
 
-    uint32_t get_rf_idx() const { return m_cal_file->rf_idx(); }
+    uint32_t get_rf_idx() const { return _cal_file->rf_idx(); }
 
-    uint32_t get_rfu_idx() const { return m_cal_file->rfu_idx(); }
+    uint32_t get_rfu_idx() const { return _cal_file->rfu_idx(); }
 
-    cal_file* cf() const { return m_cal_file.get(); }
+    cal_file *data_base() const { return _cal_file; }
 
     pci_dev_vi* get_k7() const { return m_k7; }
 
@@ -130,7 +133,7 @@ public:
 
     void connect(pci_dev_vi *k7) { m_k7 = k7; }
     int32_t get_k7_ver(uint32_t &ver);
-    arb_reader *arb() { return m_arb_reader.get(); }
+    arb_reader *arb() { return _arb_reader; }
 
     virtual void tx_att_states(std::vector<common_atts_t> &states) { states.clear(); }
     virtual void tx_att_states(std::vector<common_atts_t> &states,std::vector<bool> &checked)
@@ -240,102 +243,21 @@ public:
 
     int32_t get_ad7680(uint32_t &det);
 
-// Make test/cal reports available.These may throw runtime_exception.
-// Test report related functions are named such as "prepare_tr_rf_tx_freq_res_test();"
-// Cal report related  functions are named such as "prepare_cr_tx_lol();"
-#define DECL_FUNC_PREPARE_TR(name,item_t) \
-public: \
-    void prepare_tr_##name() { \
-        tr_header_t header;get_sn_major(header.sn); \
-        header.item = item_t; \
-        header.size = sizeof(name##_data); \
-        if (_tr_##name == nullptr) \
-            _tr_##name = boost::make_shared<name>(#name,&header,true); \
-    } \
-    name *tr_##name() const \
-    { return _tr_##name.get(); } \
-protected: \
-    boost::shared_ptr<name> _tr_##name;
-
-#define DECL_FUNC_PREPARE_CR(name,item_t) \
-public: \
-    void prepare_cr_##name() { \
-        tr_header_t header;get_sn_major(header.sn); \
-        header.item = item_t; \
-        header.size = sizeof(name##_data); \
-        if (_cr_##name == nullptr) \
-            _cr_##name = boost::make_shared<name>(#name,&header,true); \
-    } \
-    name *cr_##name() const \
-    { return _cr_##name.get(); } \
-protected: \
-    boost::shared_ptr<name> _cr_##name;
-
-    DECL_FUNC_PREPARE_TR(rf_tx_freq_res_test,TI_RF_TX_FREQ_RES)
-    DECL_FUNC_PREPARE_TR(if_tx_freq_res_test,TI_IF_TX_FREQ_RES)
-    DECL_FUNC_PREPARE_TR(rf_rx_freq_res_test,TI_RF_RX_FREQ_RES)
-    DECL_FUNC_PREPARE_TR(if_rx_freq_res_test,TI_IF_RX_FREQ_RES)
-    DECL_FUNC_PREPARE_TR(tx_phase_noise_test,TI_TX_PHASE_NOISE)
-    DECL_FUNC_PREPARE_TR(tx_noise_floor_test,TI_TX_NOISE_FLOOR)
-    DECL_FUNC_PREPARE_TR(tx_lo_ld_test,TI_TX_LO_LD)
-    DECL_FUNC_PREPARE_TR(tx_pwr_mod_sw_test,TI_TX_PWR_MOD_SW)
-    DECL_FUNC_PREPARE_TR(tx_filter_sw_test,TI_TX_FILTER_SW)
-    DECL_FUNC_PREPARE_TR(tx_io_sw_test,TI_TX_IO_SW)
-
-    DECL_FUNC_PREPARE_CR(tx_passband_freq_res_160_cal,TI_TX_PASSBAND_160)
-    DECL_FUNC_PREPARE_CR(rx_passband_freq_res_160_cal,TI_RX_PASSBAND_160)
-    DECL_FUNC_PREPARE_CR(tx_base_pwr_cal,TI_TX_BASE_PWR)
-    DECL_FUNC_PREPARE_CR(tx_pwr_op_cal,TI_TX_PWR_OP)
-    DECL_FUNC_PREPARE_CR(tx_pwr_io_cal,TI_TX_PWR_IO)
-    DECL_FUNC_PREPARE_CR(rx_ref_cal,TI_RX_REF)
-    DECL_FUNC_PREPARE_CR(rx_pwr_op_cal,TI_RX_PWR_OP)
-    DECL_FUNC_PREPARE_CR(rx_pwr_io_cal,TI_RX_PWR_IO)
-
-    DECL_FUNC_PREPARE_CR(rf_tx_freq_res_cal,TI_RF_TX_FREQ_RES)
-    DECL_FUNC_PREPARE_CR(rf_rx_freq_res_cal,TI_RF_RX_FREQ_RES)
-
-// FTP support.
-#define DECL_FUNC_FTP_PUT(report) \
-public: \
-    int32_t ftp_put##report();
-
-    DECL_FUNC_FTP_PUT(_tr_rf_tx_freq_res_test)
-    DECL_FUNC_FTP_PUT(_tr_if_tx_freq_res_test)
-    DECL_FUNC_FTP_PUT(_tr_rf_rx_freq_res_test)
-    DECL_FUNC_FTP_PUT(_tr_if_rx_freq_res_test)
-    DECL_FUNC_FTP_PUT(_tr_tx_phase_noise_test)
-    DECL_FUNC_FTP_PUT(_tr_tx_noise_floor_test)
-    DECL_FUNC_FTP_PUT(_tr_tx_lo_ld_test)
-    DECL_FUNC_FTP_PUT(_tr_tx_pwr_mod_sw_test)
-    DECL_FUNC_FTP_PUT(_tr_tx_filter_sw_test)
-    DECL_FUNC_FTP_PUT(_tr_tx_io_sw_test)
-
-    DECL_FUNC_FTP_PUT(_cr_tx_passband_freq_res_160_cal)
-    DECL_FUNC_FTP_PUT(_cr_rx_passband_freq_res_160_cal)
-    DECL_FUNC_FTP_PUT(_cr_tx_base_pwr_cal)
-    DECL_FUNC_FTP_PUT(_cr_tx_pwr_op_cal)
-    DECL_FUNC_FTP_PUT(_cr_tx_pwr_io_cal)
-    DECL_FUNC_FTP_PUT(_cr_rx_ref_cal)
-    DECL_FUNC_FTP_PUT(_cr_rx_pwr_op_cal)
-    DECL_FUNC_FTP_PUT(_cr_rx_pwr_io_cal)
-
-    template <typename ftp_call_back_t>
-    static void set_ftp_retry_call_back(ftp_call_back_t f)
-    { _ftp_retry_call_back = f; }
-
 private:
     int32_t w_eeprom(uint16_t addr,uint32_t length,const char *buf);
     int32_t r_eeprom(uint16_t addr,uint32_t length,char *buf);
 
 protected:
     pci_dev_vi *m_k7;
-    boost::shared_ptr<cal_file> m_cal_file;
-    boost::shared_ptr<arb_reader> m_arb_reader;
-    static boost::function<bool()> _ftp_retry_call_back;
+    cal_file *_cal_file;
+    arb_reader *_arb_reader;
 
-    float m_arb_level_offset;
+    float _arb_level_offset;
     bool en_tx_tc; // Enable T/Rx power temperature compansate?
     bool en_rx_tc;
 };
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif

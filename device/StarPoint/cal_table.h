@@ -123,14 +123,16 @@ static const uint32_t ul_filter_160M_freqs =
         SERIE_SIZE(ul_filter_160M_freq_star,ul_filter_160M_freq_stop,ul_filter_freq_step);
 } // namespace ns_sp2401
 
+namespace ns_starpoint {
 namespace ns_sp9500 {
-static const uint8_t g_max_rfu = 5;
-static const uint8_t g_max_rf  = 4; // each RFU
-static const uint8_t g_max_fan = 12;
+    static const uint8_t g_max_rfu = 5;
+    static const uint8_t g_max_rf  = 4; // each RFU
+    static const uint8_t g_max_fan = 12;
 
-static const uint64_t g_rf_freq_space = 1000000;
-static const uint64_t g_0dBFS = 80000000;
+    static const uint64_t g_rf_freq_space = 1000000;
+    static const uint64_t g_0dBFS = 80000000;
 } // namespace ns_sp9500
+} // namespace ns_starpoint
 
 namespace ns_dt3308 {
 static const uint64_t g_0dBFS = 100000000;

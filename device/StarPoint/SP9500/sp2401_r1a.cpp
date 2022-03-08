@@ -16,6 +16,7 @@
 #define NCO_DDC_64 1
 
 using namespace std;
+using namespace ns_starpoint;
 using namespace ns_sp9500;
 using namespace ns_sp2401;
 
@@ -479,9 +480,9 @@ int32_t sp2401_r1a::set_rx_filter(const data_t &data) const
 
     for (uint32_t i = 0;i < ARRAY_SIZE(data.coef);i ++) {
         RFU_K7_REG_2(0x00f3,0x20f3).addr = unsigned(i);
-        RFU_K7_REG_2(0x00f5,0x20f5).real = unsigned(data.coef[i].real);
-        RFU_K7_REG_2(0x00f6,0x20f6).imag = unsigned(data.coef[i].imag);
-        RFU_K7_REG_2(0x00f4,0x20f4).sum  = unsigned(data.coef[i].real + data.coef[i].imag);
+        RFU_K7_REG_2(0x00f5,0x20f5).real = unsigned(data.coef[i].i);
+        RFU_K7_REG_2(0x00f6,0x20f6).imag = unsigned(data.coef[i].q);
+        RFU_K7_REG_2(0x00f4,0x20f4).sum  = unsigned(data.coef[i].i + data.coef[i].q);
         RFU_K7_W_2(0x00f3,0x20f3);
         RFU_K7_W_2(0x00f4,0x20f4);
         RFU_K7_W_2(0x00f5,0x20f5);
@@ -492,11 +493,11 @@ int32_t sp2401_r1a::set_rx_filter(const data_t &data) const
     return 0;
 }
 
-int32_t sp2401_r1a::set_rx_filter(const rx_filter_80m_table::data_m_t &data) const
-{ return set_rx_filter<rx_filter_80m_table::data_m_t>(data); }
+int32_t sp2401_r1a::set_rx_filter(const data_m_rx_filter_80 &data) const
+{ return set_rx_filter<data_m_rx_filter_80>(data); }
 
-int32_t sp2401_r1a::set_rx_filter(const rx_filter_160m_table::data_m_t &data) const
-{ return set_rx_filter<rx_filter_160m_table::data_m_t>(data); }
+int32_t sp2401_r1a::set_rx_filter(const data_m_rx_filter_160 &data) const
+{ return set_rx_filter<data_m_rx_filter_160>(data); }
 
 int32_t sp2401_r1a::set_rx_filter_default()
 {

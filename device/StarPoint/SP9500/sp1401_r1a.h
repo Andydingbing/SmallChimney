@@ -2,26 +2,10 @@
 #define SP1401_R1A_H
 
 #include "sp1401.h"
-#include "cal_file_r1ab.h"
+#include "cal_file.h"
 
-class sp1401_r1a;
-
-typedef int32_t (sp1401_r1a::*r1a_set_lo_reg)(uint32_t);
-typedef int32_t (sp1401_r1a::*r1a_det_lo_lock)(bool &);
-
-#define DECLARE_R1A_SETLOREG_FUNCTION_MAP   \
-    r1a_set_lo_reg set_r1a_lo_reg[4] = {    \
-        &sp1401_r1a::set_tx_lo1_reg,        \
-        &sp1401_r1a::set_tx_lo2_reg,        \
-        &sp1401_r1a::set_rx_lo1_reg,        \
-        &sp1401_r1a::set_rx_lo2_reg };
-
-#define DECLARE_R1A_DETLOLOCK_FUNCTION_MAP  \
-    r1a_det_lo_lock det_r1a_lo_lock[4] = {  \
-        &sp1401_r1a::det_tx_lo1_lock,       \
-        &sp1401_r1a::det_tx_lo2_lock,       \
-        &sp1401_r1a::det_rx_lo1_lock,       \
-        &sp1401_r1a::det_rx_lo2_lock };
+namespace ns_starpoint {
+namespace ns_sp9500 {
 
 class API sp1401_r1a : public sp1401
 {
@@ -84,9 +68,8 @@ public:
         io_mode_t mode;
         ns_sp1401::r1a::rx_lna_att_t lna_att;
     };
-public:
-    cal_file_r1ab* cf();
 
+public:
     int32_t tx_freq2lo(uint64_t freq,uint64_t &lo1,uint64_t &lo2,tx_band_t &band);
     int32_t tx_lo2freq(uint64_t lo1,uint64_t lo2,tx_band_t band,uint64_t &freq);
     int32_t rx_freq2lo(uint64_t freq,uint64_t &lo1,uint64_t &lo2);
@@ -146,5 +129,25 @@ public:
     int32_t set_rx_if1_hmc694_vga(double vol);
     int32_t set_rx_if1_hmc694_vgg2(double vol);
 };
+
+typedef int32_t (sp1401_r1a::*r1a_set_lo_reg)(uint32_t);
+typedef int32_t (sp1401_r1a::*r1a_det_lo_lock)(bool &);
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
+
+#define DECLARE_R1A_SETLOREG_FUNCTION_MAP   \
+    r1a_set_lo_reg set_r1a_lo_reg[4] = {    \
+        &sp1401_r1a::set_tx_lo1_reg,        \
+        &sp1401_r1a::set_tx_lo2_reg,        \
+        &sp1401_r1a::set_rx_lo1_reg,        \
+        &sp1401_r1a::set_rx_lo2_reg };
+
+#define DECLARE_R1A_DETLOLOCK_FUNCTION_MAP  \
+    r1a_det_lo_lock det_r1a_lo_lock[4] = {  \
+        &sp1401_r1a::det_tx_lo1_lock,       \
+        &sp1401_r1a::det_tx_lo2_lock,       \
+        &sp1401_r1a::det_rx_lo1_lock,       \
+        &sp1401_r1a::det_rx_lo2_lock };
 
 #endif

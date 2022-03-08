@@ -4,7 +4,8 @@
 #include "sleep_common.h"
 #include "algo_chip.hpp"
 
-using namespace rd;
+using namespace ns_starpoint;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 using namespace ns_sp1401::r1c;
 
@@ -34,7 +35,6 @@ sp1401_r1c::gpio_b_t::gpio_b_t()
 
 sp1401_r1c::sp1401_r1c(uint32_t rf_idx,uint32_t rfu_idx)
 {
-    m_cal_file = boost::make_shared<cal_file_r1cd>(HW_ERROR,rf_idx,rfu_idx);
     m_tx_chain_state.att0 = 5.0;
     m_tx_chain_state.att1 = 20.0;
     m_tx_chain_state.att2 = 0.0;
@@ -49,7 +49,7 @@ sp1401_r1c::sp1401_r1c(uint32_t rf_idx,uint32_t rfu_idx)
 
 int32_t sp1401_r1c::open_board()
 {
-    INT_CHECK(m_cal_file->open());
+    INT_CHECK(_cal_file->open());
     INT_CHECK(set_pwr_en(true));
     INT_CHECK(init_adf5355());
     INT_CHECK(init_hmc1197());
@@ -174,13 +174,8 @@ bool sp1401_r1c::is_connected()
 			return true;
         }
     }
-    Log.set_last_err(-2,"missing rfu%u--->rf%u",m_cal_file->rfu_idx(),m_cal_file->rf_idx());
+    Log.set_last_err(-2,"missing rfu%u--->rf%u",_cal_file->rfu_idx(),_cal_file->rf_idx());
 	return false;
-}
-
-cal_file_r1cd* sp1401_r1c::cf()
-{
-    return (cal_file_r1cd *)(m_cal_file.get());
 }
 
 int32_t sp1401_r1c::tx_freq2lo(
@@ -884,7 +879,7 @@ int32_t sp1401_r1c::set_rx_att(double att1,double att2,double att3)
 	return 0;
 }
 
-int32_t sp1401_r1c::set_rx_att(const rx_ref_table_r1cd::rx_state_m_t &data)
+int32_t sp1401_r1c::set_rx_att(const rx_state_m_t &data)
 {
     INT_CHECK(set_rx_lna_att_sw(rx_lna_att_t(data.lna_att)));
     INT_CHECK(set_rx_att_019_sw(rx_att_019_t(data.att_019)));

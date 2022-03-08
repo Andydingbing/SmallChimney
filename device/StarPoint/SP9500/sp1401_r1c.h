@@ -2,14 +2,6 @@
 #define SP1401_R1C_H
 
 #include "sp1401.h"
-#include "cal_file_r1cd.h"
-
-class sp1401_r1c;
-
-typedef int32_t (sp1401_r1c::*r1c_set_lo_reg)(uint32_t);
-typedef int32_t (sp1401_r1c::*r1c_det_lo_lock)(bool &);
-typedef int32_t (sp1401_r1c::*r1c_get_temp)(double *);
-typedef int32_t (sp1401_r1c::*r1c_get_ad7680)(uint32_t &);
 
 #define DECLARE_R1C_SETLOREG_FUNCTION_MAP \
     r1c_set_lo_reg set_r1c_lo_reg[4] = { \
@@ -31,6 +23,9 @@ typedef int32_t (sp1401_r1c::*r1c_get_ad7680)(uint32_t &);
         &sp1401_r1c::get_ad7680_rx_if1, \
         &sp1401_r1c::get_ad7680_rx_if2, \
         &sp1401_r1c::get_ad7680_tx_if2 };
+
+namespace ns_starpoint {
+namespace ns_sp9500 {
 
 /*
  * R1C just fail.
@@ -157,7 +152,6 @@ public:
     };
 
 public:
-    cal_file_r1cd* cf();
     rx_chain_state_all_t  m_rx_chain_state;
     tx_chain_state_all_t  m_tx_chain_state;
     static int32_t tx_lo2freq(uint64_t lo1,uint64_t lo2,uint64_t lo3,uint64_t &freq);
@@ -254,7 +248,7 @@ public:
     int32_t set_rx_att3(double att);
     int32_t set_rx_att3(float att) { return set_rx_att3(double(att)); }
 
-    int32_t set_rx_att(const rx_ref_table_r1cd::rx_state_m_t &data);
+    int32_t set_rx_att(const rx_state_m_t &data);
     virtual int32_t set_rx_att(double att1,double att2,double att3);
     virtual int32_t set_rx_att(float att1,float att2,float att3)
     { return set_rx_att(double(att1),double(att2),double(att3)); }
@@ -278,5 +272,13 @@ public:
     int32_t get_tx_chain_state(tx_chain_state_all_t  &tx_chain_state);
     int32_t get_rx_chain_state(rx_chain_state_all_t  &rx_chain_state);
 };
+
+typedef int32_t (sp1401_r1c::*r1c_set_lo_reg)(uint32_t);
+typedef int32_t (sp1401_r1c::*r1c_det_lo_lock)(bool &);
+typedef int32_t (sp1401_r1c::*r1c_get_temp)(double *);
+typedef int32_t (sp1401_r1c::*r1c_get_ad7680)(uint32_t &);
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif

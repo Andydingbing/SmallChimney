@@ -8,6 +8,7 @@
 #include <vector>
 
 using namespace std;
+using namespace ns_starpoint;
 using namespace ns_sp9500;
 using namespace ns_sp1401;
 

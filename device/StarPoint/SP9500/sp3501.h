@@ -7,6 +7,9 @@
 #include "liblog.h"
 #include "libdriver.h"
 
+namespace ns_starpoint {
+namespace ns_sp9500 {
+
 class API sp3501 : boost::noncopyable
 {
 public:
@@ -60,5 +63,8 @@ public:
     pci_dev_vi *m_s6;
     uint32_t _fan_group_speed[4];
 };
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif

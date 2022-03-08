@@ -1,23 +1,23 @@
 #include "sp1401_r1a.h"
 #include "../chip/reg_def_sp9500.h"
-#include "cal_file_r1ab.h"
 #include <math.h>
 #include <stdlib.h>
 #include "sleep_common.h"
 #include "algo_chip.hpp"
 
-using namespace rd;
+using namespace ns_starpoint;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 using namespace ns_sp1401::r1a;
 
 sp1401_r1a::sp1401_r1a(uint32_t rf_idx,uint32_t rfu_idx)
 {
-    m_cal_file = boost::make_shared<cal_file_r1ab>(HW_ERROR,rf_idx,rfu_idx);
+
 }
 
 int32_t sp1401_r1a::open_board()
 {
-    INT_CHECK(m_cal_file->open());
+    INT_CHECK(_cal_file->open());
     INT_CHECK(set_pwr_en(true));
     INT_CHECK(set_io_mode(io_mode_t::OUTPUT));
     INT_CHECK(init_lo());
@@ -28,22 +28,20 @@ int32_t sp1401_r1a::open_board()
     INT_CHECK(set_rx_lna_att_sw(RX_ATT));
     INT_CHECK(set_rx_att(20.0,20));
     INT_CHECK(set_rx_if_filter_sw(_100MHz));
-    INT_CHECK(set_rx_lmh5401N(-2.5));        //LT2666 DAC0
-    INT_CHECK(set_rx_lmh5401P(-2.5));        //LT2666 DAC1
-    INT_CHECK(set_tx_lo2_xb1007(-2.5));      //LT2666 DAC2
-    INT_CHECK(set_ltc2666(3,-2.5));          //LT2666 DAC3
-    INT_CHECK(set_rx_if1_hmc694_vgg1(-0.8)); //LT2666 DAC4
-    INT_CHECK(set_rx_if1_hmc694_vga(-1.25)); //LT2666 DAC5
-    INT_CHECK(set_rx_if1_hmc694_vgg2(-0.8)); //LT2666 DAC6
-    INT_CHECK(set_ltc2666(7,-2.5));          //LT2666 DAC7
+    INT_CHECK(set_rx_lmh5401N(-2.5));        // LT2666 DAC0
+    INT_CHECK(set_rx_lmh5401P(-2.5));        // LT2666 DAC1
+    INT_CHECK(set_tx_lo2_xb1007(-2.5));      // LT2666 DAC2
+    INT_CHECK(set_ltc2666(3,-2.5));          // LT2666 DAC3
+    INT_CHECK(set_rx_if1_hmc694_vgg1(-0.8)); // LT2666 DAC4
+    INT_CHECK(set_rx_if1_hmc694_vga(-1.25)); // LT2666 DAC5
+    INT_CHECK(set_rx_if1_hmc694_vgg2(-0.8)); // LT2666 DAC6
+    INT_CHECK(set_ltc2666(7,-2.5));          // LT2666 DAC7
     return sp1401::open_board();
 }
 
 int32_t sp1401_r1a::init_lo()
 {
     uint32_t reg[13];
-	for (int i = 0;i < 13;i ++)
-        reg[i] = 0;
 
     ns_adf5355::freq_formula_in param_in;
     ns_adf5355::freq_formula_out param_out;
@@ -51,6 +49,8 @@ int32_t sp1401_r1a::init_lo()
     uint64_t freq_vco = 0;
     uint64_t freq_lo[4] = {0,0,0,0};
     tx_band_t band = BAND_LOW;
+
+    ZERO_ARRAY(reg);
 
     reg[3] = 0x00000013;
     reg[4] = 0x30008394;
@@ -109,16 +109,11 @@ bool sp1401_r1a::is_connected()
         double rx_temp = 0.0;
         INT_CHECKB(get_rx_temp(rx_temp));
         if (rx_temp <= 0) {
-            Log.set_last_err(-2,"missing rfu%u--->rf%u",m_cal_file->rfu_idx(),m_cal_file->rf_idx());
+            Log.set_last_err(-2,"missing rfu%u--->rf%u",_cal_file->rfu_idx(),_cal_file->rf_idx());
 			return false;
 		}
 	}
 	return true;
-}
-
-cal_file_r1ab *sp1401_r1a::cf()
-{
-    return (cal_file_r1ab *)(m_cal_file.get());
 }
 
 int32_t sp1401_r1a::tx_freq2lo(uint64_t freq,uint64_t &lo1,uint64_t &lo2,tx_band_t &band)
@@ -127,8 +122,7 @@ int32_t sp1401_r1a::tx_freq2lo(uint64_t freq,uint64_t &lo1,uint64_t &lo2,tx_band
         band = BAND_LOW;
         lo1 = 4100000000;
         lo2 = freq + 4100000000;
-	}
-	else {
+    } else {
         band = BAND_HIGH;
         lo1 = freq;
         lo2 = 6800000000;
@@ -140,13 +134,14 @@ int32_t sp1401_r1a::tx_lo2freq(uint64_t lo1,uint64_t lo2,tx_band_t band,uint64_t
 {
     freq = 0;
     if (BAND_LOW == band) {
-        if (lo2 > lo1)
+        if (lo2 > lo1) {
             freq = lo2 - lo1;
-		else
+        } else {
 			return -1;
-	}
-	else
+        }
+    } else {
         freq = lo1;
+    }
 	return 0;
 }
 
@@ -160,10 +155,11 @@ int32_t sp1401_r1a::rx_freq2lo(uint64_t freq,uint64_t &lo1,uint64_t &lo2)
 int32_t sp1401_r1a::rx_lo2freq(uint64_t lo1,uint64_t lo2,uint64_t &freq)
 {
     freq = 0;
-    if (lo1 > 7500000000)
+    if (lo1 > 7500000000) {
         freq = lo1 - 7500000000;
-	else
+    } else {
 		return -1;
+    }
 	return 0;
 }
 
@@ -176,7 +172,7 @@ int32_t sp1401_r1a::io_mode2io_sw(
         bool &tx_led,bool &rx_led)
 {
     switch (mode) {
-    case io_mode_t::IO : {	             //sw6---sw1 11 10 1 0
+    case io_mode_t::IO : {	   // sw6---sw1 11 10 1 0
         tx_sw = TX_IO_ON;
         rx_sw = RX_IO_ON;
         rx_sw1 = RX_IO_ON_1;
@@ -184,7 +180,7 @@ int32_t sp1401_r1a::io_mode2io_sw(
         tx_led = false;
         rx_led = true;
         return 0; }
-    case io_mode_t::OUTPUT : {          //sw6---sw1 10 11 0 0
+    case io_mode_t::OUTPUT : { // sw6---sw1 10 11 0 0
         tx_sw = TX_ON;
         rx_sw = RX_ON;
         rx_sw1 = RX_IO_ON_1;
@@ -192,7 +188,7 @@ int32_t sp1401_r1a::io_mode2io_sw(
         tx_led = true;
         rx_led = true;
         return 0; }
-    case io_mode_t::LOOP : {            //sw6---sw1 01 00 1 1
+    case io_mode_t::LOOP : {   // sw6---sw1 01 00 1 1
         tx_sw = TX_LOOP_ON;
         rx_sw = RX_LOOP_ON;
         rx_sw1 = RX_IO_OFF_1;
@@ -228,9 +224,11 @@ int32_t sp1401_r1a::set_io_mode(io_mode_t mode)
     rx_io_sw_t rx_sw = RX_ON;
     rx_io_sw1_t rx_sw1 = RX_IO_ON_1;
     rx_io_sw2_t rx_sw2 = RX_ON_2;
-    bool tx_led = true,rx_led = true;
+    bool tx_led = true;
+    bool rx_led = true;
 
     io_mode2io_sw(mode,tx_sw,rx_sw,rx_sw1,rx_sw2,tx_led,rx_led);
+
     RFU_K7_REG_2(0x1666,0x16e6).tx_io_sw = unsigned(tx_sw);
     RFU_K7_REG_2(0x1666,0x16e6).rx_io_sw = unsigned(rx_sw);
     RFU_K7_REG_2(0x1666,0x16e6).rx_io_sw1 = unsigned(rx_sw1);

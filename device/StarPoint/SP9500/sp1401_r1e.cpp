@@ -2,7 +2,8 @@
 #include "../chip/reg_def_sp9500.h"
 #include "sleep_common.h"
 
-using namespace rd;
+using namespace ns_starpoint;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 
 sp1401_r1e::gpio_a_t::gpio_a_t()

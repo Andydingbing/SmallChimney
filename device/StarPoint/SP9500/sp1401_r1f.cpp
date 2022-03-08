@@ -4,7 +4,8 @@
 #include "algo_chip.hpp"
 
 using namespace std;
-using namespace rd;
+using namespace ns_starpoint;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 using namespace ns_sp1401::r1f;
 

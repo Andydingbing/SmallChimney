@@ -1,5 +1,5 @@
-#ifndef DEVICE_STARPOINT_SP9500_CAL_TABLE_TX_ATT_H
-#define DEVICE_STARPOINT_SP9500_CAL_TABLE_TX_ATT_H
+#ifndef DEVICE_STARPOINT_SP9500_CAL_TABLE_RX_ATT_H
+#define DEVICE_STARPOINT_SP9500_CAL_TABLE_RX_ATT_H
 
 #include "item_table.hpp"
 #include "global_header.h"
@@ -9,12 +9,12 @@ namespace ns_starpoint {
 namespace ns_sp9500 {
 
 template<int T>
-struct data_f_tx_att : item_table_base::data_f_base_t
+struct data_f_rx_att : item_table_base::data_f_base_t
 {
-    float  offset[T];
+    int64_t offset[T];
     double temp[4];
 
-    data_f_tx_att()
+    data_f_rx_att()
     {
         ZERO_ARRAY(offset);
         INIT_ARRAY(temp,-100.0);
@@ -22,25 +22,25 @@ struct data_f_tx_att : item_table_base::data_f_base_t
 };
 
 template<int T>
-struct data_m_tx_att
+struct data_m_rx_att
 {
-    float offset[T];
-    float temp_5;
+    int32_t offset[T];
+    float temp;
 };
 
-typedef data_f_tx_att<R1C_TX_ATT_OP_POWER_PTS> data_f_tx_att_op;
-typedef data_m_tx_att<R1C_TX_ATT_OP_POWER_PTS> data_m_tx_att_op;
+typedef data_f_rx_att<R1C_RX_REF_OP_PTS - 3 + 1> data_f_rx_att_op;
+typedef data_m_rx_att<R1C_RX_REF_OP_PTS - 3 + 1> data_m_rx_att_op;
 
-typedef data_f_tx_att<R1C_TX_ATT_IO_POWER_PTS> data_f_tx_att_io;
-typedef data_m_tx_att<R1C_TX_ATT_IO_POWER_PTS> data_m_tx_att_io;
+typedef data_f_rx_att<R1C_RX_REF_IO_PTS - 3 + 1> data_f_rx_att_io;
+typedef data_m_rx_att<R1C_RX_REF_IO_PTS - 3 + 1> data_m_rx_att_io;
 
 
-template<int size,int start,int stop,int step>
-class tx_att_table_t : public item_table<data_f_tx_att<size>,data_m_tx_att<size>>
+template<int size>
+class rx_att_table_t : public item_table<data_f_rx_att<size>,data_m_rx_att<size>>
 {
 public:
-    typedef data_f_tx_att<size> data_f_t;
-    typedef data_m_tx_att<size> data_m_t;
+    typedef data_f_rx_att<size> data_f_t;
+    typedef data_m_rx_att<size> data_m_t;
 
     void map_from(void *data,uint32_t pts) OVERRIDE
     {
@@ -51,9 +51,9 @@ public:
 
         for (uint32_t i = 0;i < pts;++i) {
             for (int j = 0;j < size;++j) {
-                d_m.offset[j] = d_f[i].offset[j];
+                d_m.offset[j] = int32_t(d_f[i].offset[j]);
             }
-            d_m.temp_5 = float(d_f[i].temp[1]);
+            d_m.temp = float(d_f[i].temp[0]);
             _data_m.push_back(d_m);
         }
     }
@@ -99,8 +99,8 @@ public:
     void save_as(const std::string &path);
 };
 
-typedef tx_att_table_t<R1C_TX_ATT_OP_POWER_PTS,R1C_TX_ATT_OP_POWER_STAR,R1C_TX_ATT_OP_POWER_STOP,R1C_TX_ATT_STEP> tx_att_op_table_t;
-typedef tx_att_table_t<R1C_TX_ATT_IO_POWER_PTS,R1C_TX_ATT_IO_POWER_STAR,R1C_TX_ATT_IO_POWER_STOP,R1C_TX_ATT_STEP> tx_att_io_table_t;
+typedef rx_att_table_t<R1C_RX_REF_OP_PTS - 3 + 1> rx_att_op_table_t;
+typedef rx_att_table_t<R1C_RX_REF_IO_PTS - 3 + 1> rx_att_io_table_t;
 
 } // namespace ns_sp9500
 } // namespace ns_starpoint

@@ -25,16 +25,16 @@ public:
     cal_file() : basic_report<cal_table_t>(path()) {}
     virtual ~cal_file() {}
 
-    const item_table_base *db(const uint32_t table) const
-    {
-        switch (table) {
-        case cal_table_t::TX_ACLR : return &_tx_aclr;
-        case cal_table_t::RX_Gain_Accu : return &_rx_gain_accu;
-        case cal_table_t::TX_VGA : return &_tx_vga;
-        case cal_table_t::RX_RF_VGA : return &_rx_rf_vga;
-        default : return nullptr;
-        }
-    }
+//    const item_table_base *db(const uint32_t table) const
+//    {
+//        switch (table) {
+//        case cal_table_t::TX_ACLR : return &_tx_aclr;
+//        case cal_table_t::RX_Gain_Accu : return &_rx_gain_accu;
+//        case cal_table_t::TX_VGA : return &_tx_vga;
+//        case cal_table_t::RX_RF_VGA : return &_rx_rf_vga;
+//        default : return nullptr;
+//        }
+//    }
 
     int32_t open()
     {

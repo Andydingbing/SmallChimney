@@ -6,6 +6,7 @@
 #include "../cal_table.h"
 #include "sleep_common.h"
 
+using namespace ns_starpoint;
 using namespace ns_sp9500;
 
 sp3501::sp3501()

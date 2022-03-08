@@ -3,8 +3,11 @@
 
 #include "libdriver.h"
 #include "traits.hpp"
-#include "rx_filter_table.h"
+#include "cal_table_rx_filter.h"
 #include <boost/smart_ptr.hpp>
+
+namespace ns_starpoint {
+namespace ns_sp9500 {
 
 class API sp2401_r1a : ::noncopyable
 {
@@ -104,8 +107,8 @@ public:
 
     template <typename data_t>
     int32_t set_rx_filter(const data_t &data) const;
-    int32_t set_rx_filter(const rx_filter_80m_table::data_m_t &data) const;
-    int32_t set_rx_filter(const rx_filter_160m_table::data_m_t &data) const;
+    int32_t set_rx_filter(const data_m_rx_filter_80 &data) const;
+    int32_t set_rx_filter(const data_m_rx_filter_160 &data) const;
 
     int32_t set_rx_filter_default();
     int32_t set_rx_pwr_comp(int32_t offset);
@@ -151,5 +154,8 @@ private:
     pci_dev_vi *m_k7;
     pci_dev_vi *m_s6;
 };
+
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif
