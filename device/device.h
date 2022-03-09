@@ -35,4 +35,4 @@ API int32_t radio_set_iq_capture_abort(const uint32_t index);
 }
 #endif
 
-#endif // DEVICE_DEVICE_H
+#endif

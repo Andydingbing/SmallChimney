@@ -1,12 +1,12 @@
-#include "ericsson_radio_4415_b3_child_widget.h"
-#include "ericsson_radio_4415_b3_widget.h"
-#include "ericsson_radio_4415_b3_cal_tx_vga.h"
-#include "ericsson_radio_4415_b3_cal_rx_rf_vga.h"
-#include "ericsson_radio_4415_b3_test_tx_aclr.h"
-#include "ericsson_radio_4415_b3_test_rx_gain_accuracy.h"
+#include "ericsson_radio_6449_b42_child_widget.h"
+#include "ericsson_radio_6449_b42_widget.h"
+#include "ericsson_radio_6449_b42_cal_tx_vga.h"
+#include "ericsson_radio_6449_b42_cal_rx_rf_vga.h"
+#include "ericsson_radio_6449_b42_test_tx_aclr.h"
+#include "ericsson_radio_6449_b42_test_rx_gain_accuracy.h"
 
 using namespace ns_ericsson;
-using namespace ns_radio_4415;
+using namespace ns_radio_6449;
 
 MODEL_PREFIX(Com_Log_Model,"","Time","Write","Read","Result");
 MODEL_ROWCNT(Radio.com_loggers());
@@ -58,7 +58,7 @@ void ChildWidgets::init()
     Radio.set_sn("0001");
     Radio.set_init_callback(initCallback);
 
-    DECL_TREE("Radio,Overview",Q_4415_Widget,Radio.channels());
+    DECL_TREE("Radio,Overview",Q_6449_Widget,Radio.channels());
 
     DECL_TREE("Test,TX-ACLR",Q_Test_TX_ACLR_Widget,Radio.channels());
     DECL_TREE("Test,RX-Gain Accuracy",Q_Test_RX_Gain_Accuracy_Widget,Radio.channels());
@@ -146,7 +146,7 @@ void ChildWidgets::mainTabCurrentChanged(int index)
 
 void ChildWidgets::addComLoggerCallback()
 {
-    ChildWidgets *childs = dynamic_cast<ChildWidgets *>(g_MainW->childWidgets.at(Ericsson_Radio_4415_B3));
+    ChildWidgets *childs = dynamic_cast<ChildWidgets *>(g_MainW->childWidgets.at(Ericsson_Radio_6449_B42));
     emit childs->addComLogger(Radio.com_loggers());
 }
 

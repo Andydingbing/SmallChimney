@@ -5,6 +5,7 @@
 #include "../device/Ericsson_Radio_4415/cal_file.h"
 
 #include "thread_widget.h"
+#include "ui_ericsson_radio_4415_b3.h"
 #include "ui_ericsson_radio_4415_b3_cal_rx_rf_vga.h"
 #include "ui_ericsson_radio_4415_b3_cal_tx_vga.h"
 #include "ui_ericsson_radio_4415_b3_test_rx_gain_accuracy.h"

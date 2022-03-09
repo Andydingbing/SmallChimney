@@ -1,6 +1,7 @@
 include(../include/config.pri)
 
 include(Ericsson/Radio_4415.pri)
+include(Ericsson/Radio_6449.pri)
 include(Ericsson/Air_3268.pri)
 
 #include(StarPoint/SP9500.pri)
@@ -28,6 +29,7 @@ LIBS += \
 -lreport \
 -lsequence \
 -lEricsson_Radio_4415 \
+-lEricsson_Radio_6449 \
 -lEricsson_Air_3268
 #-lSP9500
 

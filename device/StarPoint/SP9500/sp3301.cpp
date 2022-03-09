@@ -555,6 +555,8 @@ int32_t sp3301::set_tx_bw(uint32_t rf_idx,bw_t bw)
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
 
+    return 0;
+
 //    switch (sp1401->get_hw_ver()) {
 //        case R1C : case R1D : case R1E : case R1F : {
 //            double real[dl_filter_tap_2i] = {0.0};

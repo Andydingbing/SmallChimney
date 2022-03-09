@@ -12,6 +12,7 @@
 #include <QStyleFactory>
 #include "device.h"
 #include "Ericsson/Radio_4415/ericsson_radio_4415_b3_child_widget.h"
+#include "Ericsson/Radio_6449/ericsson_radio_6449_b42_child_widget.h"
 #include "Ericsson/Air_3268/ericsson_air_3268_b42_child_widget.h"
 #include "StarPoint/SP9500/starpoint_sp9500_child_widget.h"
 #include "log_model.hpp"
@@ -67,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Log.en(log_t::RD_LOG_ALL_ON,false);
 
     childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(this));
+    childWidgets.push_back(new ns_ericsson::ns_radio_6449::ChildWidgets(this));
     childWidgets.push_back(new ns_ericsson::ns_air_3268::ChildWidgets(this));
 //    childWidgets.push_back(new ns_sp9500::ChildWidgets(this));
 
@@ -188,6 +190,7 @@ void MainWindow::initMenu()
     ui->menuBar->addMenu(menuProject);
 
     addMapProjectMenu(Ericsson_Radio_4415_B3,"Ericsson,Radio 4415 B3");
+    addMapProjectMenu(Ericsson_Radio_6449_B42,"Ericsson,Radio 6449 B42");
     addMapProjectMenu(Ericsson_Air_3268_B47,"Ericsson,Air 3268 B47");
     addMapProjectMenu(StarPoint_SP9500,"StarPoint,SP9500");
 

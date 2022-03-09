@@ -1,18 +1,19 @@
-#ifndef Q_ERICSSON_RADIO_4415_B3_Widget_H
-#define Q_ERICSSON_RADIO_4415_B3_Widget_H
+#ifndef Q_ERICSSON_RADIO_6449_B42_Widget_H
+#define Q_ERICSSON_RADIO_6449_B42_Widget_H
 
-#include "ericsson_radio_4415_b3_global.h"
+#include "ericsson_radio_6449_b42_global.h"
+#include <QMetaEnum>
 
 namespace ns_ericsson {
-namespace ns_radio_4415 {
+namespace ns_radio_6449 {
 
-class Q_4415_Widget : public Q_Widget
+class Q_6449_Widget : public Q_Widget
 {
     Q_OBJECT
 
 public:
-    explicit Q_4415_Widget(QWidget *parent = nullptr);
-    ~Q_4415_Widget();
+    explicit Q_6449_Widget(QWidget *parent = nullptr);
+    ~Q_6449_Widget();
 
 public slots:
     void init();
@@ -49,10 +50,10 @@ private slots:
     void on_comboBoxRX_Type_activated(int index);
 
 private:
-    Ui::Q_Ericsson_4415_Widget *ui;
+    Ui::Q_Ericsson_6449_Widget *ui;
 };
 
-} // namespace ns_radio_4415
+} // namespace ns_radio_6449
 } // namespace ns_ericsson
 
 #endif

@@ -1,7 +1,6 @@
 #ifndef DEFINE_H
 #define DEFINE_H
 
-//#include "libdriver.h"
 #include "liblog.h"
 #include "instr.h"
 #include "libinstrument.h"
@@ -16,9 +15,11 @@
 #include "config_table.h"
 #include "complex_sequence.h"
 #include <QCheckBox>
+#include <QMetaEnum>
 
 enum Project {
     Ericsson_Radio_4415_B3,
+    Ericsson_Radio_6449_B42,
     Ericsson_Air_3268_B47,
     StarPoint_SP9500,
     PROJECTS
@@ -37,10 +38,6 @@ for (size_t i = 0;i < better_enum::_size();++i) { \
 }
 
 
-namespace Ui {
-class Q_Ericsson_4415_Widget;
-}
-
 class Q_Widget : public QWidget
 {
     Q_OBJECT
@@ -51,6 +48,32 @@ public:
 public slots:
     virtual void init() {} // Init child widgets
 };
+
+
+class Global_Enum : public QObject
+{
+    Q_OBJECT
+
+#define ENUM_STRING_LIST(e) \
+    Q_ENUM(e##_t) \
+    static QStringList e() \
+    { \
+        QStringList list; \
+        const char *str = nullptr; \
+        for (int i = 0;;++i) { \
+            if ((str = QMetaEnum::fromType<radio_system_t>().valueToKey(i)) == nullptr) { \
+                break; \
+            } \
+            list.push_back(QString(str)); \
+        } \
+        return list; \
+    }
+
+public:
+    #include "device_types.h"
+    ENUM_STRING_LIST(radio_system)
+};
+
 
 template <typename T>
 inline QString freqStringFrom(const T &freq, freq_string_unit_priority_t priority = FSU_M)

@@ -9,7 +9,7 @@ enum radio_bw_t {
     _5M,
     _10M,
     _15M,
-    _20M,
+    _20M
 };
 
 enum radio_io_mode_t {
