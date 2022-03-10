@@ -5,65 +5,6 @@
 #include "global.h"
 #include "qwt_series_data.h"
 
-#define DECLARE_CAL_TABLE_MODEL(class_name)                             \
-public:                                                                 \
-    explicit class_name(QObject *parent = 0);                           \
-    int rowCount(const QModelIndex &parent) const override;             \
-    int columnCount(const QModelIndex &parent) const override;          \
-    QVariant data(const QModelIndex &index, int role) const override;   \
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-
-
-typedef class QCalBaseModel : public QAbstractTableModel
-{
-    Q_OBJECT
-
-public:
-    QCalBaseModel(QObject *parent = nullptr) : QAbstractTableModel(parent) {}
-
-public slots:
-    void reset()
-    {
-        beginResetModel();
-        endResetModel();
-    }
-
-    void update(const QModelIndex &tl,
-                const QModelIndex &br,
-                cal_file::cal_item_t item,
-                int sec)
-    {
-        Q_UNUSED(item);
-        Q_UNUSED(sec);
-        emit dataChanged(tl,br,QVector<int>(Qt::DisplayRole));
-    }
-
-    void update2(const QModelIndex &tl,
-                const QModelIndex &br,
-                test_item_t item,int sec)
-    {
-        Q_UNUSED(item);
-        Q_UNUSED(sec);
-        emit dataChanged(tl,br,QVector<int>(Qt::DisplayRole));
-    }
-
-    void uiInsert(const int first,const int last,const int cal_table)
-    {
-        beginInsertRows(QModelIndex(),first,last);
-        for (int i = first;i <= last;++i) {
-            insertRow(i);
-        }
-        endInsertRows();
-        emit dataChanged(index(first,0),index(last,columnCount() - 1));
-    }
-
-    void uiUpdate(const int first,const int last,const int cal_table)
-    {
-        emit dataChanged(index(first,0),index(last,columnCount() - 1),QVector<int>(Qt::DisplayRole));
-    }
-} QCalBaseModel, QTestBaseModel;
-
-
 // T/Rx attenuation states model
 class QAttStateModel : public QAbstractTableModel
 {

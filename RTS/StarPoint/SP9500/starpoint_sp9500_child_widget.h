@@ -3,6 +3,7 @@
 
 #include "child_widget_helper.h"
 
+namespace ns_starpoint {
 namespace ns_sp9500 {
 
 class ChildWidgets : public ChildWidgetHelper
@@ -62,6 +63,7 @@ private:
     QAction *actionAbout;
 };
 
-} // namespace NS_SP9500
+} // namespace ns_sp9500
+} // namespace ns_starpoint
 
 #endif

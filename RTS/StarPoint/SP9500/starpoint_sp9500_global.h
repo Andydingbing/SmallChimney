@@ -26,6 +26,7 @@
 #include "ui_starpoint_sp9500_fpga.h"
 #include "ui_starpoint_sp9500_cal_tx_lo_leak.h"
 
+using namespace ns_starpoint;
 using namespace ns_sp9500;
 using namespace ns_sp1401;
 using namespace ns_sp2401;

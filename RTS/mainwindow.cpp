@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(this));
     childWidgets.push_back(new ns_ericsson::ns_radio_6449::ChildWidgets(this));
     childWidgets.push_back(new ns_ericsson::ns_air_3268::ChildWidgets(this));
-//    childWidgets.push_back(new ns_sp9500::ChildWidgets(this));
+    childWidgets.push_back(new ns_starpoint::ns_sp9500::ChildWidgets(this));
 
     mainSplitter  = new QSplitter(Qt::Horizontal,ui->centralWidget);
     rightSplitter = new QSplitter(Qt::Vertical);

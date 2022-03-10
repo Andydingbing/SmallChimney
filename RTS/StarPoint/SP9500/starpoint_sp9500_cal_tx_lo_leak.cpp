@@ -1,14 +1,11 @@
 #include "starpoint_sp9500_cal_tx_lo_leak.h"
 
 using namespace std;
-//using namespace ns_starpoint;
-using namespace ns_sp9500;
 
 void Q_Cal_TX_LO_Leak_Thread::kase()
 {
     KASE_THREAD_START("TX LO Leakage",100);
 
-//    QTXLOLeakModel *model = dynamic_cast<QTXLOLeakModel *>(calParam.model_0);
 //    bool useSA = (calParam.methodLOLeak == M_Spectrum);
 
 //    quint64 freq = 2400000000;
@@ -60,6 +57,7 @@ void Q_Cal_TX_LO_Leak_Thread::kase()
 void Q_Cal_TX_LO_Leak_Widget::init()
 {
 //    registerModelView(&model,ui->tableView);
+    config->checkBoxRef->setChecked(false);
 //    config->textEditFreq->setText("1747.5M");
 //    config->lineEditAtt->setText("0:1:16,23");
 //    result->checkBoxMonotonic->setChecked(false);

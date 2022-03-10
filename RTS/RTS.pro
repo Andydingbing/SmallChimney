@@ -4,7 +4,7 @@ include(Ericsson/Radio_4415.pri)
 include(Ericsson/Radio_6449.pri)
 include(Ericsson/Air_3268.pri)
 
-#include(StarPoint/SP9500.pri)
+include(StarPoint/SP9500.pri)
 
 QT += core gui network svg
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -30,8 +30,8 @@ LIBS += \
 -lsequence \
 -lEricsson_Radio_4415 \
 -lEricsson_Radio_6449 \
--lEricsson_Air_3268
-#-lSP9500
+-lEricsson_Air_3268 \
+-lSP9500
 
 win32-g++ {
     DEFINES += QWT_DLL

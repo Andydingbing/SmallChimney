@@ -95,7 +95,7 @@ public: \
     kase##_ConfigModel(QObject *parent = nullptr) : Q_Config_Table_Model(parent) \
     { \
         _item.clear(); \
-        _item = QStringList{ PARAM_PICK_1_OF_3_3(,,,__VA_ARGS__) }; \
+        _item << PARAM_PICK_1_OF_3_3(<<,,, __VA_ARGS__); \
         _item.push_front("");\
         setRowCount(rowCount(QModelIndex())); \
         setColumnCount(columnCount(QModelIndex())); \
@@ -114,7 +114,7 @@ public: \
     kase##_ResultModel(QObject *parent = nullptr) : Q_Config_Table_Model(parent) \
     { \
         _item.clear(); \
-        _item = QStringList{ PARAM_PICK_1_OF_3_3(,,,__VA_ARGS__) }; \
+        _item << PARAM_PICK_1_OF_3_3(<<,,, __VA_ARGS__); \
         _item.push_front(""); \
         setRowCount(rowCount(QModelIndex())); \
         setColumnCount(columnCount(QModelIndex())); \

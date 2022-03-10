@@ -3,17 +3,16 @@
 
 #include "starpoint_sp9500_global.h"
 
-//namespace ns_starpoint {
+namespace ns_starpoint {
 namespace ns_sp9500 {
 
 //KASE_MODEL(TX_LO_Leak,"Att","Power","Time")
 
 KASE_CONFIG(Cal_TX_LO_Leak,
-    QTextEdit, textEditFreq, "Freq",
-    QLineEdit, lineEditAtt, "Att Bit")
+    QCheckBox, checkBoxRef, "10M Ref",
+    QComboBox, comboBoxMethod, "Method")
 
 KASE_RESULT(Cal_TX_LO_Leak,
-    QCheckBox, checkBoxMonotonic, "Monotonic",
     QLineEdit, lineEditDyRange, "Dynamic Range")
 
 KASE_WIDGET_PREFIX(StarPoint,SP9500,Cal_TX_LO_Leak)
@@ -33,6 +32,6 @@ KASE_THREAD(Cal_TX_LO_Leak)
 KASE_WIDGET_SUFFIX()
 
 } // namespace ns_sp9500
-//} // namespace ns_starpoint
+} // namespace ns_starpoint
 
 #endif
