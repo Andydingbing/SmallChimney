@@ -20,9 +20,7 @@ const uint32_t sp1401::temps = 1001;
 
 sp1401::sp1401()
 {
-    m_k7 = nullptr;
-    en_tx_tc = false;
-    en_rx_tc = false;
+    _k7 = nullptr;
 }
 
 int32_t sp1401::open_board()
@@ -92,13 +90,12 @@ int32_t sp1401::set_sn_major(const hw_ver_t &ver,const uint32_t &ordinal)
 {
     char sn[32] = {0};
     ZERO_ARRAY(sn);
-    uint32_t rf_idx = _cal_file->rf_idx();
-    uint32_t rfu_idx = _cal_file->rfu_idx();
+
     sprintf(sn,"%9s%08XRFU%dRF%d",
             hw_ver2sn_header(ver).c_str(),
             ass_ordinal(ordinal),
-            rfu_idx,
-            rf_idx);
+            _rfu_idx,
+            _rf_idx);
     INT_CHECK(w_eeprom(0x0000,g_sn_length,sn));
     return 0;
 }

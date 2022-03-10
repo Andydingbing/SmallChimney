@@ -174,7 +174,7 @@ bool sp1401_r1c::is_connected()
 			return true;
         }
     }
-    Log.set_last_err(-2,"missing rfu%u--->rf%u",_cal_file->rfu_idx(),_cal_file->rf_idx());
+    Log.set_last_err(-2,"missing rfu%u--->rf%u",rfu_idx(),rf_idx());
 	return false;
 }
 

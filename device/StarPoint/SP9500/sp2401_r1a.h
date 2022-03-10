@@ -73,7 +73,7 @@ public:
     int32_t open_board(pci_dev_vi *k7,pci_dev_vi *s6);
     int32_t	open_board(pci_dev_vi *s6);
     int32_t get_s6_ver(uint32_t &ver);
-    uint32_t get_rf_idx() const { return m_rf_idx; }
+    uint32_t rf_idx() const { return _rf_idx; }
     int32_t fpga_reset();
     pci_dev* k7();
     pci_dev* s6();
@@ -105,7 +105,7 @@ public:
     int32_t set_rx_filter_2I3D_default();
     int32_t set_rx_filter(double *real,double *imag);
 
-    template <typename data_t>
+    template<typename data_t>
     int32_t set_rx_filter(const data_t &data) const;
     int32_t set_rx_filter(const data_m_rx_filter_80 &data) const;
     int32_t set_rx_filter(const data_m_rx_filter_160 &data) const;
@@ -150,9 +150,9 @@ public:
     static int32_t rx_filter_coef_default(double *real,double *imag,int32_t order);
 
 private:
-    uint32_t m_rf_idx;
-    pci_dev_vi *m_k7;
-    pci_dev_vi *m_s6;
+    uint32_t _rf_idx;
+    pci_dev_vi *_k7;
+    pci_dev_vi *_s6;
 };
 
 } // namespace ns_starpoint

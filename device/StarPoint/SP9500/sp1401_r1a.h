@@ -70,6 +70,8 @@ public:
     };
 
 public:
+    virtual bool is_connected() OVERRIDE;
+
     int32_t tx_freq2lo(uint64_t freq,uint64_t &lo1,uint64_t &lo2,tx_band_t &band);
     int32_t tx_lo2freq(uint64_t lo1,uint64_t lo2,tx_band_t band,uint64_t &freq);
     int32_t rx_freq2lo(uint64_t freq,uint64_t &lo1,uint64_t &lo2);

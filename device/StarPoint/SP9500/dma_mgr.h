@@ -50,7 +50,7 @@ private:
 private:
     int32_t reset();
 private:
-    pci_dev_vi *m_k7;
+    pci_dev_vi *_k7;
     vi_mem_io *m_dmar;
     vi_mem_io *m_dmaw[R_BLOCKS];
     uint32_t *m_usr_spc;

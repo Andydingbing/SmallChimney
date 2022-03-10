@@ -22,26 +22,26 @@ using namespace ns_sp2401;
 
 sp2401_r1a::sp2401_r1a(uint32_t rf_idx)
 {
-    m_k7 = nullptr;
-    m_s6 = nullptr;
-    m_rf_idx = rf_idx;
+    _k7 = nullptr;
+    _s6 = nullptr;
+    _rf_idx = rf_idx;
 }
 
 int32_t sp2401_r1a::open_board(pci_dev_vi *k7, pci_dev_vi *s6)
 {
-    m_k7 = k7;
-    m_s6 = s6;
+    _k7 = k7;
+    _s6 = s6;
 
     INT_CHECK(set_da_sw(FROM_TO_RF));
     INT_CHECK(set_ad_sw(FROM_TO_RF));
 
-    if (m_rf_idx == 2) {
+    if (_rf_idx == 2) {
         INT_CHECK(set_da_freq_MHz(491.52));
         INT_CHECK(set_ad_freq_MHz(368.64));
     }
 
     bool lock = false;
-    if (m_rf_idx == 0 || m_rf_idx == 2) {
+    if (_rf_idx == 0 || _rf_idx == 2) {
         INT_CHECK(clock_of_da_ld(lock));
         if (lock == false) {
             Log.set_last_err("ADF4351 of DAC unlocked");
@@ -75,7 +75,7 @@ int32_t sp2401_r1a::open_board(pci_dev_vi *k7, pci_dev_vi *s6)
 
 int32_t sp2401_r1a::open_board(pci_dev_vi *s6)
 {
-    m_s6 = s6;
+    _s6 = s6;
 	return 0;
 }
 
@@ -96,12 +96,12 @@ int32_t sp2401_r1a::fpga_reset()
 
 pci_dev* sp2401_r1a::k7()
 {
-    return m_k7;
+    return _k7;
 }
 
 pci_dev* sp2401_r1a::s6()
 {
-    return m_s6;
+    return _s6;
 }
 
 int32_t sp2401_r1a::clock_of_da_ld(bool &lock)
@@ -144,7 +144,7 @@ int32_t sp2401_r1a::set_da_sw(ad_da_port_t port)
 {
     RFU_S6_REG_DECLARE(0x000b);
     RFU_S6_R(0x000b);
-    switch (m_rf_idx) {
+    switch (_rf_idx) {
         case 0 : {RFU_S6_REG(0x000b).rf_ch_0 = unsigned(port);break;}
         case 1 : {RFU_S6_REG(0x000b).rf_ch_1 = unsigned(port);break;}
         case 2 : {RFU_S6_REG(0x000b).rf_ch_2 = unsigned(port);break;}
@@ -183,7 +183,7 @@ int32_t sp2401_r1a::set_ad_sw(ad_da_port_t port)
 {
     RFU_S6_REG_DECLARE(0x000a);
     RFU_S6_R(0x000a);
-    switch (m_rf_idx) {
+    switch (_rf_idx) {
         case 0 : {RFU_S6_REG(0x000a).rf_ch_0 = unsigned(port);break;}
         case 1 : {RFU_S6_REG(0x000a).rf_ch_1 = unsigned(port);break;}
         case 2 : {RFU_S6_REG(0x000a).rf_ch_2 = unsigned(port);break;}
@@ -755,7 +755,7 @@ int32_t sp2401_r1a::set_fpga_bit(const char *path)
     uint32_t file_size = 0;
     uint32_t cnt = 0;
     uint32_t to_cnt = 0;
-    const uint32_t fpga_idx = (m_rf_idx == 0 || m_rf_idx == 1 ? 1 : 0);
+    const uint32_t fpga_idx = (_rf_idx == 0 || _rf_idx == 1 ? 1 : 0);
     const uint32_t buffer_offset = (fpga_idx == 0 ? 0x0005 : 0x0009) * 4;
     const uint32_t block_size = 500; // * 32bit
 
@@ -828,9 +828,9 @@ int32_t sp2401_r1a::set_fpga_bit(const char *path)
 
     for (uint32_t i = 0;i < cnt;i ++) {
         if (i == cnt - 1) {
-            m_s6->w32(pci_dev::AS_BAR0,buffer_offset,(file_size - i * 4 * block_size) / 4,&buf[i * block_size]);
+            _s6->w32(pci_dev::AS_BAR0,buffer_offset,(file_size - i * 4 * block_size) / 4,&buf[i * block_size]);
         } else {
-            m_s6->w32(pci_dev::AS_BAR0,buffer_offset,block_size,&buf[i * block_size]);
+            _s6->w32(pci_dev::AS_BAR0,buffer_offset,block_size,&buf[i * block_size]);
         }
 
         RFU_S6_WAIT_FIFO_EMPTY_2(0x0003,0x0007,0,1000);

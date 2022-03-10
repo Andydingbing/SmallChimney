@@ -52,7 +52,7 @@ double sp3301::rx_tc_coef[12][6] = {
 #define SP1401_R1C dynamic_cast<sp1401_r1c *>(sp1401)
 #define SP1401_R1F dynamic_cast<sp1401_r1f *>(sp1401)
 
-#define DECL_RF_VER hw_ver_t RF_VER = sp1401->get_hw_ver();
+#define DECL_RF_VER hw_ver_t RF_VER = hw_ver_t(sp1401->hw_ver());
 
 #define DECL_DYNAMIC_DDR dma_mgr *ddr = m_dma_mgr->at(K7_IDX(rf_idx)).get();
 
@@ -339,7 +339,7 @@ int32_t sp3301::get_rf_port()
 
 hw_ver_t sp3301::get_rf_ver(uint32_t rf_idx)
 {
-    return m_sp1401->at(rf_idx)->get_hw_ver();
+    return hw_ver_t(m_sp1401->at(rf_idx)->hw_ver());
 }
 
 int32_t sp3301::get_sn(char *sn)
@@ -540,7 +540,7 @@ int32_t sp3301::set_tx_freq(uint32_t rf_idx,uint64_t freq)
     INT_CHECK(sp2401->set_duc_dds(freq_duc));
     m_tx_freq[rf_idx] = freq;
     INT_CHECK(set_tx_pwr(rf_idx,float(m_tx_pwr[rf_idx])));
-    INT_CHECK(set_tx_bw(rf_idx,sp1401->get_bw()));
+    INT_CHECK(set_tx_bw(rf_idx,sp1401->bw()));
     return 0;
 }
 
@@ -601,7 +601,7 @@ int32_t sp3301::arb_load(uint32_t rf_idx, const char *path)
 
     sp1401 *sp1401[2] = {m_sp1401->at(rf_idx).get(),m_sp1401->at(rf_idx_2).get()};
     FILE *fp[2] = {nullptr,nullptr};
-    pci_dev_vi *m_k7 = sp1401[0]->get_k7();
+    pci_dev_vi *_k7 = sp1401[0]->k7();
 
     uint32_t spls_total = 0;
     uint32_t spls_left = 0;
@@ -784,7 +784,7 @@ int32_t sp3301::set_rx_freq(uint32_t rf_idx,uint64_t freq)
     INT_CHECK(sp2401->set_ddc(freq_ddc));
     m_rx_freq[rf_idx] = freq;
     INT_CHECK(set_rx_level(rf_idx,m_ref[rf_idx]));
-    INT_CHECK(set_rx_bw(rf_idx,sp1401->get_bw()));
+    INT_CHECK(set_rx_bw(rf_idx,sp1401->bw()));
     return 0;
 }
 
@@ -799,7 +799,7 @@ int32_t sp3301::set_rx_bw(uint32_t rf_idx,bw_t bw)
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
 
-    switch (sp1401->get_hw_ver()) {
+    switch (sp1401->hw_ver()) {
 //        case R1C : case R1D : case R1E : case R1F : {
 //            CAL_FILE_R1C->set_bw(bw);
 //            double real[ul_filter_tap] = {0.0};
@@ -949,7 +949,7 @@ int32_t sp3301::get_temp(uint32_t rf_idx,double &tx_temp,double &rx_temp)
     tx_temp = 0.0;
     rx_temp = 0.0;
 
-    switch (sp1401->get_hw_ver()) {
+    switch (sp1401->hw_ver()) {
         case R1A : case R1B : {
             INT_CHECK(SP1401_R1A->get_tx_temp(tx_temp));
             INT_CHECK(SP1401_R1A->get_rx_temp(rx_temp));

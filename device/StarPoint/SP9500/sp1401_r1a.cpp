@@ -109,7 +109,7 @@ bool sp1401_r1a::is_connected()
         double rx_temp = 0.0;
         INT_CHECKB(get_rx_temp(rx_temp));
         if (rx_temp <= 0) {
-            Log.set_last_err(-2,"missing rfu%u--->rf%u",_cal_file->rfu_idx(),_cal_file->rf_idx());
+            Log.set_last_err(-2,"missing rfu%u--->rf%u",rfu_idx(),rf_idx());
 			return false;
 		}
 	}

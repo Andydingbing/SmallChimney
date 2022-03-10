@@ -11,7 +11,7 @@ using namespace ns_sp9500;
 
 sp3501::sp3501()
 {
-    m_s6 = new pci_dev_vi("s6");
+    _s6 = new pci_dev_vi("s6");
 
     for (uint32_t i = 0;i < ARRAY_SIZE(_fan_group_speed);++i) {
         _fan_group_speed[i] = 0;
@@ -20,7 +20,7 @@ sp3501::sp3501()
 
 sp3501::~sp3501()
 {
-    SAFE_DEL(m_s6);
+    SAFE_DEL(_s6);
 }
 
 sp3501 &sp3501::instance()
@@ -52,7 +52,7 @@ int32_t sp3501::open_board()
 
     ini_file.get_config_str_value(str_rsrc_section,"CXU_S6",str_rsrc_name);
 
-    INT_CHECK(m_s6->init(str_rsrc_name,0x10ee,0x3501));
+    INT_CHECK(_s6->init(str_rsrc_name,0x10ee,0x3501));
 
     for (uint32_t i = 0;i < ARRAY_SIZE(_fan_group_speed);++i) {
         _fan_group_speed[i] = 0;

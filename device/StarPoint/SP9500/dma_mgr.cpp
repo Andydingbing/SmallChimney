@@ -8,7 +8,7 @@
 using namespace ns_starpoint;
 using namespace ns_sp9500;
 
-dma_mgr::dma_mgr(pci_dev_vi *k7) : m_k7(k7)
+dma_mgr::dma_mgr(pci_dev_vi *k7) : _k7(k7)
 {
 	m_dmar = new vi_mem_io;
     for (uint32_t i = 0; i < R_BLOCKS; i++) {

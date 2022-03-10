@@ -1,6 +1,7 @@
 #include "self_cal_helper.h"
 #include "sleep_common.h"
 #include "liblog.h"
+#include "algo_math.hpp"
 
 using namespace ns_starpoint;
 using namespace ns_sp9500;
@@ -65,7 +66,7 @@ int32_t self_cal_tx_lol_helper::init()
 
 int32_t self_cal_tx_lol_helper::run()
 {
-    if (is_rf_ver_before(_sp1401->get_hw_ver(),R1B)) {
+    if (is_before(_sp1401->hw_ver(),R1B)) {
         return 0;
     }
 
@@ -231,7 +232,7 @@ int32_t self_cal_tx_sb_helper::init()
 
 int32_t self_cal_tx_sb_helper::run(tx_sideband_table_t::data_f_t *data)
 {
-    if (is_rf_ver_before(_sp1401->get_hw_ver(),R1B)) {
+    if (is_before(_sp1401->hw_ver(),R1B)) {
         return 0;
     }
 

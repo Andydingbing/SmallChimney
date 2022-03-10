@@ -13,4 +13,4 @@ public:
 
 } // namespace ns_ericsson
 
-#endif // DEVICE_ERICSSON_RADIO_4415_B3_H
+#endif

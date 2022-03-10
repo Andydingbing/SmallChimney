@@ -15,6 +15,7 @@
 #include <boost/function.hpp>
 #include "freq_string.hpp"
 #include "traits.hpp"
+#include "frontend.h"
 
 const static float g_temp_star = 20.0f;
 const static float g_temp_stop = 70.0f;
@@ -23,17 +24,14 @@ const static float g_temp_step = 0.25f;
 namespace ns_starpoint {
 namespace ns_sp9500 {
 
-class API sp1401 : boost::noncopyable
+class API sp1401 : public frontend
 {
 public:
     typedef boost::shared_ptr<sp1401> sptr;
     sp1401();
     virtual ~sp1401() {}
+
 public:
-    enum rf_ch_t {
-        CH_TX = 0,
-        CH_RX = 1
-	};
     enum trig_src_t	{
         TS_MANUAL = 1,
         TS_EXT_A  = 4,
@@ -41,18 +39,22 @@ public:
         TS_EXT_C  = 6,
         TS_EXT_D  = 7
 	};
+
     enum rep_mode_t {
         RM_SINGLE_SLOT,
         RM_CONTINUOUS
 	};
+
     enum multi_seg_trig_src_t {
         MS_TS_MANUAL
 	};
+
     enum multi_seg_rep_mode_t {
         MS_RM_AUTO,
         MS_RM_CONTINUOUS,
         MS_RM_CONTINUOUS_SEAMLESS
 	};
+
     enum rx_if_filter_t {
 		_100MHz,
 		_160MHz
@@ -77,10 +79,10 @@ public:
 
     enum pwr_meas_state_t {
         PMS_IDLE	= 0x0,
-        PMS_WFT		= 0x1,  //waiting for trigger
-        PMS_TT		= 0x2,  //trigger timeout,manual set to IDLE
-        PMS_RUNNING = 0x3,  //calculating
-        PMS_DONE	= 0x4   //manual set to IDLE
+        PMS_WFT		= 0x1,  // waiting for trigger
+        PMS_TT		= 0x2,  // trigger timeout,manual set to IDLE
+        PMS_RUNNING = 0x3,  // calculating
+        PMS_DONE	= 0x4   // manual set to IDLE
 	};
 
 #define DECLARE_SP1401(class_name) \
@@ -89,7 +91,6 @@ public: \
     virtual int32_t open_board(); \
     virtual int32_t close_board(); \
     virtual int32_t set_led(bool tx,bool rx); \
-    virtual bool    is_connected(); \
     virtual int32_t set_tx_freq(uint64_t freq); \
     virtual int32_t set_tx_att(double att); \
     virtual int32_t set_tx_modulator_en(bool en); \
@@ -99,39 +100,25 @@ public: \
     virtual int32_t get_io_mode(io_mode_t &mode); \
 
 public:
-    virtual int32_t open_board();
-    virtual int32_t close_board() = 0;
+    virtual int32_t open_board() OVERRIDE;
     virtual int32_t set_led(bool tx,bool rx) = 0;
-    virtual bool	is_connected() = 0;
-    virtual int32_t set_tx_freq(uint64_t freq) = 0;
     virtual int32_t set_tx_att(double att) = 0;
     virtual int32_t set_tx_modulator_en(bool en) = 0;
     virtual int32_t set_pwr_en(bool en) = 0;
-    virtual int32_t set_rx_freq(uint64_t freq) = 0;
-    virtual int32_t set_io_mode(io_mode_t mode) = 0;
     virtual int32_t get_io_mode(io_mode_t &mode) = 0;
 
 public:
-    ns_sp1401::bw_t get_bw() const { return _cal_file->bw(); }
+    ns_sp1401::bw_t bw() const { return _cal_file->bw(); }
 
-    ns_sp1401::hw_ver_t get_hw_ver() const { return _cal_file->hw_ver(); }
+    int32_t hw_ver() const OVERRIDE { return _cal_file->hw_ver(); }
 
     void set_hw_ver(ns_sp1401::hw_ver_t ver) { _cal_file->set_hw_ver(ver); }
 
-    uint32_t get_rf_idx() const { return _cal_file->rf_idx(); }
-
-    uint32_t get_rfu_idx() const { return _cal_file->rfu_idx(); }
-
     cal_file *data_base() const { return _cal_file; }
 
-    pci_dev_vi* get_k7() const { return m_k7; }
+    pci_dev_vi* k7() const { return _k7; }
 
-    void set_tx_en_tc(const bool en) { en_tx_tc = en; }
-    void set_rx_en_tc(const bool en) { en_rx_tc = en; }
-    bool is_tx_en_tc() const { return en_tx_tc; }
-    bool is_rx_en_tc() const { return en_rx_tc; }
-
-    void connect(pci_dev_vi *k7) { m_k7 = k7; }
+    void connect(pci_dev_vi *k7) { _k7 = k7; }
     int32_t get_k7_ver(uint32_t &ver);
     arb_reader *arb() { return _arb_reader; }
 
@@ -181,11 +168,11 @@ public:
     static uint32_t temperatures()
     { return SERIE_SIZE(temperature_star(),temperature_stop(),temperature_step()); }
 
-    static  uint32_t ass_ordinal(uint32_t ordinal);
-    static  int32_t is_valid_sn(const char *sn);
-    static  int32_t get_hw_ver(const char *sn,ns_sp1401::hw_ver_t &ver);
-    static  std::string hw_ver2str(ns_sp1401::hw_ver_t ver);
-    static  std::string hw_ver2sn_header(ns_sp1401::hw_ver_t ver);
+    static uint32_t ass_ordinal(uint32_t ordinal);
+    static int32_t is_valid_sn(const char *sn);
+    static int32_t get_hw_ver(const char *sn,ns_sp1401::hw_ver_t &ver);
+    static std::string hw_ver2str(ns_sp1401::hw_ver_t ver);
+    static std::string hw_ver2sn_header(ns_sp1401::hw_ver_t ver);
 
     virtual int32_t set_arb_segments(uint16_t segs);
     virtual int32_t set_arb_param(uint32_t add_samp,uint32_t cycle,uint32_t rep_mode);
@@ -248,13 +235,9 @@ private:
     int32_t r_eeprom(uint16_t addr,uint32_t length,char *buf);
 
 protected:
-    pci_dev_vi *m_k7;
     cal_file *_cal_file;
+    pci_dev_vi *_k7;
     arb_reader *_arb_reader;
-
-    float _arb_level_offset;
-    bool en_tx_tc; // Enable T/Rx power temperature compansate?
-    bool en_rx_tc;
 };
 
 } // namespace ns_starpoint

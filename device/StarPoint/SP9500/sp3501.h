@@ -60,7 +60,7 @@ public:
     int32_t set_fan_group(uint32_t idx,uint32_t speed);
 
 public:
-    pci_dev_vi *m_s6;
+    pci_dev_vi *_s6;
     uint32_t _fan_group_speed[4];
 };
 

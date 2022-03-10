@@ -5,13 +5,13 @@
 
 #ifdef _DEBUG
 #define K7_ASSERT() \
-    if (m_k7 == nullptr) { \
+    if (_k7 == nullptr) { \
         Log.set_last_err("device:k7 disconnect"); \
         return -1; \
     }
 
 #define S6_ASSERT() \
-    if (m_s6 == nullptr) { \
+    if (_s6 == nullptr) { \
         Log.set_last_err("device:s6 disconnect"); \
         return -1; \
     }
@@ -22,79 +22,79 @@
 
 #define K7_W(ns,addr) \
     do {K7_ASSERT(); int32_t ret = 0; \
-        if ((ret = m_k7->w32(pci_dev::AS_BAR0,uint16_t(addr<<2),REG_DATA(ns,addr)))) { \
+        if ((ret = _k7->w32(pci_dev::AS_BAR0,uint16_t(addr<<2),REG_DATA(ns,addr)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_k7->descriptor(),addr,REG_DATA(ns,addr)); \
+        Log.add_reg(ret,_k7->descriptor(),addr,REG_DATA(ns,addr)); \
     }while (0);
 
 #define K7_W_2(ns,addr0,addr1) \
     do {K7_ASSERT(); int32_t ret = 0; \
-        uint32_t addr = ns##r##addr0##addr1.addr[get_rf_idx()]; \
-        if ((ret = m_k7->w32(pci_dev::AS_BAR0,addr<<2,REG_DATA_2(ns,addr0,addr1)))) { \
+        uint32_t addr = ns##r##addr0##addr1.addr[_rf_idx]; \
+        if ((ret = _k7->w32(pci_dev::AS_BAR0,addr<<2,REG_DATA_2(ns,addr0,addr1)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_k7->descriptor(),addr,REG_DATA_2(ns,addr0,addr1)); \
+        Log.add_reg(ret,_k7->descriptor(),addr,REG_DATA_2(ns,addr0,addr1)); \
     }while (0);
 
 #define S6_W(ns,addr) \
     do {S6_ASSERT(); int32_t ret = 0; \
-        if ((ret = m_s6->w32(pci_dev::AS_BAR0,uint16_t(addr <<2),REG_DATA(ns,addr)))) { \
+        if ((ret = _s6->w32(pci_dev::AS_BAR0,uint16_t(addr <<2),REG_DATA(ns,addr)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_s6->descriptor(),addr,REG_DATA(ns,addr)); \
+        Log.add_reg(ret,_s6->descriptor(),addr,REG_DATA(ns,addr)); \
     }while (0);
 
 #define S6_W_2(ns,addr0,addr1) \
     do {S6_ASSERT(); \
         int32_t ret = 0; \
-        uint32_t addr = ns##r##addr0##addr1.addr[get_rf_idx()/2]; \
-        if ((ret = m_s6->w32(pci_dev::AS_BAR0,addr<<2,REG_DATA_2(ns,addr0,addr1)))) { \
+        uint32_t addr = ns##r##addr0##addr1.addr[_rf_idx/2]; \
+        if ((ret = _s6->w32(pci_dev::AS_BAR0,addr<<2,REG_DATA_2(ns,addr0,addr1)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_s6->descriptor(),addr,REG_DATA_2(ns,addr0,addr1)); \
+        Log.add_reg(ret,_s6->descriptor(),addr,REG_DATA_2(ns,addr0,addr1)); \
     }while (0);
 
 #define K7_R(ns,addr) \
     do {K7_ASSERT(); int32_t ret = 0; \
-        if ((ret = m_k7->r32(pci_dev::AS_BAR0,uint16_t(addr<<2),&REG_DATA(ns,addr)))) { \
+        if ((ret = _k7->r32(pci_dev::AS_BAR0,uint16_t(addr<<2),&REG_DATA(ns,addr)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_k7->descriptor(),addr,0xffffffff,REG_DATA(ns,addr)); \
+        Log.add_reg(ret,_k7->descriptor(),addr,0xffffffff,REG_DATA(ns,addr)); \
     }while (0);
 
 #define K7_R_2(ns,addr0,addr1) \
     do {K7_ASSERT(); int32_t ret = 0; \
-        uint32_t addr = ns##r##addr0##addr1.addr[get_rf_idx()]; \
-        if ((ret = m_k7->r32(pci_dev::AS_BAR0,addr<<2,&REG_DATA_2(ns,addr0,addr1)))) { \
+        uint32_t addr = ns##r##addr0##addr1.addr[_rf_idx]; \
+        if ((ret = _k7->r32(pci_dev::AS_BAR0,addr<<2,&REG_DATA_2(ns,addr0,addr1)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_k7->descriptor(),addr,0xffffffff,REG_DATA_2(ns,addr0,addr1)); \
+        Log.add_reg(ret,_k7->descriptor(),addr,0xffffffff,REG_DATA_2(ns,addr0,addr1)); \
     }while (0);
 
 #define S6_R(ns,addr) \
     do {S6_ASSERT(); int32_t ret = 0; \
-        if ((ret = m_s6->r32(pci_dev::AS_BAR0,uint16_t(addr <<2),&REG_DATA(ns,addr)))) { \
+        if ((ret = _s6->r32(pci_dev::AS_BAR0,uint16_t(addr <<2),&REG_DATA(ns,addr)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_s6->descriptor(),addr,0xffffffff,REG_DATA(ns,addr)); \
+        Log.add_reg(ret,_s6->descriptor(),addr,0xffffffff,REG_DATA(ns,addr)); \
     }while (0);
 
 #define S6_R_2(ns,addr0,addr1) \
     do {S6_ASSERT(); int32_t ret = 0; \
-        uint32_t addr = ns##r##addr0##addr1.addr[get_rf_idx()/2]; \
-        if ((ret = m_s6->r32(pci_dev::AS_BAR0,addr<<2,&REG_DATA_2(ns,addr0,addr1)))) { \
+        uint32_t addr = ns##r##addr0##addr1.addr[_rf_idx/2]; \
+        if ((ret = _s6->r32(pci_dev::AS_BAR0,addr<<2,&REG_DATA_2(ns,addr0,addr1)))) { \
             Log.set_last_err("%s:%s line%d",__FILE__,BOOST_CURRENT_FUNCTION,__LINE__); \
             return -1; \
         } \
-        Log.add_reg(ret,m_s6->descriptor(),addr,0xffffffff,REG_DATA_2(ns,addr0,addr1)); \
+        Log.add_reg(ret,_s6->descriptor(),addr,0xffffffff,REG_DATA_2(ns,addr0,addr1)); \
     }while (0);
 
 #define K7OP(ns,addr,bit) \
@@ -180,7 +180,7 @@
 
 #define K7WAIT_IDLE_2(ns,addr0,addr1,bit,flag,times) \
     do {bool idle = false; \
-        uint32_t addr = ns##r##addr0##addr1.addr[get_rf_idx()]; \
+        uint32_t addr = ns##r##addr0##addr1.addr[_rf_idx]; \
         K7_R_2(ns,addr0,addr1); \
         for (int32_t i = 0;i < times;i ++) { \
             if (flag == REG_2(ns,addr0,addr1).bit) { \
@@ -215,7 +215,7 @@
 
 #define S6WAIT_FIFO_EMPTY_2(ns,addr0,addr1,bit,flag,times) \
     do {bool full = true; \
-        uint32_t addr = ns##r##addr0##addr1.addr[get_rf_idx()/2]; \
+        uint32_t addr = ns##r##addr0##addr1.addr[_rf_idx/2]; \
         RFU_S6_R_2(addr0,addr1); \
         for (int32_t i = 0;i < times;i ++) { \
             if (flag != REG_2(ns,addr0,addr1).bit) { \

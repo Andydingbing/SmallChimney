@@ -183,6 +183,7 @@ public:
             bool &io_green,
             bool &io_red);
 
+    bool is_connected() OVERRIDE;
     int32_t init_adf5355();
     virtual int32_t set_adf5355(lo_t lo,uint64_t freq);
     int32_t init_hmc1197();

@@ -94,17 +94,13 @@ public:
     #endif
     }
 
-    ns_sp1401::bw_t bw() { return _bw; }
-    ns_sp1401::hw_ver_t hw_ver() { return _hw_ver; }
-    uint32_t rf_idx()  { return _rf_idx; }
-    uint32_t rfu_idx() { return _rfu_idx; }
-    uint32_t ordinal() { return _ordinal; }
+    ns_sp1401::bw_t bw() const { return _bw; }
+    ns_sp1401::hw_ver_t hw_ver() const { return _hw_ver; }
+    uint32_t ordinal() const { return _ordinal; }
 
     void set_bw(ns_sp1401::bw_t bw) { _bw = bw; }
     void set_hw_ver(ns_sp1401::hw_ver_t ver) { _hw_ver = ver; }
 
-    uint32_t _rf_idx;
-    uint32_t _rfu_idx;
     uint32_t _ordinal;
     ns_sp1401::bw_t _bw;
     ns_sp1401::hw_ver_t _hw_ver;
