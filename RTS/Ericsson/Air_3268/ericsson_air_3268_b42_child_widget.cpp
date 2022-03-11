@@ -50,7 +50,7 @@ ChildWidgets::ChildWidgets(MainWindow *parent) :
 
 void ChildWidgets::init()
 {
-    Radio.set_sn("0001");
+    Radio.set_sn(0,"0001");
     Radio.set_init_callback(initCallback);
 
     DECL_TREE("Radio,Overview",Q_3268_Widget,Radio.channels());

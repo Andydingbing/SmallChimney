@@ -25,7 +25,7 @@ void Q_Cal_RX_RF_VGA_Thread::kase()
             data.pwr[idx] = rand() * (110.0 - 70.0) / 32768.0 + 70.0;
         }
         data.freq = FREQ_K(1747500);
-        Radio.db_add(RFIdx,RX_RF_VGA,&data);
+        Radio.data_base_add(RFIdx,RX_RF_VGA,&data);
 
         setProgressPos(i % 32768);
         i += 50;
@@ -77,7 +77,7 @@ void Q_Cal_RX_RF_VGA_Widget::init()
 
 void Q_Cal_RX_RF_VGA_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_case(RFIdx,RX_RF_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(RFIdx,RX_RF_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
     ui->plot->replot();
 }
 

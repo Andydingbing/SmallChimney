@@ -27,7 +27,7 @@ void radio::set_log_callback(void (*callback)())
     return air_3268::logger()->set_callback(callback);
 }
 
-int32_t radio::set_sn(const char *sn)
+int32_t radio::set_sn(const uint32_t index,const char *sn)
 {
     for (uint8_t i = 0;i < channels();++i) {
         INT_CHECK(g_air_3268[i].set_sn(sn));
@@ -35,9 +35,27 @@ int32_t radio::set_sn(const char *sn)
     return 0;
 }
 
-int32_t radio::get_sn(char *sn)
+int32_t radio::get_sn(const uint32_t index,char *sn)
 {
     return 0;
+}
+
+const item_table_base* radio::data_base(const uint32_t index,const int32_t kase) const
+{
+    return g_radio.data_base()->db(kase);
+}
+
+int32_t radio::data_base_add(const uint32_t index,const int32_t kase,void *data)
+{
+    g_radio.data_base()->add(cal_table_t::_from_integral(kase),data);
+    return 0;
+}
+
+int32_t radio::prepare_kase(const uint32_t index,const int32_t kase,const string freq_str,const bool is_exp)
+{
+    cal_table_t cal_table = cal_table_t::_from_integral(kase);
+
+    return g_radio.prepare_case(cal_table,freq_str,is_exp);
 }
 
 uint32_t radio::com_loggers()
@@ -120,18 +138,8 @@ uint32_t radio::channels()
     return g_channels;
 }
 
-int32_t radio::prepare_case(const uint32_t index,const ericsson_air_3268_kase kase,const string freq_str,const bool is_exp)
-{
-    cal_table_t cal_table = cal_table_t::_from_integral(kase);
-
-    return g_radio.prepare_case(cal_table,freq_str,is_exp);
-}
-
-int32_t radio::db_add(const uint32_t index,const ericsson_air_3268_kase kase,void *data)
-{
-    g_radio.data_base()->add(cal_table_t::_from_integral(kase),data);
-    return 0;
-}
+int32_t radio::serial_write(const char *str)
+{ return serial_write(string(str)); }
 
 int32_t radio::serial_write(const std::string &str)
 {
@@ -141,11 +149,6 @@ int32_t radio::serial_write(const std::string &str)
 
 int32_t radio::set_tx_frequency(const uint32_t index,const uint64_t freq)
 { return g_radio.set_tx_freq(freq); }
-
-int32_t radio::get_tx_frequency(const uint32_t index,uint64_t *freq)
-{
-    return 0;
-}
 
 int32_t radio::txon(const uint32_t index)
 { return g_radio.txon(); }
@@ -188,9 +191,6 @@ int32_t radio::pacm(const uint32_t index)
 int32_t radio::set_rx_frequency(const uint32_t index,const uint64_t freq)
 { return g_radio.set_rx_freq(freq); }
 
-int32_t radio::get_rx_frequency(const uint32_t index,uint64_t *freq)
-{ return 0; }
-
 int32_t radio::rx(const uint32_t index,const uint64_t freq)
 { return g_radio.rx(freq); }
 
@@ -217,7 +217,7 @@ int32_t radio::rxrfvga(const uint32_t index,const double att)
 { return g_radio.rxrfvga(att); }
 
 int32_t radio::rxrfvgaswp(const uint32_t index,const std::string &str,void *data)
-{ return 0/*g_radio.rxrfvgaswp(str,(data_f_rx_rf_vga *)data)*/; }
+{ return g_radio.rxrfvgaswp(str,(data_f_rx_rf_vga *)data); }
 
 int32_t radio::rxagc(const uint32_t index,const bool en)
 { return g_radio.rxagc(en); }

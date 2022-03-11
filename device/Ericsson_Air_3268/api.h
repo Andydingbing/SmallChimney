@@ -4,6 +4,7 @@
 #include "cal_file.h"
 #include "../eutra/band.hpp"
 #include "../rd_types.h"
+#include "../device.h"
 
 enum ericsson_air_3268_kase {
     Begin = 0,
@@ -19,18 +20,26 @@ namespace ns_air_3268 {
 
 #define Radio radio::instance()
 
-class API radio : noncopyable
+class API radio : public radio_base
 {
 public:
     static radio &instance();
 
 public:
-    void set_init_callback(int32_t (*callback)());
-    void set_log_callback(void (*callback)());
+    uint32_t channels() OVERRIDE;
+    void set_init_callback(int32_t (*callback)()) OVERRIDE;
+    void set_log_callback(void (*callback)()) OVERRIDE;
 
-    int32_t set_sn(const char *sn);
-    int32_t get_sn(char *sn);
+    int32_t set_sn(const uint32_t index,const char *sn) OVERRIDE;
+    int32_t get_sn(const uint32_t index,char *sn) OVERRIDE;
 
+    const item_table_base* data_base(const uint32_t index,const int32_t kase) const OVERRIDE;
+    int32_t data_base_add(const uint32_t index,const int32_t kase,void *data) OVERRIDE;
+    int32_t prepare_kase(const uint32_t index,const int32_t kase,const std::string freq_str,const bool is_exp) OVERRIDE;
+
+    int32_t init() OVERRIDE;
+
+public:
     uint32_t    com_loggers();
     const char* com_logger_write(const uint32_t n);
     const char* com_logger_read(const uint32_t n);
@@ -39,15 +48,11 @@ public:
 
     cal_file* data_base(const uint32_t index) const;
 
-    int32_t init();
-    uint32_t channels();
-    int32_t prepare_case(const uint32_t index,const ericsson_air_3268_kase kase,const std::string freq_str,const bool is_exp);
-    int32_t db_add(const uint32_t index,const ericsson_air_3268_kase kase,void *data);
+    int32_t serial_write(const char *str);
     int32_t serial_write(const std::string &str);
 
 public:
     int32_t set_tx_frequency(const uint32_t index,const uint64_t freq);
-    int32_t get_tx_frequency(const uint32_t index,uint64_t *freq);
     int32_t txon(const uint32_t index);
     int32_t txoff(const uint32_t index);
     int32_t txtype(const uint32_t index,const radio_system_t &system,const uint64_t bw);
@@ -59,7 +64,6 @@ public:
 
 public:
     int32_t set_rx_frequency(const uint32_t index,const uint64_t freq);
-    int32_t get_rx_frequency(const uint32_t index,uint64_t *freq);
     int32_t rx(const uint32_t index,const uint64_t freq);
     int32_t rxtype(const uint32_t index,const radio_system_t &system,const uint64_t bw);
     int32_t rxrfsw(const uint32_t index,const bool en_lna,const bool en_att);

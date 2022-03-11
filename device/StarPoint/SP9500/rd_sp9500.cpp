@@ -61,12 +61,12 @@ int32_t RF_Boot()
     available_rf_board_t rf_board;
     sp3301::active_t RfuActiveInfo[g_max_rfu];
 
-    SP3301_2.boot();
-    SP3301_3.boot();
+    SP3301_2.init();
+    SP3301_3.init();
     SP3301_2.program_bit();
     SP3301_3.program_bit();
-    SP3301_2.boot();
-    SP3301_3.boot();
+    SP3301_2.init();
+    SP3301_3.init();
 
     uint16_t ocxo_value = 0;
     SP3301_2.get_ocxo(ocxo_value);
@@ -156,7 +156,7 @@ int32_t RF_GetRFPortNumber(uint32_t &uiRFPortNumber)
 int32_t RF_GetRFSerialNumber(uint32_t RFIndex, char *SerialNumber)
 {
     DECL_DYNAMIC_SP3301
-    INT_CHECK(SP3301->get_rf_sn(rf_idx,SerialNumber));
+    INT_CHECK(SP3301->get_sn(rf_idx,SerialNumber));
     return 0;
 }
 
@@ -175,7 +175,6 @@ int32_t RF_GetRFUSerialNumber(uint32_t RFUIndex,char *SerialNumber)
 
 int32_t RF_GetRFDriverVersion(const char **version)
 {
-    *version = SP3301_2.get_driver_ver();
     return 0;
 }
 

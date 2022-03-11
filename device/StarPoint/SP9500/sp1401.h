@@ -210,6 +210,7 @@ public:
     int32_t get_pwr_meas_state(pwr_meas_state_t &state);
     int32_t get_pwr_meas_peak(double &pwr);
     int32_t get_pwr_meas_pwr(double &pwr);
+
 public:
     int32_t set_sn_major(const ns_sp1401::hw_ver_t &ver,const uint32_t &ordinal);
     int32_t get_sn_major(char *sn);

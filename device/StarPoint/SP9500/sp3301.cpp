@@ -45,8 +45,8 @@ double sp3301::rx_tc_coef[12][6] = {
     {-20.4481420074096860,+0.5204172441628423,-0.0285343069279326,+0.0007448393639637,-0.0000096415820063,+0.0000000485445166},
 };
 
-#define DECL_DYNAMIC_SP1401 sp1401     *sp1401 = m_sp1401->at(rf_idx).get();
-#define DECL_DYNAMIC_SP2401 sp2401_r1a *sp2401 = m_sp2401_r1a->at(rf_idx).get();
+#define DECL_DYNAMIC_SP1401 sp1401     *sp1401 = _sp1401[index];
+#define DECL_DYNAMIC_SP2401 sp2401_r1a *sp2401 = _sp2401_r1a[index];
 
 #define SP1401_R1A dynamic_cast<sp1401_r1a *>(sp1401)
 #define SP1401_R1C dynamic_cast<sp1401_r1c *>(sp1401)
@@ -54,7 +54,7 @@ double sp3301::rx_tc_coef[12][6] = {
 
 #define DECL_RF_VER hw_ver_t RF_VER = hw_ver_t(sp1401->hw_ver());
 
-#define DECL_DYNAMIC_DDR dma_mgr *ddr = m_dma_mgr->at(K7_IDX(rf_idx)).get();
+#define DECL_DYNAMIC_DDR dma_mgr *ddr = _dma_mgr[K7_IDX(index)];
 
 #define CAL_FILE_R1A dynamic_cast<cal_file_r1ab *>(sp1401->cf())
 #define CAL_FILE_R1C dynamic_cast<cal_file_r1cd *>(sp1401->cf())
@@ -78,28 +78,20 @@ sp3301::sp3301(uint32_t rfu_idx):
     m_is_program_k7_0(true),
     m_is_program_k7_1(true)
 {
-    m_sp1401 = boost::make_shared<vector<sp1401::sptr>>();
-    m_sp1401_r1a = boost::make_shared<vector<sp1401_r1a::sptr>>();
-    m_sp1401_r1c = boost::make_shared<vector<sp1401_r1c::sptr>>();
-    m_sp1401_r1e = boost::make_shared<vector<sp1401_r1e::sptr>>();
-    m_sp1401_r1f = boost::make_shared<vector<sp1401_r1f::sptr>>();
-    m_sp2401_r1a = boost::make_shared<vector<sp2401_r1a::sptr>>();
-
-    m_dma_mgr = boost::make_shared<vector<dma_mgr::sptr>>();
-
-    m_I = new vector<int16_t *>;
-    m_Q = new vector<int16_t *>;
-
     for (uint32_t i = 0;i < g_max_rf;i ++) {
-        m_sp1401->push_back(nullptr);
-        m_sp1401_r1a->push_back(boost::make_shared<sp1401_r1a>(i,rfu_idx));
-        m_sp1401_r1c->push_back(boost::make_shared<sp1401_r1c>(i,rfu_idx));
-        m_sp1401_r1e->push_back(boost::make_shared<sp1401_r1e>(i,rfu_idx));
-        m_sp1401_r1f->push_back(boost::make_shared<sp1401_r1f>(i,rfu_idx));
-        m_sp2401_r1a->push_back(boost::make_shared<sp2401_r1a>(i));
-        m_sp1401->at(i) = m_sp1401_r1a->at(i);
-        m_I->push_back(nullptr);
-        m_Q->push_back(nullptr);
+        _sp1401_r1a[i] = new sp1401_r1a(i,rfu_idx);
+        _sp1401_r1c[i] = new sp1401_r1c(i,rfu_idx);
+        _sp1401_r1e[i] = new sp1401_r1e(i,rfu_idx);
+        _sp1401_r1f[i] = new sp1401_r1f(i,rfu_idx);
+        _sp2401_r1a[i] = new sp2401_r1a(i);
+        _sp1401[i] = _sp1401_r1a[i];
+
+        _I[i] = nullptr;
+        _Q[i] = nullptr;
+    }
+
+    for (uint32_t i = 0;i < g_max_rf/2;i ++) {
+        _dma_mgr[i] = nullptr;
     }
 
     for (int32_t i = 0;i < g_max_rf;i ++) {
@@ -127,6 +119,49 @@ sp3301 &sp3301::instance(uint32_t rfu_idx)
     }
 }
 
+uint32_t sp3301::channels()
+{
+    return g_max_rf;
+}
+
+int32_t sp3301::set_sn(const uint32_t index,const char *sn)
+{
+    DECL_DYNAMIC_SP1401
+//    sp1401->set_sn_major(sn);
+    return 0;
+}
+
+int32_t sp3301::get_sn(const uint32_t index,char *sn)
+{
+    DECL_DYNAMIC_SP1401
+    sp1401->get_sn_major(sn);
+    return 0;
+}
+
+const item_table_base* sp3301::data_base(const uint32_t index,const int32_t kase) const
+{
+    DECL_DYNAMIC_SP1401
+
+    return sp1401->data_base()->db(kase);
+}
+
+int32_t sp3301::data_base_add(const uint32_t index,const int32_t kase,void *data)
+{
+    DECL_DYNAMIC_SP1401
+
+    return sp1401->data_base()->add(kase,data);
+}
+
+int32_t sp3301::prepare_kase(const uint32_t index,const int32_t kase,const std::string freq_str,const bool is_exp)
+{
+    DECL_DYNAMIC_SP1401
+
+    set_helper::range_freq<uint64_t> freqs;
+    set_helper::parse(freq_str,freqs);
+
+    return sp1401->data_base()->prepare(cal_table_t::_from_integral(kase),freqs.freq,is_exp);
+}
+
 //sp3301::rfu_info_t::rfu_info_t(const char *k7_0,const char *k7_1,const char *s6,const char *sn):
 //    k7_0_ver(0),
 //    k7_1_ver(0),
@@ -145,7 +180,7 @@ sp3301::active_t sp3301::is_actived()
 
 int32_t sp3301::get_ocxo(uint16_t &value)
 {
-    uint32_t rf_idx = 0;
+    uint32_t index = 0;
     DECL_DYNAMIC_SP1401;
     data_m_x9119 data;
 
@@ -154,7 +189,7 @@ int32_t sp3301::get_ocxo(uint16_t &value)
     return 0;
 }
 
-int32_t sp3301::boot()
+int32_t sp3301::init()
 {
     vector<string> str_rsrc_rfu;
     vector<string>::iterator iter_rsrc_rfu;
@@ -204,56 +239,56 @@ int32_t sp3301::boot()
 
     if (m_active.s6) {
         if (m_active.k7_0) {
-            INT_CHECK(m_sp2401_r1a->at(2)->open_board(&m_k7_0,&m_s6));
-            INT_CHECK(m_sp2401_r1a->at(3)->open_board(&m_k7_0,&m_s6));
-            INT_CHECK(m_sp2401_r1a->at(2)->get_s6_ver(m_rfu_info.s6_ver));
+            INT_CHECK(_sp2401_r1a[2]->open_board(&m_k7_0,&m_s6));
+            INT_CHECK(_sp2401_r1a[3]->open_board(&m_k7_0,&m_s6));
+            INT_CHECK(_sp2401_r1a[2]->get_s6_ver(m_rfu_info.s6_ver));
 
-            m_sp1401_r1a->at(2)->connect(&m_k7_0);
-            m_sp1401_r1a->at(3)->connect(&m_k7_0);
-            m_sp1401_r1c->at(2)->connect(&m_k7_0);
-            m_sp1401_r1c->at(3)->connect(&m_k7_0);
-            m_sp1401_r1e->at(2)->connect(&m_k7_0);
-            m_sp1401_r1e->at(3)->connect(&m_k7_0);
-            m_sp1401_r1f->at(2)->connect(&m_k7_0);
-            m_sp1401_r1f->at(3)->connect(&m_k7_0);
+            _sp1401_r1a[2]->connect(&m_k7_0);
+            _sp1401_r1a[3]->connect(&m_k7_0);
+            _sp1401_r1c[2]->connect(&m_k7_0);
+            _sp1401_r1c[3]->connect(&m_k7_0);
+            _sp1401_r1e[2]->connect(&m_k7_0);
+            _sp1401_r1e[3]->connect(&m_k7_0);
+            _sp1401_r1f[2]->connect(&m_k7_0);
+            _sp1401_r1f[3]->connect(&m_k7_0);
 
             instance_sp1401(2);
             instance_sp1401(3);
 
-            m_sp1401->at(2)->set_tx_en_tc(true);
-            m_sp1401->at(2)->set_rx_en_tc(true);
-            m_sp1401->at(3)->set_tx_en_tc(true);
-            m_sp1401->at(3)->set_rx_en_tc(true);
+            _sp1401[2]->set_tx_en_tc(true);
+            _sp1401[2]->set_rx_en_tc(true);
+            _sp1401[3]->set_tx_en_tc(true);
+            _sp1401[3]->set_rx_en_tc(true);
 
-            m_dma_mgr->push_back(boost::make_shared<dma_mgr>(&m_k7_0));
-            INT_CHECK(m_dma_mgr->at(0)->init());
-            INT_CHECK(m_sp1401->at(2)->get_k7_ver(m_rfu_info.k7_0_ver));
+            _dma_mgr[0] = new dma_mgr(&m_k7_0);
+            INT_CHECK(_dma_mgr[0]->init());
+            INT_CHECK(_sp1401[2]->get_k7_ver(m_rfu_info.k7_0_ver));
         }
         if (m_active.k7_1) {
-            INT_CHECK(m_sp2401_r1a->at(0)->open_board(&m_k7_1,&m_s6));
-            INT_CHECK(m_sp2401_r1a->at(1)->open_board(&m_k7_1,&m_s6));
-            INT_CHECK(m_sp2401_r1a->at(0)->get_s6_ver(m_rfu_info.s6_ver));
+            INT_CHECK(_sp2401_r1a[0]->open_board(&m_k7_1,&m_s6));
+            INT_CHECK(_sp2401_r1a[1]->open_board(&m_k7_1,&m_s6));
+            INT_CHECK(_sp2401_r1a[0]->get_s6_ver(m_rfu_info.s6_ver));
 
-            m_sp1401_r1a->at(0)->connect(&m_k7_1);
-            m_sp1401_r1a->at(1)->connect(&m_k7_1);
-            m_sp1401_r1c->at(0)->connect(&m_k7_1);
-            m_sp1401_r1c->at(1)->connect(&m_k7_1);
-            m_sp1401_r1e->at(0)->connect(&m_k7_1);
-            m_sp1401_r1e->at(1)->connect(&m_k7_1);
-            m_sp1401_r1f->at(0)->connect(&m_k7_1);
-            m_sp1401_r1f->at(1)->connect(&m_k7_1);
+            _sp1401_r1a[0]->connect(&m_k7_1);
+            _sp1401_r1a[1]->connect(&m_k7_1);
+            _sp1401_r1c[0]->connect(&m_k7_1);
+            _sp1401_r1c[1]->connect(&m_k7_1);
+            _sp1401_r1e[0]->connect(&m_k7_1);
+            _sp1401_r1e[1]->connect(&m_k7_1);
+            _sp1401_r1f[0]->connect(&m_k7_1);
+            _sp1401_r1f[1]->connect(&m_k7_1);
 
             instance_sp1401(0);
             instance_sp1401(1);
 
-            m_sp1401->at(0)->set_tx_en_tc(true);
-            m_sp1401->at(0)->set_rx_en_tc(true);
-            m_sp1401->at(1)->set_tx_en_tc(true);
-            m_sp1401->at(1)->set_rx_en_tc(true);
+            _sp1401[0]->set_tx_en_tc(true);
+            _sp1401[0]->set_rx_en_tc(true);
+            _sp1401[1]->set_tx_en_tc(true);
+            _sp1401[1]->set_rx_en_tc(true);
 
-            m_dma_mgr->push_back(boost::make_shared<dma_mgr>(&m_k7_1));
-            INT_CHECK(m_dma_mgr->at(1)->init());
-            INT_CHECK(m_sp1401->at(0)->get_k7_ver(m_rfu_info.k7_1_ver));
+            _dma_mgr[1] = new dma_mgr(&m_k7_1);
+            INT_CHECK(_dma_mgr[1]->init());
+            INT_CHECK(_sp1401[0]->get_k7_ver(m_rfu_info.k7_1_ver));
         }
     }
 
@@ -294,7 +329,7 @@ int32_t sp3301::program_bit()
             strcat(bit_path,"\\");
             strcat(bit_path,"p0_top.bit");
             Log.stdprintf("k7_0 bit path = %s\n",bit_path);
-            INT_CHECK(m_sp2401_r1a->at(2)->set_fpga_bit(bit_path));
+            INT_CHECK(_sp2401_r1a[2]->set_fpga_bit(bit_path));
         } else {
             is_conflict[0] = true;
             Log.set_last_err("conflicted version of rf2(%s) & rf3(%s)",
@@ -313,7 +348,7 @@ int32_t sp3301::program_bit()
             strcat(bit_path,"\\");
             strcat(bit_path,"p1_top.bit");
             Log.stdprintf("k7_1 bit path = %s\n",bit_path);
-            INT_CHECK(m_sp2401_r1a->at(0)->set_fpga_bit(bit_path));
+            INT_CHECK(_sp2401_r1a[0]->set_fpga_bit(bit_path));
         }
         else {
             is_conflict[1] = true;
@@ -337,9 +372,9 @@ int32_t sp3301::get_rf_port()
     return no;
 }
 
-hw_ver_t sp3301::get_rf_ver(uint32_t rf_idx)
+hw_ver_t sp3301::get_rf_ver(uint32_t index)
 {
-    return hw_ver_t(m_sp1401->at(rf_idx)->hw_ver());
+    return hw_ver_t(_sp1401[index]->hw_ver());
 }
 
 int32_t sp3301::get_sn(char *sn)
@@ -348,24 +383,10 @@ int32_t sp3301::get_sn(char *sn)
     return 0;
 }
 
-int32_t sp3301::get_rf_sn(uint32_t rf_idx,char *sn)
-{
-    DECL_DYNAMIC_SP1401
-    sp1401->get_sn_major(sn);
-    return 0;
-}
-
 int32_t sp3301::get_ver(char *ver)
 {
     strcpy(ver,"SP2401R1BRFUD160");
     return 0;
-}
-
-const char *sp3301::get_driver_ver()
-{
-//    extern const char *drive_ver;
-//    return drive_ver;
-    return nullptr;
 }
 
 string sp3301::ass_k7_name(uint32_t k7_idx,uint32_t rfu_idx)
@@ -415,28 +436,28 @@ char sp3301::rf_ver2child_dir(hw_ver_t ver0,hw_ver_t ver1)
     return 'A' - 1;
 }
 
-int32_t sp3301::set_tx_en_tc(const uint32_t rf_idx,const bool en)
+int32_t sp3301::set_tx_en_tc(const uint32_t index,const bool en)
 {
     DECL_DYNAMIC_SP1401
     sp1401->set_tx_en_tc(en);
     return 0;
 }
 
-int32_t sp3301::set_tx_state(uint32_t rf_idx,bool state)
+int32_t sp3301::set_tx_state(uint32_t index,bool state)
 {
     DECL_DYNAMIC_SP1401
     sp1401->set_tx_modulator_en(state);
     return 0;
 }
 
-int32_t sp3301::set_tx_pwr(uint32_t rf_idx,float pwr)
+int32_t sp3301::set_tx_pwr(uint32_t index,float pwr)
 {
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
     DECL_RF_VER
 
-    uint64_t freq = m_tx_freq[rf_idx];
-    io_mode_t mode = io_mode_t::_from_integral(m_io_mode[rf_idx]);
+    uint64_t freq = m_tx_freq[index];
+    io_mode_t mode = io_mode_t::_from_integral(m_io_mode[index]);
 
     switch (RF_VER) {
         case R1A : case R1B : {
@@ -498,11 +519,11 @@ int32_t sp3301::set_tx_pwr(uint32_t rf_idx,float pwr)
         }
         default:break;
     }
-    m_tx_pwr[rf_idx] = double(pwr);
+    m_tx_pwr[index] = double(pwr);
     return 0;
 }
 
-int32_t sp3301::set_tx_freq(uint32_t rf_idx,uint64_t freq)
+int32_t sp3301::set_tx_freq(uint32_t index,uint64_t freq)
 {
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
@@ -538,19 +559,19 @@ int32_t sp3301::set_tx_freq(uint32_t rf_idx,uint64_t freq)
 //    }
     INT_CHECK(sp1401->set_tx_freq(freq_rf));
     INT_CHECK(sp2401->set_duc_dds(freq_duc));
-    m_tx_freq[rf_idx] = freq;
-    INT_CHECK(set_tx_pwr(rf_idx,float(m_tx_pwr[rf_idx])));
-    INT_CHECK(set_tx_bw(rf_idx,sp1401->bw()));
+    m_tx_freq[index] = freq;
+    INT_CHECK(set_tx_pwr(index,float(m_tx_pwr[index])));
+    INT_CHECK(set_tx_bw(index,sp1401->bw()));
     return 0;
 }
 
-int32_t sp3301::get_tx_freq(uint32_t rf_idx,uint64_t &freq)
+int32_t sp3301::get_tx_freq(uint32_t index,uint64_t &freq)
 {
-    freq = m_tx_freq[rf_idx];
+    freq = m_tx_freq[index];
     return 0;
 }
 
-int32_t sp3301::set_tx_bw(uint32_t rf_idx,bw_t bw)
+int32_t sp3301::set_tx_bw(uint32_t index,bw_t bw)
 {
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
@@ -565,12 +586,12 @@ int32_t sp3301::set_tx_bw(uint32_t rf_idx,bw_t bw)
 //            CAL_FILE_R1C->set_bw(bw);
 //            if (_80M == bw) {
 //                tx_filter_80m_table::data_m_t data;
-//                CAL_FILE_R1C->m_tx_filter_80m->get(m_tx_freq[rf_idx],&data);
+//                CAL_FILE_R1C->m_tx_filter_80m->get(m_tx_freq[index],&data);
 //                data._2double(real,imag);
 //                sp2401->set_tx_filter(real,imag);
 //            } else if (_160M == bw) {
 //                tx_filter_160m_table::data_m_t data;
-//                CAL_FILE_R1C->m_tx_filter_160m->get(m_tx_freq[rf_idx],&data);
+//                CAL_FILE_R1C->m_tx_filter_160m->get(m_tx_freq[index],&data);
 //                data._2double(real,imag);
 //                sp2401->set_tx_filter(real,imag);
 //            }
@@ -580,26 +601,26 @@ int32_t sp3301::set_tx_bw(uint32_t rf_idx,bw_t bw)
 //    }
 }
 
-int32_t sp3301::set_tx_src(uint32_t rf_idx,sp2401_r1a::da_src_t src)
+int32_t sp3301::set_tx_src(uint32_t index,sp2401_r1a::da_src_t src)
 {
     DECL_DYNAMIC_SP2401
     INT_CHECK(sp2401->set_dds_src(src));
     return 0;
 }
 
-int32_t sp3301::set_src_freq(uint32_t rf_idx,uint64_t freq)
+int32_t sp3301::set_src_freq(uint32_t index,uint64_t freq)
 {
     DECL_DYNAMIC_SP2401
     INT_CHECK(sp2401->set_dds1((double)freq));
     return 0;
 }
 
-int32_t sp3301::arb_load(uint32_t rf_idx, const char *path)
+int32_t sp3301::arb_load(uint32_t index, const char *path)
 {
     DECL_DYNAMIC_DDR
-    uint32_t rf_idx_2 = brother_idx(rf_idx);
+    uint32_t index_2 = brother_idx(index);
 
-    sp1401 *sp1401[2] = {m_sp1401->at(rf_idx).get(),m_sp1401->at(rf_idx_2).get()};
+    sp1401 *sp1401[2] = {_sp1401[index],_sp1401[index_2]};
     FILE *fp[2] = {nullptr,nullptr};
     pci_dev_vi *_k7 = sp1401[0]->k7();
 
@@ -682,7 +703,7 @@ int32_t sp3301::arb_load(uint32_t rf_idx, const char *path)
     return 0;
 }
 
-int32_t sp3301::set_arb_en(uint32_t rf_idx,bool en)
+int32_t sp3301::set_arb_en(uint32_t index,bool en)
 {
     DECL_DYNAMIC_SP1401
 
@@ -695,26 +716,26 @@ int32_t sp3301::set_arb_en(uint32_t rf_idx,bool en)
     return 0;
 }
 
-int32_t sp3301::set_arb_cnt(uint32_t rf_idx,int cnt)
+int32_t sp3301::set_arb_cnt(uint32_t index,int cnt)
 {
     return 0;
 }
 
-int32_t sp3301::set_rx_en_tc(const uint32_t rf_idx,const bool en)
+int32_t sp3301::set_rx_en_tc(const uint32_t index,const bool en)
 {
     DECL_DYNAMIC_SP1401
     sp1401->set_rx_en_tc(en);
     return 0;
 }
 
-int32_t sp3301::set_rx_level(uint32_t rf_idx,double level)
+int32_t sp3301::set_rx_level(uint32_t index,double level)
 {
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
     DECL_RF_VER
 
-    uint64_t freq = m_rx_freq[rf_idx];
-    io_mode_t mode = io_mode_t::_from_integral(m_io_mode[rf_idx]);
+    uint64_t freq = m_rx_freq[index];
+    io_mode_t mode = io_mode_t::_from_integral(m_io_mode[index]);
 
     switch (RF_VER) {
 //        case R1A : case R1B : {
@@ -768,11 +789,11 @@ int32_t sp3301::set_rx_level(uint32_t rf_idx,double level)
 //        }
         default:break;
     }
-    m_ref[rf_idx] = level;
+    m_ref[index] = level;
     return 0;
 }
 
-int32_t sp3301::set_rx_freq(uint32_t rf_idx,uint64_t freq)
+int32_t sp3301::set_rx_freq(uint32_t index,uint64_t freq)
 {
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
@@ -782,19 +803,19 @@ int32_t sp3301::set_rx_freq(uint32_t rf_idx,uint64_t freq)
 
     INT_CHECK(sp1401->set_rx_freq(freq_rf));
     INT_CHECK(sp2401->set_ddc(freq_ddc));
-    m_rx_freq[rf_idx] = freq;
-    INT_CHECK(set_rx_level(rf_idx,m_ref[rf_idx]));
-    INT_CHECK(set_rx_bw(rf_idx,sp1401->bw()));
+    m_rx_freq[index] = freq;
+    INT_CHECK(set_rx_level(index,m_ref[index]));
+    INT_CHECK(set_rx_bw(index,sp1401->bw()));
     return 0;
 }
 
-int32_t sp3301::get_rx_freq(uint32_t rf_idx,uint64_t &freq)
+int32_t sp3301::get_rx_freq(uint32_t index,uint64_t &freq)
 {
-    freq = m_rx_freq[rf_idx];
+    freq = m_rx_freq[index];
     return 0;
 }
 
-int32_t sp3301::set_rx_bw(uint32_t rf_idx,bw_t bw)
+int32_t sp3301::set_rx_bw(uint32_t index,bw_t bw)
 {
     DECL_DYNAMIC_SP1401
     DECL_DYNAMIC_SP2401
@@ -808,13 +829,13 @@ int32_t sp3301::set_rx_bw(uint32_t rf_idx,bw_t bw)
 //            if (_80M == bw) {
 //                rx_filter_80m_table::data_m_t data;
 
-//                CAL_FILE_R1C->m_rx_filter_80m->get(m_rx_freq[rf_idx],&data);
+//                CAL_FILE_R1C->m_rx_filter_80m->get(m_rx_freq[index],&data);
 //                data._2double(real,imag);
 //                sp2401->set_rx_filter(real,imag);
 //            } else if (_160M == bw) {
 //                rx_filter_160m_table::data_m_t data;
 
-//                CAL_FILE_R1C->m_rx_filter_160m->get(m_rx_freq[rf_idx],&data);
+//                CAL_FILE_R1C->m_rx_filter_160m->get(m_rx_freq[index],&data);
 //                data._2double(real,imag);
 //                sp2401->set_rx_filter(real,imag);
 //            }
@@ -824,87 +845,85 @@ int32_t sp3301::set_rx_bw(uint32_t rf_idx,bw_t bw)
     }
 }
 
-int32_t sp3301::set_io_mode(uint32_t rf_idx,io_mode_t mode)
+int32_t sp3301::set_io_mode(uint32_t index,io_mode_t mode)
 {
     DECL_DYNAMIC_SP1401
     INT_CHECK(sp1401->set_io_mode(mode));
-    m_io_mode[rf_idx] = mode;
+    m_io_mode[index] = mode;
     return 0;
 }
 
-int32_t sp3301::set_iq_cap_trig_src(uint32_t rf_idx, sp1401::iq_cap_src_t src)
+int32_t sp3301::set_iq_cap_trig_src(uint32_t index, sp1401::iq_cap_src_t src)
 {
     DECL_DYNAMIC_SP1401
     INT_CHECK(sp1401->set_iq_cap_src(src,true));
     return 0;
 }
 
-int32_t sp3301::set_iq_cap_trig_level(uint32_t rf_idx,float level)
+int32_t sp3301::set_iq_cap_trig_level(uint32_t index,float level)
 {
     DECL_DYNAMIC_SP1401
     INT_CHECK(sp1401->set_pwr_meas_trig_threshold(double(level)));
     return 0;
 }
 
-int32_t sp3301::set_iq_cap_samples(uint32_t rf_idx,uint32_t samples)
+int32_t sp3301::set_iq_cap_samples(uint32_t index,uint32_t samples)
 {
     DECL_DYNAMIC_DDR
     return ddr->set_fpga_w_samples(samples);
 }
 
-int32_t sp3301::get_iq_cap_samples(const uint32_t rf_idx,uint32_t &samples) const
+int32_t sp3301::get_iq_cap_samples(const uint32_t index,uint32_t &samples) const
 {
     DECL_DYNAMIC_DDR;
     return ddr->get_fpga_w_samples(samples);
 }
 
-int32_t sp3301::set_iq_cap_buffer(uint32_t rf_idx, int16_t *I, int16_t *Q)
+int32_t sp3301::set_iq_cap_buffer(uint32_t index,int16_t *I,int16_t *Q)
 {
-    m_I->at(rf_idx) = I;
-    m_Q->at(rf_idx) = Q;
+    _I[index] = I;
+    _Q[index] = Q;
     return 0;
 }
 
-int32_t sp3301::get_iq_cap_buffer(uint32_t rf_idx,int16_t **I,int16_t **Q)
+int32_t sp3301::get_iq_cap_buffer(uint32_t index,int16_t **I,int16_t **Q)
 {
-    *I = m_I->at(rf_idx);
-    *Q = m_I->at(rf_idx);
+    *I = _I[index];
+    *Q = _Q[index];
     return 0;
 }
 
-int32_t sp3301::iq_cap(uint32_t rf_idx)
+int32_t sp3301::iq_cap(uint32_t index)
 {
     DECL_DYNAMIC_DDR
     INT_CHECK(ddr->fpga_w());
     return 0;
 }
 
-int32_t sp3301::iq_cap_abort(uint32_t rf_idx)
+int32_t sp3301::iq_cap_abort(uint32_t index)
 {
     DECL_DYNAMIC_DDR
     INT_CHECK(ddr->fpga_w_abort());
     return 0;
 }
 
-int32_t sp3301::iq_cap_iq2buf(uint32_t rf_idx)
+int32_t sp3301::iq_cap_iq2buf(uint32_t index)
 {
     DECL_DYNAMIC_DDR
+    uint32_t index_2 = brother_idx(index);
 
-    uint32_t rf_idx_2 = brother_idx(rf_idx);
-    INT_CHECK(ddr->iq2buf(rf_idx,m_I->at(rf_idx),m_Q->at(rf_idx),m_I->at(rf_idx_2),m_Q->at(rf_idx_2)));
-    return 0;
+    return ddr->iq2buf(index,_I[index],_Q[index],_I[index_2],_Q[index_2]);
 }
 
-int32_t sp3301::iq_cap_iq2buf(uint32_t rf_idx,uint32_t samples)
+int32_t sp3301::iq_cap_iq2buf(uint32_t index,uint32_t samples)
 {
     DECL_DYNAMIC_DDR
+    uint32_t index_2 = brother_idx(index);
 
-    uint32_t rf_idx_2 = brother_idx(rf_idx);
-    INT_CHECK(ddr->iq2buf(rf_idx,m_I->at(rf_idx),m_Q->at(rf_idx),samples,m_I->at(rf_idx_2),m_Q->at(rf_idx_2)));
-    return 0;
+    return ddr->iq2buf(index,_I[index],_Q[index],samples,_I[index_2],_Q[index_2]);
 }
 
-int32_t sp3301::init_pwr_meas(uint32_t rf_idx)
+int32_t sp3301::init_pwr_meas(uint32_t index)
 {
     DECL_DYNAMIC_SP1401
     INT_CHECK(sp1401->pwr_meas_abort());
@@ -912,21 +931,21 @@ int32_t sp3301::init_pwr_meas(uint32_t rf_idx)
     return 0;
 }
 
-int32_t sp3301::abort_pwr_meas(uint32_t rf_idx)
+int32_t sp3301::abort_pwr_meas(uint32_t index)
 {
     DECL_DYNAMIC_SP1401
     INT_CHECK(sp1401->pwr_meas_abort());
     return 0;
 }
 
-int32_t sp3301::get_pwr_meas_proc(uint32_t rf_idx,sp1401::pwr_meas_state_t &proc)
+int32_t sp3301::get_pwr_meas_proc(uint32_t index,sp1401::pwr_meas_state_t &proc)
 {
     DECL_DYNAMIC_SP1401
     INT_CHECK(sp1401->get_pwr_meas_state(proc));
     return 0;
 }
 
-int32_t sp3301::get_pwr_meas_result(uint32_t rf_idx,float &pwr,float &crest)
+int32_t sp3301::get_pwr_meas_result(uint32_t index,float &pwr,float &crest)
 {
     DECL_DYNAMIC_SP1401
 
@@ -942,7 +961,7 @@ int32_t sp3301::get_pwr_meas_result(uint32_t rf_idx,float &pwr,float &crest)
     return 0;
 }
 
-int32_t sp3301::get_temp(uint32_t rf_idx,double &tx_temp,double &rx_temp)
+int32_t sp3301::get_temp(uint32_t index,double &tx_temp,double &rx_temp)
 {
     DECL_DYNAMIC_SP1401
 
@@ -991,7 +1010,7 @@ int32_t sp3301::get_temp(uint32_t rf_idx,double &tx_temp,double &rx_temp)
     }
 }
 
-int32_t sp3301::get_cal_temp(uint32_t rf_idx, double &temp)
+int32_t sp3301::get_cal_temp(uint32_t index, double &temp)
 {
     DECL_DYNAMIC_SP1401
     DECL_RF_VER
@@ -1008,120 +1027,123 @@ int32_t sp3301::get_cal_temp(uint32_t rf_idx, double &temp)
     return 0;
 }
 
-int32_t sp3301::set_iq_cap_frame_trig_src(uint32_t rf_idx,sp2401_r1a::frame_trig_src_t src)
+int32_t sp3301::set_iq_cap_frame_trig_src(uint32_t index,sp2401_r1a::frame_trig_src_t src)
 {
     DECL_DYNAMIC_SP2401
     INT_CHECK(sp2401->set_frame_trig_src(src));
     return 0;
 }
 
-int32_t sp3301::set_iq_cap_frame_trig_frame(uint32_t rf_idx,uint32_t frame)
+int32_t sp3301::set_iq_cap_frame_trig_frame(uint32_t index,uint32_t frame)
 {
     DECL_DYNAMIC_SP2401
     INT_CHECK(sp2401->set_trig_frame(frame));
     return 0;
 }
 
-int32_t sp3301::set_iq_cap_frame_trig_offset(uint32_t rf_idx,int32_t offset)
+int32_t sp3301::set_iq_cap_frame_trig_offset(uint32_t index,int32_t offset)
 {
     DECL_DYNAMIC_SP2401
     INT_CHECK(sp2401->set_frame_trig_offset(offset));
     return 0;
 }
 
-int32_t sp3301::set_iq_cap_frame_trig_mod_x_y(uint32_t rf_idx,uint16_t x,uint16_t y)
+int32_t sp3301::set_iq_cap_frame_trig_mod_x_y(uint32_t index,uint16_t x,uint16_t y)
 {
     DECL_DYNAMIC_SP2401
     INT_CHECK(sp2401->set_frame_trig_mod_x_y(x,y));
     return 0;
 }
 
-int32_t sp3301::instance_sp1401(uint32_t rf_idx)
+int32_t sp3301::instance_sp1401(uint32_t index)
 {
     bool is_connected = false;
     char sn[24] = {0};
     hw_ver_t ver = HW_ERROR;
 
-    INT_CHECK(m_sp1401->at(rf_idx)->get_sn_major(sn));
+    INT_CHECK(_sp1401[index]->get_sn_major(sn));
+
     if (sp1401::is_valid_sn(sn) > SN_NULL) {
         is_connected = true;
         sp1401::get_hw_ver(sn,ver);
+
         switch (ver) {
             case R1A : case R1B : {
-                m_sp1401->at(rf_idx) = m_sp1401_r1a->at(rf_idx);
+                _sp1401[index] = _sp1401_r1a[index];
                 break;
             }
             case R1C : case R1D : {
-                m_sp1401->at(rf_idx) = m_sp1401_r1c->at(rf_idx);
+                _sp1401[index] = _sp1401_r1c[index];
                 break;
             }
             case R1E : {
-                m_sp1401->at(rf_idx) = m_sp1401_r1e->at(rf_idx);
+                _sp1401[index] = _sp1401_r1e[index];
                 break;
             }
             case R1F : case HW_VER_SP9500_MAX : case HW_ERROR : {
-                m_sp1401->at(rf_idx) = m_sp1401_r1f->at(rf_idx);
+                _sp1401[index] = _sp1401_r1f[index];
                 break;
             }
         }
-        m_sp1401->at(rf_idx)->set_hw_ver(ver);
+        _sp1401[index]->set_hw_ver(ver);
     } else {
-        if ((is_connected = m_sp1401_r1a->at(rf_idx)->is_connected())) {
-            m_sp1401->at(rf_idx) = m_sp1401_r1a->at(rf_idx);
-        } else if ((is_connected = m_sp1401_r1c->at(rf_idx)->is_connected())) {
-            m_sp1401->at(rf_idx) = m_sp1401_r1c->at(rf_idx);
-        } else if ((is_connected = m_sp1401_r1e->at(rf_idx)->is_connected())) {
-            m_sp1401->at(rf_idx) = m_sp1401_r1e->at(rf_idx);
-        } else if ((is_connected = m_sp1401_r1f->at(rf_idx)->is_connected())) {
-            m_sp1401->at(rf_idx) = m_sp1401_r1f->at(rf_idx);
+        if ((is_connected = _sp1401_r1a[index]->is_connected())) {
+            _sp1401[index] = _sp1401_r1a[index];
+        } else if ((is_connected = _sp1401_r1c[index]->is_connected())) {
+            _sp1401[index] = _sp1401_r1c[index];
+        } else if ((is_connected = _sp1401_r1e[index]->is_connected())) {
+            _sp1401[index] = _sp1401_r1e[index];
+        } else if ((is_connected = _sp1401_r1f[index]->is_connected())) {
+            _sp1401[index] = _sp1401_r1f[index];
         } else {
-            m_sp1401->at(rf_idx) = m_sp1401_r1f->at(rf_idx);
+            _sp1401[index] = _sp1401_r1f[index];
         }
     }
+
     if (is_connected) {
-        INT_CHECK(m_sp1401->at(rf_idx)->open_board());
-        m_active.sp1401[rf_idx] = true;
+        INT_CHECK(_sp1401[index]->open_board());
+        m_active.sp1401[index] = true;
     }
     return 0;
 }
 
-int32_t sp3301::self_cal_tx_lol(uint32_t rf_idx)
+int32_t sp3301::self_cal_tx_lol(uint32_t index)
 {
     uint64_t rx_freq = 0;
     uint64_t tx_freq = 0;
 
-    INT_CHECK(get_rx_freq(rf_idx,rx_freq));
-    INT_CHECK(get_tx_freq(rf_idx,tx_freq));
+    INT_CHECK(get_rx_freq(index,rx_freq));
+    INT_CHECK(get_tx_freq(index,tx_freq));
 
-    self_cal_tx_lol_helper caller(this,rf_idx);
+    self_cal_tx_lol_helper caller(this,index);
 
     INT_CHECK(caller.run());
 
-    INT_CHECK(set_rx_freq(rf_idx,rx_freq));
-    INT_CHECK(set_rx_level(rf_idx,0.0));
-    INT_CHECK(set_tx_freq(rf_idx,tx_freq));
-    INT_CHECK(set_tx_pwr(rf_idx,-60.0));
-    INT_CHECK(set_io_mode(rf_idx,io_mode_t::IO));
+    INT_CHECK(set_rx_freq(index,rx_freq));
+    INT_CHECK(set_rx_level(index,0.0));
+    INT_CHECK(set_tx_freq(index,tx_freq));
+    INT_CHECK(set_tx_pwr(index,-60.0));
+    INT_CHECK(set_io_mode(index,io_mode_t::IO));
     return 0;
 }
 
-int32_t sp3301::self_cal_tx_sb(uint32_t rf_idx)
+int32_t sp3301::self_cal_tx_sb(uint32_t index)
 {
     uint64_t rx_freq = 0;
     uint64_t tx_freq = 0;
 
-    INT_CHECK(get_rx_freq(rf_idx,rx_freq));
-    INT_CHECK(get_tx_freq(rf_idx,tx_freq));
+    INT_CHECK(get_rx_freq(index,rx_freq));
+    INT_CHECK(get_tx_freq(index,tx_freq));
 
-    self_cal_tx_sb_helper caller(this,rf_idx);
+    self_cal_tx_sb_helper caller(this,index);
 //    tx_sb_table_r1cd::data_f_t data;
 
 //    INT_CHECK(caller.run(&data));
 
-    INT_CHECK(set_rx_freq(rf_idx,rx_freq));
-    INT_CHECK(set_rx_level(rf_idx,0.0));
-    INT_CHECK(set_tx_freq(rf_idx,tx_freq));
-    INT_CHECK(set_tx_pwr(rf_idx,-60.0));
-    INT_CHECK(set_io_mode(rf_idx,io_mode_t::IO));
+    INT_CHECK(set_rx_freq(index,rx_freq));
+    INT_CHECK(set_rx_level(index,0.0));
+    INT_CHECK(set_tx_freq(index,tx_freq));
+    INT_CHECK(set_tx_pwr(index,-60.0));
+    INT_CHECK(set_io_mode(index,io_mode_t::IO));
     return 0;
 }

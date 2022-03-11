@@ -42,7 +42,7 @@ void Q_Test_RX_Gain_Accuracy_Thread::kase()
     data.pwr[2] = float(pwr[2]);
     data.pwr[3] = float(pwr[3]);
 
-    Radio.db_add(RFIdx,RX_Gain_Accu,&data);
+    Radio.data_base_add(RFIdx,RX_Gain_Accu,&data);
     emit uiUpdate(0,3,RX_Gain_Accu);
 }
 
@@ -57,7 +57,7 @@ void Q_Test_RX_Gain_Accuracy_Widget::init()
 
 void Q_Test_RX_Gain_Accuracy_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_case(RFIdx,RX_Gain_Accu,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(RFIdx,RX_Gain_Accu,config->textEditFreq->toPlainText().toStdString(),is_exp);
 }
 
 void Q_Test_RX_Gain_Accuracy_Widget::uiUpdate(const int first,const int last,const int kase)

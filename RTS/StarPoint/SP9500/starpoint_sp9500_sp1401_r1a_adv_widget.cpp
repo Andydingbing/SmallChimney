@@ -205,7 +205,7 @@ void Q_StarPoint_SP9500_SP1401_R1A_Adv_Widget::on_pushButtonAdvTxLO1_clicked()
         dlg_ADF5355[loIdx]->_sp1401_r1a = SP1401_R1A;
         dlg_ADF5355[loIdx]->_sp1401_r1c = nullptr;
         dlg_ADF5355[loIdx]->loIdx = loIdx;
-        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_TX_LO1").arg(SP3301->get_rfu_idx()).arg(RFIdx));
+        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_TX_LO1").arg(SP3301->rfu_idx()).arg(RFIdx));
     }
 
     dlg_ADF5355[loIdx]->setVisible(true);
@@ -221,7 +221,7 @@ void Q_StarPoint_SP9500_SP1401_R1A_Adv_Widget::on_pushButtonAdvTxLO2_clicked()
         dlg_ADF5355[loIdx]->_sp1401_r1a = SP1401_R1A;
         dlg_ADF5355[loIdx]->_sp1401_r1c = nullptr;
         dlg_ADF5355[loIdx]->loIdx = loIdx;
-        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_TX_LO2").arg(SP3301->get_rfu_idx()).arg(RFIdx));
+        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_TX_LO2").arg(SP3301->rfu_idx()).arg(RFIdx));
     }
 
     dlg_ADF5355[loIdx]->setVisible(true);
@@ -237,7 +237,7 @@ void Q_StarPoint_SP9500_SP1401_R1A_Adv_Widget::on_pushButtonAdvRxLO1_clicked()
         dlg_ADF5355[loIdx]->_sp1401_r1a = SP1401_R1A;
         dlg_ADF5355[loIdx]->_sp1401_r1c = nullptr;
         dlg_ADF5355[loIdx]->loIdx = loIdx;
-        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_RX_LO1").arg(SP3301->get_rfu_idx()).arg(RFIdx));
+        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_RX_LO1").arg(SP3301->rfu_idx()).arg(RFIdx));
     }
 
     dlg_ADF5355[loIdx]->setVisible(true);
@@ -253,7 +253,7 @@ void Q_StarPoint_SP9500_SP1401_R1A_Adv_Widget::on_pushButtonAdvRxLO2_clicked()
         dlg_ADF5355[loIdx]->_sp1401_r1a = SP1401_R1A;
         dlg_ADF5355[loIdx]->_sp1401_r1c = nullptr;
         dlg_ADF5355[loIdx]->loIdx = loIdx;
-        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_RX_LO2").arg(SP3301->get_rfu_idx()).arg(RFIdx));
+        dlg_ADF5355[loIdx]->setWindowTitle(QString("R1A/B_ADF5355_RFU%1_RF%2_RX_LO2").arg(SP3301->rfu_idx()).arg(RFIdx));
     }
 
     dlg_ADF5355[loIdx]->setVisible(true);

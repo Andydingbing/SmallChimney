@@ -1,8 +1,26 @@
 #ifndef DEVICE_DEVICE_H
 #define DEVICE_DEVICE_H
 
+#include "item_table.hpp"
 #include "eutra/band.hpp"
 #include "rd_types.h"
+
+class API radio_base
+{
+public:
+    virtual uint32_t channels() = 0;
+    virtual void set_init_callback(int32_t (*callback)()) {}
+    virtual void set_log_callback(void (*callback)()) {}
+
+    virtual int32_t set_sn(const uint32_t index,const char *sn) = 0;
+    virtual int32_t get_sn(const uint32_t index,char *sn) = 0;
+
+    virtual const item_table_base* data_base(const uint32_t index,const int32_t kase) const = 0;
+    virtual int32_t data_base_add(const uint32_t index,const int32_t kase,void *data) = 0;
+    virtual int32_t prepare_kase(const uint32_t index,const int32_t kase,const std::string freq_str,const bool is_exp) = 0;
+
+    virtual int32_t init() = 0;
+};
 
 #if defined(__cplusplus) || defined(__cplusplus__)
 extern "C" {

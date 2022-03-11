@@ -67,7 +67,7 @@ void Q_Cal_TX_VGA_Thread::kase()
         data.dac[idx] = dac;
         data.att[idx] = float(dyRange);
 
-        Radio.db_add(RFIdx,TX_VGA,&data);
+        Radio.data_base_add(RFIdx,TX_VGA,&data);
 
         emit uiInsert(idx,idx,TX_VGA);
         emit uiUpdate(idx,idx,TX_VGA);
@@ -91,7 +91,7 @@ void Q_Cal_TX_VGA_Widget::init()
 
 void Q_Cal_TX_VGA_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_case(RFIdx,TX_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(RFIdx,TX_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
 
     ui->plot->replot();
 }

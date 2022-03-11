@@ -49,7 +49,7 @@ void Q_Cal_RX_RF_VGA_Widget::init()
 
 void Q_Cal_RX_RF_VGA_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_case(RFIdx,RX_RF_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(RFIdx,RX_RF_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
     ui->plot->replot();
 }
 

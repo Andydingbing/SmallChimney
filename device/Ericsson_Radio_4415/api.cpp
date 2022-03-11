@@ -28,7 +28,7 @@ void radio::set_log_callback(void (*callback)())
     return radio_4415::logger()->set_callback(callback);
 }
 
-int32_t radio::set_sn(const char *sn)
+int32_t radio::set_sn(const uint32_t index,const char *sn)
 {
     for (uint8_t i = 0;i < channels();++i) {
         INT_CHECK(g_radio_4415[i].set_sn(sn));
@@ -36,9 +36,27 @@ int32_t radio::set_sn(const char *sn)
     return 0;
 }
 
-int32_t radio::get_sn(char *sn)
+int32_t radio::get_sn(const uint32_t index,char *sn)
 {
     return 0;
+}
+
+const item_table_base* radio::data_base(const uint32_t index,const int32_t kase) const
+{
+    return g_radio.data_base()->db(kase);
+}
+
+int32_t radio::data_base_add(const uint32_t index,const int32_t kase,void *data)
+{
+    g_radio.data_base()->add(cal_table_t::_from_integral(kase),data);
+    return 0;
+}
+
+int32_t radio::prepare_kase(const uint32_t index,const int32_t kase,const string freq_str,const bool is_exp)
+{
+    cal_table_t cal_table = cal_table_t::_from_integral(kase);
+
+    return g_radio.prepare_case(cal_table,freq_str,is_exp);
 }
 
 uint32_t radio::com_loggers()
@@ -162,19 +180,6 @@ uint32_t radio::channels()
     return g_channels;
 }
 
-int32_t radio::prepare_case(const uint32_t index,const ericsson_radio_4415_kase kase,const string freq_str,const bool is_exp)
-{
-    cal_table_t cal_table = cal_table_t::_from_integral(kase);
-
-    return g_radio.prepare_case(cal_table,freq_str,is_exp);
-}
-
-int32_t radio::db_add(const uint32_t index,const ericsson_radio_4415_kase kase,void *data)
-{
-    g_radio.data_base()->add(cal_table_t::_from_integral(kase),data);
-    return 0;
-}
-
 int32_t radio::serial_write(const char *str)
 { return serial_write(string(str)); }
 
@@ -295,121 +300,3 @@ int32_t radio::ulils(double *a,double *b,double *c,double *d)
 
 int32_t radio::mpa(const uint32_t index,const bool en)
 { return g_radio.mpa(en); }
-
-
-void ericsson_radio_4415_set_init_callback(int32_t (*callback)())
-{ return Radio.set_init_callback(callback); }
-
-void ericsson_radio_4415_set_log_callback(void (*callback)())
-{ return Radio.set_log_callback(callback); }
-
-int32_t ericsson_radio_4415_set_sn(const char *sn)
-{ return Radio.set_sn(sn); }
-
-int32_t ericsson_radio_4415_get_sn(char *sn)
-{ return Radio.get_sn(sn); }
-
-uint32_t ericsson_radio_4415_com_loggers()
-{ return Radio.com_loggers(); }
-
-const char* ericsson_radio_4415_com_logger_write(const uint32_t n)
-{ return Radio.com_logger_write(n); }
-
-const char* ericsson_radio_4415_com_logger_read(const uint32_t n)
-{ return Radio.com_logger_read(n); }
-
-const char* ericsson_radio_4415_com_logger_time(const uint32_t n)
-{ return Radio.com_logger_time(n); }
-
-int32_t ericsson_radio_4415_com_logger_result(const uint32_t n)
-{ return Radio.com_logger_result(n); }
-
-int32_t ericsson_radio_4415_init()
-{ return Radio.init(); }
-
-uint32_t ericsson_radio_4415_channels()
-{ return Radio.channels(); }
-
-int32_t ericsson_radio_4415_prepare_case(const uint32_t index,const ericsson_radio_4415_kase kase,const char *freq_str,const bool is_exp)
-{ return Radio.prepare_case(index,kase,freq_str,is_exp); }
-
-int32_t ericsson_radio_4415_db_add(const uint32_t index,const ericsson_radio_4415_kase kase,void *data)
-{ return Radio.db_add(index,kase,data); }
-
-int32_t ericsson_radio_4415_serial_write(const char *str)
-{ return Radio.serial_write(str); }
-
-int32_t ericsson_radio_4415_set_tx_frequency(const uint32_t index,const uint64_t freq)
-{ return Radio.set_tx_frequency(index,freq); }
-
-int32_t ericsson_radio_4415_txon(const uint32_t index)
-{ return Radio.txon(index); }
-
-int32_t ericsson_radio_4415_txoff(const uint32_t index)
-{ return Radio.txoff(index); }
-
-int32_t ericsson_radio_4415_txtype(const uint32_t index,const radio_system_t &system,const uint64_t bw)
-{ return Radio.txtype(index,system,bw); }
-
-int32_t ericsson_radio_4415_txstepattmain(const uint32_t index,const double att)
-{ return Radio.txstepattmain(index,att); }
-
-int32_t ericsson_radio_4415_txattmain(const uint32_t index,const uint32_t dac)
-{ return Radio.txattmain(index,dac); }
-
-int32_t ericsson_radio_4415_pabias(const uint32_t index)
-{ return Radio.pabias(index); }
-
-int32_t ericsson_radio_4415_all_pabias()
-{ return Radio.pabias(); }
-
-int32_t ericsson_radio_4415_pacm(const uint32_t index)
-{ return Radio.pacm(index); }
-
-int32_t ericsson_radio_4415_set_rx_frequency(const uint32_t index,const uint64_t freq)
-{ return Radio.set_rx_frequency(index,freq); }
-
-int32_t ericsson_radio_4415_rx(const uint32_t index,const uint64_t freq)
-{ return Radio.rx(index,freq); }
-
-int32_t ericsson_radio_4415_rxtype(const uint32_t index,const radio_system_t &system,const uint64_t bw)
-{ return Radio.rxtype(index,system,bw); }
-
-int32_t ericsson_radio_4415_rxrfsw(const uint32_t index,const bool en_lna,const bool en_att)
-{ return Radio.rxrfsw(index,en_lna,en_att); }
-
-int32_t ericsson_radio_4415_rxrfvga(const uint32_t index,const double att)
-{ return Radio.rxrfvga(index,att); }
-
-int32_t ericsson_radio_4415_rxrfvgaswp(const uint32_t index,const char *str,void *data)
-{ return Radio.rxrfvgaswp(index,str,data); }
-
-int32_t ericsson_radio_4415_rxagc(const uint32_t index,const bool en)
-{ return Radio.rxagc(index,en); }
-
-int32_t ericsson_radio_4415_rxcpriconf(const uint32_t index)
-{ return Radio.rxcpriconf(index); }
-
-int32_t ericsson_radio_4415_biasctrl(const uint32_t index,const bool en)
-{ return Radio.biasctrl(index,en); }
-
-int32_t ericsson_radio_4415_ccctrl(const uint32_t index,const bool en)
-{ return Radio.ccctrl(index,en); }
-
-int32_t ericsson_radio_4415_iqcomp3(const uint32_t index)
-{ return Radio.iqcomp3(index); }
-
-int32_t ericsson_radio_4415_intdldcw(const uint32_t index,const double pwr,const bool en)
-{ return Radio.intdldcw(index,pwr,en); }
-
-int32_t ericsson_radio_4415_rxulg(const uint32_t index,const double gain)
-{ return Radio.rxulg(index,gain); }
-
-int32_t ericsson_radio_4415_ulil(const uint32_t index,double *pwr)
-{ return Radio.ulil(index,pwr); }
-
-int32_t ericsson_radio_4415_ulils(double *a,double *b,double *c,double *d)
-{ return Radio.ulils(a,b,c,d); }
-
-int32_t ericsson_radio_4415_mpa(const uint32_t index,const bool en)
-{ return Radio.mpa(index,en); }

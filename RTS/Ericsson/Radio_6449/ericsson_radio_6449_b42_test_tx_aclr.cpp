@@ -56,7 +56,7 @@ void Q_Test_TX_ACLR_Thread::kase()
     data.acp[2] = acp_upper.at(0);
     data.acp[3] = acp_upper.at(1);
 
-    Radio.db_add(RFIdx,TX_ACLR,&data);
+    Radio.data_base_add(RFIdx,TX_ACLR,&data);
 
     emit uiUpdate(0,0,TX_ACLR);
 }
@@ -71,7 +71,7 @@ void Q_Test_TX_ACLR_Widget::init()
 
 void Q_Test_TX_ACLR_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_case(RFIdx,TX_ACLR,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(RFIdx,TX_ACLR,config->textEditFreq->toPlainText().toStdString(),is_exp);
 }
 
 void Q_Test_TX_ACLR_Widget::uiUpdate(const int first,const int last,const int kase)

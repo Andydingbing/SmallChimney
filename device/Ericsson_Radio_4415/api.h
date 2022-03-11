@@ -4,28 +4,7 @@
 #include "cal_file.h"
 #include "../eutra/band.hpp"
 #include "../rd_types.h"
-#include "../device_radio_c_api.h"
-#include "../device_radio_cpp_api.h"
-#include "../device_radio_cpp_constructor.h"
-
-#if defined(__cplusplus) || defined(__cplusplus__)
-    #define PRODUCT_PREFIX(vendor,product) vendor##_##product##_
-    #define API_RADIO(vendor,product,...) \
-        extern "C" { RADIO_C_API(__VA_ARGS__,vendor##_##product##_) } \
-        namespace ns_##vendor { \
-        namespace ns_##product { \
-            class API radio_helper { public: \
-                radio_helper() { RADIO_CPP_CONSTRUCTOR(__VA_ARGS__,vendor##_##product##_) } \
-                RADIO_CPP_API(__VA_ARGS__) \
-            }; \
-            static radio_helper radio; \
-        } /*namespace ns_##vendor*/  \
-        } /*namespace ns_##product*/
-#else
-    #define API_RADIO(vendor,product,...) \
-        RADIO_C_API(__VA_ARGS__,vendor##_##product##_)
-#endif
-
+#include "../device.h"
 
 enum ericsson_radio_4415_kase {
     Begin = 0,
@@ -42,18 +21,26 @@ namespace ns_radio_4415 {
 
 #define Radio radio::instance()
 
-class API radio : noncopyable
+class API radio : public radio_base
 {
 public:
     static radio &instance();
 
 public:
-    void set_init_callback(int32_t (*callback)());
-    void set_log_callback(void (*callback)());
+    uint32_t channels() OVERRIDE;
+    void set_init_callback(int32_t (*callback)()) OVERRIDE;
+    void set_log_callback(void (*callback)()) OVERRIDE;
 
-    int32_t set_sn(const char *sn);
-    int32_t get_sn(char *sn);
+    int32_t set_sn(const uint32_t index,const char *sn) OVERRIDE;
+    int32_t get_sn(const uint32_t index,char *sn) OVERRIDE;
 
+    const item_table_base* data_base(const uint32_t index,const int32_t kase) const OVERRIDE;
+    int32_t data_base_add(const uint32_t index,const int32_t kase,void *data) OVERRIDE;
+    int32_t prepare_kase(const uint32_t index,const int32_t kase,const std::string freq_str,const bool is_exp) OVERRIDE;
+
+    int32_t init() OVERRIDE;
+
+public:
     uint32_t    com_loggers();
     const char* com_logger_write(const uint32_t n);
     const char* com_logger_read(const uint32_t n);
@@ -62,10 +49,6 @@ public:
 
     cal_file* data_base(const uint32_t index) const;
 
-    int32_t init();
-    uint32_t channels();
-    int32_t prepare_case(const uint32_t index,const ericsson_radio_4415_kase kase,const std::string freq_str,const bool is_exp);
-    int32_t db_add(const uint32_t index,const ericsson_radio_4415_kase kase,void *data);
     int32_t serial_write(const char *str);
     int32_t serial_write(const std::string &str);
 
@@ -104,64 +87,5 @@ public:
 
 } // namespace ns_radio_4415
 } // namespace ns_ericsson
-
-
-#if defined(__cplusplus) || defined(__cplusplus__)
-extern "C" {
-#endif
-
-API void ericsson_radio_4415_set_init_callback(int32_t (*callback)());
-API void ericsson_radio_4415_set_log_callback(void (*callback)());
-
-API int32_t ericsson_radio_4415_set_sn(const char *sn);
-API int32_t ericsson_radio_4415_get_sn(char *sn);
-
-API uint32_t    ericsson_radio_4415_com_loggers();
-API const char* ericsson_radio_4415_com_logger_write(const uint32_t n);
-API const char* ericsson_radio_4415_com_logger_read(const uint32_t n);
-API const char* ericsson_radio_4415_com_logger_time(const uint32_t n);
-API int32_t     ericsson_radio_4415_com_logger_result(const uint32_t n);
-
-API int32_t ericsson_radio_4415_init();
-API uint32_t ericsson_radio_4415_channels();
-API int32_t ericsson_radio_4415_prepare_case(const uint32_t index,const ericsson_radio_4415_kase kase,const char *freq_str,const bool is_exp);
-API int32_t ericsson_radio_4415_db_add(const uint32_t index,const ericsson_radio_4415_kase kase,void *data);
-
-API int32_t ericsson_radio_4415_serial_write(const char *str);
-
-API int32_t ericsson_radio_4415_set_tx_frequency(const uint32_t index,const uint64_t freq);
-API int32_t ericsson_radio_4415_txon(const uint32_t index);
-API int32_t ericsson_radio_4415_txoff(const uint32_t index);
-API int32_t ericsson_radio_4415_txtype(const uint32_t index,const radio_system_t &system,const uint64_t bw);
-API int32_t ericsson_radio_4415_txstepattmain(const uint32_t index,const double att);
-API int32_t ericsson_radio_4415_txattmain(const uint32_t index,const uint32_t dac);
-API int32_t ericsson_radio_4415_pabias(const uint32_t index);
-API int32_t ericsson_radio_4415_all_pabias();
-API int32_t ericsson_radio_4415_pacm(const uint32_t index);
-
-API int32_t ericsson_radio_4415_set_rx_frequency(const uint32_t index,const uint64_t freq);
-API int32_t ericsson_radio_4415_rx(const uint32_t index,const uint64_t freq);
-API int32_t ericsson_radio_4415_rxtype(const uint32_t index,const radio_system_t &system,const uint64_t bw);
-API int32_t ericsson_radio_4415_set_rx_lna_sw(const uint32_t index,const bool en);
-API int32_t ericsson_radio_4415_set_rx_att_sw(const uint32_t index,const bool en);
-API int32_t ericsson_radio_4415_rxrfsw(const uint32_t index,const bool en_lna,const bool en_att);
-API int32_t ericsson_radio_4415_rxrfvga(const uint32_t index,const double att);
-API int32_t ericsson_radio_4415_rxrfvgaswp(const uint32_t index,const char *str,void *data);
-API int32_t ericsson_radio_4415_rxagc(const uint32_t index,const bool en);
-API int32_t ericsson_radio_4415_rxcpriconf(const uint32_t index);
-
-API int32_t ericsson_radio_4415_biasctrl(const uint32_t index,const bool en);
-API int32_t ericsson_radio_4415_ccctrl(const uint32_t index,const bool en);
-
-API int32_t ericsson_radio_4415_iqcomp3(const uint32_t index);
-API int32_t ericsson_radio_4415_intdldcw(const uint32_t index,const double pwr,const bool en);
-API int32_t ericsson_radio_4415_rxulg(const uint32_t index,const double gain);
-API int32_t ericsson_radio_4415_ulil(const uint32_t index,double *pwr);
-API int32_t ericsson_radio_4415_ulils(double *a,double *b,double *c,double *d);
-API int32_t ericsson_radio_4415_mpa(const uint32_t index,const bool en);
-
-#if defined(__cplusplus) || defined(__cplusplus__)
-}
-#endif
 
 #endif

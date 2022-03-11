@@ -1,9 +1,9 @@
 #include "starpoint_sp9500_fpga_widget.h"
 #include <QFileDialog>
 
-#define K7_0 SP3301->get_sp2401(2)->k7()
-#define K7_1 SP3301->get_sp2401(0)->k7()
-#define S6   SP3301->get_sp2401(0)->s6()
+#define K7_0 SP3301->working_sp2401(2)->k7()
+#define K7_1 SP3301->working_sp2401(0)->k7()
+#define S6   SP3301->working_sp2401(0)->s6()
 
 Q_StarPoint_SP9500_FPGA_Widget::Q_StarPoint_SP9500_FPGA_Widget(QWidget *parent) :
     QWidget(parent),
@@ -124,7 +124,7 @@ void Q_StarPoint_SP9500_FPGA_Widget::on_pushButtonSetPathK7_0_clicked()
 
 void Q_StarPoint_SP9500_FPGA_Widget::on_pushButtonProgramK7_0_clicked()
 {
-    SP3301->get_sp2401(2)->set_fpga_bit(ui->lineEditPathK7_0->toPlainText().toStdString().c_str());
+    SP3301->working_sp2401(2)->set_fpga_bit(ui->lineEditPathK7_0->toPlainText().toStdString().c_str());
 }
 
 void Q_StarPoint_SP9500_FPGA_Widget::on_pushButtonSetPathK7_1_clicked()
@@ -137,5 +137,5 @@ void Q_StarPoint_SP9500_FPGA_Widget::on_pushButtonSetPathK7_1_clicked()
 
 void Q_StarPoint_SP9500_FPGA_Widget::on_pushButtonProgramK7_1_clicked()
 {
-    SP3301->get_sp2401(0)->set_fpga_bit(ui->lineEditPathK7_1->toPlainText().toStdString().c_str());
+    SP3301->working_sp2401(0)->set_fpga_bit(ui->lineEditPathK7_1->toPlainText().toStdString().c_str());
 }

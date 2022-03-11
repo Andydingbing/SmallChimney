@@ -4,28 +4,7 @@
 #include "cal_file.h"
 #include "../eutra/band.hpp"
 #include "../rd_types.h"
-#include "../device_radio_c_api.h"
-#include "../device_radio_cpp_api.h"
-#include "../device_radio_cpp_constructor.h"
-
-#if defined(__cplusplus) || defined(__cplusplus__)
-    #define PRODUCT_PREFIX(vendor,product) vendor##_##product##_
-    #define API_RADIO(vendor,product,...) \
-        extern "C" { RADIO_C_API(__VA_ARGS__,vendor##_##product##_) } \
-        namespace ns_##vendor { \
-        namespace ns_##product { \
-            class API radio_helper { public: \
-                radio_helper() { RADIO_CPP_CONSTRUCTOR(__VA_ARGS__,vendor##_##product##_) } \
-                RADIO_CPP_API(__VA_ARGS__) \
-            }; \
-            static radio_helper radio; \
-        } /*namespace ns_##vendor*/  \
-        } /*namespace ns_##product*/
-#else
-    #define API_RADIO(vendor,product,...) \
-        RADIO_C_API(__VA_ARGS__,vendor##_##product##_)
-#endif
-
+#include "../device.h"
 
 enum ericsson_radio_6449_kase {
     Begin = 0,
@@ -42,18 +21,26 @@ namespace ns_radio_6449 {
 
 #define Radio radio::instance()
 
-class API radio : noncopyable
+class API radio : public radio_base
 {
 public:
     static radio &instance();
 
 public:
-    void set_init_callback(int32_t (*callback)());
-    void set_log_callback(void (*callback)());
+    uint32_t channels() OVERRIDE;
+    void set_init_callback(int32_t (*callback)()) OVERRIDE;
+    void set_log_callback(void (*callback)()) OVERRIDE;
 
-    int32_t set_sn(const char *sn);
-    int32_t get_sn(char *sn);
+    int32_t set_sn(const uint32_t index,const char *sn) OVERRIDE;
+    int32_t get_sn(const uint32_t index,char *sn) OVERRIDE;
 
+    const item_table_base* data_base(const uint32_t index,const int32_t kase) const OVERRIDE;
+    int32_t data_base_add(const uint32_t index,const int32_t kase,void *data) OVERRIDE;
+    int32_t prepare_kase(const uint32_t index,const int32_t kase,const std::string freq_str,const bool is_exp) OVERRIDE;
+
+    int32_t init() OVERRIDE;
+
+public:
     uint32_t    com_loggers();
     const char* com_logger_write(const uint32_t n);
     const char* com_logger_read(const uint32_t n);
@@ -62,10 +49,6 @@ public:
 
     cal_file* data_base(const uint32_t index) const;
 
-    int32_t init();
-    uint32_t channels();
-    int32_t prepare_case(const uint32_t index,const ericsson_radio_6449_kase kase,const std::string freq_str,const bool is_exp);
-    int32_t db_add(const uint32_t index,const ericsson_radio_6449_kase kase,void *data);
     int32_t serial_write(const char *str);
     int32_t serial_write(const std::string &str);
 

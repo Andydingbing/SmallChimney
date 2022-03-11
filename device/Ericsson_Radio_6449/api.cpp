@@ -27,7 +27,7 @@ void radio::set_log_callback(void (*callback)())
     return radio_6449::logger()->set_callback(callback);
 }
 
-int32_t radio::set_sn(const char *sn)
+int32_t radio::set_sn(const uint32_t index,const char *sn)
 {
     for (uint8_t i = 0;i < channels();++i) {
         INT_CHECK(g_radio_6449[i].set_sn(sn));
@@ -35,9 +35,27 @@ int32_t radio::set_sn(const char *sn)
     return 0;
 }
 
-int32_t radio::get_sn(char *sn)
+int32_t radio::get_sn(const uint32_t index,char *sn)
 {
     return 0;
+}
+
+const item_table_base* radio::data_base(const uint32_t index,const int32_t kase) const
+{
+    return g_radio.data_base()->db(kase);
+}
+
+int32_t radio::data_base_add(const uint32_t index,const int32_t kase,void *data)
+{
+    g_radio.data_base()->add(cal_table_t::_from_integral(kase),data);
+    return 0;
+}
+
+int32_t radio::prepare_kase(const uint32_t index,const int32_t kase,const string freq_str,const bool is_exp)
+{
+    cal_table_t cal_table = cal_table_t::_from_integral(kase);
+
+    return g_radio.prepare_case(cal_table,freq_str,is_exp);
 }
 
 uint32_t radio::com_loggers()
@@ -60,47 +78,6 @@ cal_file* radio::data_base(const uint32_t index) const
     return g_radio.data_base();
 }
 
-/*
- * init procedure :
- *
- *
- *                                        N
- *                              ps on? ------> ps on
- *                                |              |
- *                               Y|              |
- *                                |              |
- *                                v              v
- *                         sweep com ports <--------------<---------------
- *                                |                                      |
- *                                |                                      |
- *                                |                                      |
- *                     Y          v                                      ^
- *           -------<----------- end?                                    |
- *           |                    |                                      |
- *           |                   N|                                      |
- *           |                    |                                      |
- *           v                    v       N                            N |
- *           |                com read ------> w/r particular command ----
- *           |                    |                       |
- *           |                    |                      Y|
- *           |                    |                       |
- *           |                    |                       v            N
- *           v          Y(booting)v                command not found? ----
- *           |                    |                       |              |
- *           |                    |                      Y|              |
- *           |                    |                       |              |
- *           v                    v                       v              v
- *           |               com selected <----------------              |
- *           |                    |                                      |
- *           |                    v                                      v
- *           |                  "wpi"                                    |
- *           |                    |                                      |
- *           |                    | <-----<---------------<---------------
- *           |                    |
- *           v                    v
- *   serial not connected        done
- *
- */
 int32_t radio::init()
 {
     serial_dev *serial = new serial_dev_vi;
@@ -159,19 +136,6 @@ int32_t radio::init()
 uint32_t radio::channels()
 {
     return g_channels;
-}
-
-int32_t radio::prepare_case(const uint32_t index,const ericsson_radio_6449_kase kase,const string freq_str,const bool is_exp)
-{
-    cal_table_t cal_table = cal_table_t::_from_integral(kase);
-
-    return g_radio.prepare_case(cal_table,freq_str,is_exp);
-}
-
-int32_t radio::db_add(const uint32_t index,const ericsson_radio_6449_kase kase,void *data)
-{
-    g_radio.data_base()->add(cal_table_t::_from_integral(kase),data);
-    return 0;
 }
 
 int32_t radio::serial_write(const char *str)

@@ -11,8 +11,8 @@ self_cal_helper::self_cal_helper(sp3301 *SP3301,uint32_t rf_idx)
 {
     _rf_idx = rf_idx;
     _sp3301 = SP3301;
-    _sp1401 = _sp3301->get_sp1401_r1f(_rf_idx);
-    _sp2401 = _sp3301->get_sp2401(_rf_idx);
+    _sp1401 = _sp3301->working_sp1401_r1f(_rf_idx);
+    _sp2401 = _sp3301->working_sp2401(_rf_idx);
 
     _I = nullptr;
     _Q = nullptr;
@@ -121,7 +121,7 @@ int32_t self_cal_tx_lol_helper::run()
     // Log
     Log.en(log_t::RD_LOG_MESSAGE_F,true);
     Log.add_msg("RFU : %d RF : %d i : %6d \t q : %6d \t lo_leakage : %8.3f",
-                _sp3301->get_rfu_idx(),
+                _sp3301->rfu_idx(),
                 _rf_idx,
                 dc_i_m,
                 dc_q_m,
@@ -292,7 +292,7 @@ int32_t self_cal_tx_sb_helper::run(tx_sideband_table_t::data_f_t *data)
     // Log
     Log.en(log_t::RD_LOG_MESSAGE_F,true);
     Log.add_msg("RFU : %d RF : %d angle : %8.3f i : %6d \t q : %6d \t sideband : %8.3f",
-                _sp3301->get_rfu_idx(),
+                _sp3301->rfu_idx(),
                 _rf_idx,
                 th_m,
                 am_i_m,
