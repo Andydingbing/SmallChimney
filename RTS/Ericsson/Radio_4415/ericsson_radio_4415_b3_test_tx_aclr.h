@@ -8,14 +8,13 @@ namespace ns_radio_4415 {
 
 KASE_MODEL(TX_ACLR,"-10M","-5M","5M","10M","Time")
 
-KASE_CONFIG(Test_TX_ACLR,
-    QTextEdit, textEditFreq, "Freq",
-    QLineEdit, lineEditAtt, "Att Bit")
-
-KASE_RESULT(Test_TX_ACLR,
-    QLineEdit, lineEditAtt, "Att Bit")
-
 KASE_WIDGET_PREFIX(Ericsson,Radio_4415_B3,Test_TX_ACLR)
+
+KASE_CONFIG(QTextEdit, textEditFreq, "Freq",
+            QLineEdit, lineEditAtt, "Att Bit")
+
+KASE_RESULT(QLineEdit, lineEditAtt, "Att Bit")
+
     TX_ACLR_Model model;
 
 KASE_THREAD(Test_TX_ACLR)

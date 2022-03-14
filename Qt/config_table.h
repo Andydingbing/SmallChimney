@@ -89,10 +89,10 @@ public:
 };
 
 
-#define CONFIG_TABLE_KASE(kase,...) \
-class kase##_ConfigModel : public Q_Config_Table_Model { \
+#define CONFIG_TABLE_KASE(...) \
+class Q_Config_Model : public Q_Config_Table_Model { \
 public: \
-    kase##_ConfigModel(QObject *parent = nullptr) : Q_Config_Table_Model(parent) \
+    Q_Config_Model(QObject *parent = nullptr) : Q_Config_Table_Model(parent) \
     { \
         _item.clear(); \
         _item << PARAM_PICK_1_OF_3_3(<<,,, __VA_ARGS__); \
@@ -101,17 +101,17 @@ public: \
         setColumnCount(columnCount(QModelIndex())); \
     } \
 }; \
-class kase##_ConfigDelegate : public Q_Config_Table_Delegate_Kase { \
+class Q_Config_Delegate : public Q_Config_Table_Delegate_Kase { \
 public: \
-    kase##_ConfigDelegate(QObject *parent = nullptr) \
+    Q_Config_Delegate(QObject *parent = nullptr) \
     { PARAM_PICK_2_OF_3_2_1(,,= new,;,__VA_ARGS__) } \
     PARAM_PICK_2_OF_3_1(,,*,;,__VA_ARGS__) \
 };
 
-#define RESULT_TABLE_KASE(kase,...) \
-class kase##_ResultModel : public Q_Config_Table_Model { \
+#define RESULT_TABLE_KASE(...) \
+class Q_Result_Model : public Q_Config_Table_Model { \
 public: \
-    kase##_ResultModel(QObject *parent = nullptr) : Q_Config_Table_Model(parent) \
+    Q_Result_Model(QObject *parent = nullptr) : Q_Config_Table_Model(parent) \
     { \
         _item.clear(); \
         _item << PARAM_PICK_1_OF_3_3(<<,,, __VA_ARGS__); \
@@ -120,9 +120,9 @@ public: \
         setColumnCount(columnCount(QModelIndex())); \
     } \
 }; \
-class kase##_ResultDelegate : public Q_Result_Table_Delegate_Kase { \
+class Q_Result_Delegate : public Q_Result_Table_Delegate_Kase { \
 public: \
-    kase##_ResultDelegate(QObject *parent = nullptr) \
+    Q_Result_Delegate(QObject *parent = nullptr) \
     { PARAM_PICK_2_OF_3_2_1(,,= new,;,__VA_ARGS__) } \
     PARAM_PICK_2_OF_3_1(,,*,;,__VA_ARGS__) \
 };

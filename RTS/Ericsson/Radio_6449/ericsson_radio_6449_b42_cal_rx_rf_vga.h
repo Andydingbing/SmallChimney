@@ -9,15 +9,14 @@ namespace ns_radio_6449 {
 KASE_MODEL(RX_RF_VGA,"Att","Power","Time")
 KASE_CURVE(RX_RF_VGA)
 
-KASE_CONFIG(Cal_RX_RF_VGA,
-    QTextEdit, textEditFreq, "Freq",
-    QLineEdit, lineEditAtt, "Att Bit")
-
-KASE_RESULT(Cal_RX_RF_VGA,
-    QCheckBox, checkBoxMonotonic, "Monotonic",
-    QLineEdit, lineEditDyRange, "Dynamic Range")
-
 KASE_WIDGET_PREFIX(Ericsson,Radio_6449_B42,Cal_RX_RF_VGA)
+
+KASE_CONFIG(QTextEdit, textEditFreq, "Freq",
+            QLineEdit, lineEditAtt, "Att Bit")
+
+KASE_RESULT(QCheckBox, checkBoxMonotonic, "Monotonic",
+            QLineEdit, lineEditDyRange, "Dynamic Range")
+
     RX_RF_VGA_Model model;
     RX_RF_VGA_Curve curve;
 

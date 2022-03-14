@@ -8,14 +8,13 @@ namespace ns_radio_4415 {
 
 KASE_MODEL(RX_Gain_Accu,"Branch","Power","Time")
 
-KASE_CONFIG(Test_RX_Gain_Accuracy,
-    QTextEdit, textEditFreq, "Freq",
-    QLineEdit, lineEditAtt, "Att Bit")
-
-KASE_RESULT(Test_RX_Gain_Accuracy,
-    QLineEdit, lineEditAccu, "Accuracy")
-
 KASE_WIDGET_PREFIX(Ericsson,Radio_4415_B3,Test_RX_Gain_Accuracy)
+
+KASE_CONFIG(QTextEdit, textEditFreq, "Freq",
+            QLineEdit, lineEditAtt, "Att Bit")
+
+KASE_RESULT(QLineEdit, lineEditAccu, "Accuracy")
+
     RX_Gain_Accu_Model model;
 
 KASE_THREAD(Test_RX_Gain_Accuracy)

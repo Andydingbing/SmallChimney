@@ -8,14 +8,15 @@ namespace ns_sp9500 {
 
 //KASE_MODEL(TX_LO_Leak,"Att","Power","Time")
 
-KASE_CONFIG(Cal_TX_LO_Leak,
+KASE_WIDGET_PREFIX(StarPoint,SP9500,Cal_TX_LO_Leak)
+
+KASE_CONFIG(
     QCheckBox, checkBoxRef, "10M Ref",
     QComboBox, comboBoxMethod, "Method")
 
-KASE_RESULT(Cal_TX_LO_Leak,
+KASE_RESULT(
     QLineEdit, lineEditDyRange, "Dynamic Range")
 
-KASE_WIDGET_PREFIX(StarPoint,SP9500,Cal_TX_LO_Leak)
 //    RX_RF_VGA_Model model;
 
 KASE_THREAD(Cal_TX_LO_Leak)

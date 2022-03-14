@@ -129,40 +129,20 @@ public:
 
 #define KASE_WIDGET_PREFIX(vendor,product,kase) \
     class KASE_THREAD_CLASS_NAME(kase); \
-    class kase##_ConfigModel; \
-    class kase##_ConfigDelegate; \
-    class kase##_ResultModel; \
-    class kase##_ResultDelegate; \
     class KASE_WIDGET_CLASS_NAME(kase) : public Q_Thread_Widget<KASE_THREAD_CLASS_NAME(kase)> \
     { \
     public: \
-        KASE_WIDGET_CLASS_NAME(kase)(QWidget *parent) : \
-            Q_Thread_Widget(parent), \
-            ui(new Ui::KASE_WIDGET_UI_CLASS_NAME(vendor,product,kase)) \
-        { \
-            ui->setupUi(this); \
-            configModel = new kase##_ConfigModel; \
-            configDelegate = new kase##_ConfigDelegate; \
-            config = static_cast<kase##_ConfigDelegate *>(configDelegate); \
-            resultModel = new kase##_ResultModel; \
-            resultDelegate = new kase##_ResultDelegate; \
-            result = static_cast<kase##_ResultDelegate *>(resultDelegate); \
-            ui->config_result->ui->config->setItemDelegate(configDelegate); \
-            ui->config_result->ui->config->setModel(configModel); \
-            ui->config_result->ui->config->setSpan(0,0,1,2); \
-            ui->config_result->ui->result->setItemDelegate(resultDelegate); \
-            ui->config_result->ui->result->setModel(resultModel); \
-            ui->config_result->ui->result->setSpan(0,0,1,2); \
-            config->labelConfig->setText("Config:"); \
-            result->labelResult->setText("Result:"); \
-            ui->config_result->ui->splitter->setStretchFactor(0,2); \
-            ui->config_result->ui->splitter->setStretchFactor(1,1); \
-            init(); \
-        } \
         ~KASE_WIDGET_CLASS_NAME(kase)() { delete ui; } \
+        class Q_Config_Delegate; \
+        class Q_Result_Delegate; \
+        Q_Config_Delegate *config; \
+        Q_Result_Delegate *result; \
         Ui::KASE_WIDGET_UI_CLASS_NAME(vendor,product,kase) *ui; \
-        kase##_ConfigDelegate *config; \
-        kase##_ResultDelegate *result; \
+        void initUi() \
+        { \
+            ui = new Ui::KASE_WIDGET_UI_CLASS_NAME(vendor,product,kase); \
+            ui->setupUi(this); \
+        } \
     \
     public slots: \
         void init(); \
@@ -170,13 +150,33 @@ public:
         void uiUpdate(const int first,const int last,const int item); \
     public:
 
-#define KASE_CONFIG(kase,...) \
-    CONFIG_TABLE_KASE(kase,__VA_ARGS__)
+#define KASE_CONFIG(...) CONFIG_TABLE_KASE(__VA_ARGS__)
 
-#define KASE_RESULT(kase,...) \
-    RESULT_TABLE_KASE(kase,__VA_ARGS__)
+#define KASE_RESULT(...) RESULT_TABLE_KASE(__VA_ARGS__)
 
 #define KASE_THREAD(kase_name) \
+    KASE_WIDGET_CLASS_NAME(kase_name)(QWidget *parent) : \
+        Q_Thread_Widget(parent) \
+    { \
+        initUi(); \
+        configModel = new Q_Config_Model; \
+        configDelegate = new Q_Config_Delegate; \
+        config = static_cast<Q_Config_Delegate *>(configDelegate); \
+        resultModel = new Q_Result_Model; \
+        resultDelegate = new Q_Result_Delegate; \
+        result = static_cast<Q_Result_Delegate *>(resultDelegate); \
+        ui->config_result->ui->config->setItemDelegate(configDelegate); \
+        ui->config_result->ui->config->setModel(configModel); \
+        ui->config_result->ui->config->setSpan(0,0,1,2); \
+        ui->config_result->ui->result->setItemDelegate(resultDelegate); \
+        ui->config_result->ui->result->setModel(resultModel); \
+        ui->config_result->ui->result->setSpan(0,0,1,2); \
+        config->labelConfig->setText("Config:"); \
+        result->labelResult->setText("Result:"); \
+        ui->config_result->ui->splitter->setStretchFactor(0,2); \
+        ui->config_result->ui->splitter->setStretchFactor(1,1); \
+        init(); \
+    } \
     }; \
     class KASE_THREAD_CLASS_NAME(kase_name) : public Q_Thread \
     { \
@@ -184,12 +184,12 @@ public:
         KASE_THREAD_CLASS_NAME(kase_name)(QObject *parent) : \
             Q_Thread(parent) \
         { \
-            config = static_cast<kase_name##_ConfigDelegate *>(configDelegate); \
-            result = static_cast<kase_name##_ResultDelegate *>(resultDelegate); \
+            config = static_cast<KASE_WIDGET_CLASS_NAME(kase_name)::Q_Config_Delegate *>(configDelegate); \
+            result = static_cast<KASE_WIDGET_CLASS_NAME(kase_name)::Q_Result_Delegate *>(resultDelegate); \
         } \
         void kase(); \
-        kase_name##_ConfigDelegate *config; \
-        kase_name##_ResultDelegate *result; \
+        KASE_WIDGET_CLASS_NAME(kase_name)::Q_Config_Delegate *config; \
+        KASE_WIDGET_CLASS_NAME(kase_name)::Q_Result_Delegate *result; \
     public:
 
 #define KASE_WIDGET_SUFFIX() \
