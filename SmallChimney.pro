@@ -15,7 +15,8 @@ sequence \
 sequence_compiler \
 RTS \
 DDT \
-$$DEVICES
+$$DEVICES \
+RTS/Ericsson/Radio_4415_B3/ericsson_radio_4415_b3.pro
 
 instrument.depends = driver
 report.depends = log

@@ -7,8 +7,19 @@
 #include "winthread.h"
 #include "table_model.h"
 #include "table_view.hpp"
-#include "global.h"
 #include "config_table.h"
+
+class Q_Widget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    Q_Widget(QWidget *parent = nullptr) : QWidget(parent) {}
+
+public slots:
+    virtual void init() {} // Init child widgets
+};
+
 
 class Q_Thread_Widget_Base : public Q_Widget, public Q_Attach_Thread_Widget
 {

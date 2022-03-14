@@ -1,6 +1,5 @@
 include(../include/config.pri)
 
-include(Ericsson/Radio_4415.pri)
 include(Ericsson/Radio_6449.pri)
 include(Ericsson/Air_3268.pri)
 

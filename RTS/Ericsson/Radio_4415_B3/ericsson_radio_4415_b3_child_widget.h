@@ -1,7 +1,8 @@
 #ifndef ERICSSON_RADIO_4415_B3_CHILD_WIDGET_H
 #define ERICSSON_RADIO_4415_B3_CHILD_WIDGET_H
 
-#include "child_widget_helper.h"
+#include "../../child_widget_helper.h"
+#include "table_view.hpp"
 
 namespace ns_ericsson {
 namespace ns_radio_4415 {

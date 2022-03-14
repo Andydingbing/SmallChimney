@@ -2,8 +2,8 @@
 #define DEFINE_H
 
 #include "liblog.h"
-#include "instr.h"
-#include "libinstrument.h"
+#include "../instrument/instr.h"
+#include "../instrument/libinstrument.h"
 #include "device.h"
 
 #include "freq_string.hpp"
@@ -36,18 +36,6 @@ enum Mode {
 for (size_t i = 0;i < better_enum::_size();++i) { \
     box->addItem(QString::fromUtf8(better_enum::_names()[i])); \
 }
-
-
-class Q_Widget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    Q_Widget(QWidget *parent = nullptr) : QWidget(parent) {}
-
-public slots:
-    virtual void init() {} // Init child widgets
-};
 
 
 class Global_Enum : public QObject

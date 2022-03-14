@@ -1,8 +1,8 @@
 #ifndef Q_WINTHREAD_H
 #define Q_WINTHREAD_H
 
-#include "global.h"
 #include <QThread>
+#include "config_table.h"
 #include "freq_string.hpp"
 #include "set_helper.hpp"
 

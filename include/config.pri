@@ -121,6 +121,9 @@ INCLUDEPATH += \
           $$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
        ../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
     ../../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
+          $$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
+       ../$$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
+    ../../$$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
           $$VAR_INCLUDE_ROOT/log \
        ../$$VAR_INCLUDE_ROOT/log \
     ../../$$VAR_INCLUDE_ROOT/log \
@@ -139,7 +142,9 @@ INCLUDEPATH += \
           $$VAR_INCLUDE_ROOT/device/common \
        ../$$VAR_INCLUDE_ROOT/device/common \
     ../../$$VAR_INCLUDE_ROOT/device/common \
-    $$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
+          ../Qt \
+       ../../Qt \
+    ../../../Qt \
     ./chip \
     ../device/chip \
     ./common \
@@ -150,7 +155,6 @@ INCLUDEPATH += \
     ../instrument \
     ../sequence \
     ../../sequence \
-    ../Qt
 
 contains(DEFINES,product) {
     DEFINES += DLL_EXPORT

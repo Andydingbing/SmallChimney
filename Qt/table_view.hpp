@@ -20,4 +20,4 @@ public:
     }
 };
 
-#endif // Q_TABLE_VIEW_HPP
+#endif
