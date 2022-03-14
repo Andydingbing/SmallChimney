@@ -140,7 +140,7 @@ public:
 
 #define KASE_WIDGET_PREFIX(vendor,product,kase) \
     class KASE_THREAD_CLASS_NAME(kase); \
-    class KASE_WIDGET_CLASS_NAME(kase) : public Q_Thread_Widget<KASE_THREAD_CLASS_NAME(kase)> \
+    class API KASE_WIDGET_CLASS_NAME(kase) : public Q_Thread_Widget<KASE_THREAD_CLASS_NAME(kase)> \
     { \
     public: \
         ~KASE_WIDGET_CLASS_NAME(kase)() { delete ui; } \
@@ -176,20 +176,20 @@ public:
         resultModel = new Q_Result_Model; \
         resultDelegate = new Q_Result_Delegate; \
         result = static_cast<Q_Result_Delegate *>(resultDelegate); \
-        ui->config_result->ui->config->setItemDelegate(configDelegate); \
-        ui->config_result->ui->config->setModel(configModel); \
-        ui->config_result->ui->config->setSpan(0,0,1,2); \
-        ui->config_result->ui->result->setItemDelegate(resultDelegate); \
-        ui->config_result->ui->result->setModel(resultModel); \
-        ui->config_result->ui->result->setSpan(0,0,1,2); \
+        ui->config_result->config->setItemDelegate(configDelegate); \
+        ui->config_result->config->setModel(configModel); \
+        ui->config_result->config->setSpan(0,0,1,2); \
+        ui->config_result->result->setItemDelegate(resultDelegate); \
+        ui->config_result->result->setModel(resultModel); \
+        ui->config_result->result->setSpan(0,0,1,2); \
         config->labelConfig->setText("Config:"); \
         result->labelResult->setText("Result:"); \
-        ui->config_result->ui->splitter->setStretchFactor(0,2); \
-        ui->config_result->ui->splitter->setStretchFactor(1,1); \
+        ui->config_result->splitter->setStretchFactor(0,2); \
+        ui->config_result->splitter->setStretchFactor(1,1); \
         init(); \
     } \
     }; \
-    class KASE_THREAD_CLASS_NAME(kase_name) : public Q_Thread \
+    class API KASE_THREAD_CLASS_NAME(kase_name) : public Q_Thread \
     { \
     public: \
         KASE_THREAD_CLASS_NAME(kase_name)(QObject *parent) : \

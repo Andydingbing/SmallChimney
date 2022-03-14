@@ -2,7 +2,7 @@
 #define COMPLEX_SEQUENCE_H
 
 #include "global_header.h"
-#include "trace.hpp"
+#include "analyzer/trace.hpp"
 //#include "span.hpp"
 #include "fftw3.h"
 
@@ -67,4 +67,4 @@ private:
     fftw_complex *_dft_out;
 };
 
-#endif // COMPLEX_SEQUENCE_H
+#endif

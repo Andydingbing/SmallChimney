@@ -20,9 +20,9 @@ namespace Ui { class MainWindow; }
     } \
 }
 
+#include <QMenu>
+#include <QAction>
 
-class QMenu;
-class QAction;
 class QTreeWidgetItem;
 
 class ChildWidgetHelper : public QObject
@@ -51,7 +51,7 @@ public:
 
     virtual void mainTabCurrentChanged(int index) {}
     virtual void init() {}
-    virtual void initMenu() {}
+    virtual void initMenu(QList<QMenu *> &menus) {}
     virtual QString tabName(int idx) { return QString("RF-%1").arg(idx); }
 
 

@@ -69,55 +69,54 @@ void ChildWidgets::init()
     treeChildItems = treeChildItemsBuiltIn;
     setMainTree(treeChildItemsBuiltIn);
 
-    initMenu();
+//    initMenu();
     initMainLogTabWidget();
 }
 
-void ChildWidgets::initMenu()
+void ChildWidgets::initMenu(QList<QMenu *> &menus)
 {
     QAction *separator = nullptr;
 
-    // Device
-    actionInit = new QAction("Init(&I)",parent);
-    actionInit->setStatusTip("Init Device");
+//    // Device
+//    actionInit = new QAction("Init(&I)",parent);
+//    actionInit->setStatusTip("Init Device");
 
-    actionInitSilent = new QAction("Init Silent(&S)",parent);
-    actionInitSilent->setStatusTip("Init Silent");
+//    actionInitSilent = new QAction("Init Silent(&S)",parent);
+//    actionInitSilent->setStatusTip("Init Silent");
 
-    connect(actionInit,SIGNAL(triggered(bool)),parent,SLOT(deviceInit()));
-    connect(actionInitSilent,SIGNAL(triggered(bool)),parent,SLOT(deviceInitSilent()));
+//    connect(actionInit,SIGNAL(triggered(bool)),parent,SLOT(deviceInit()));
+//    connect(actionInitSilent,SIGNAL(triggered(bool)),parent,SLOT(deviceInitSilent()));
 
-    actionExit = new QAction("Exit(&X)",parent);
-    actionExit->setStatusTip("Exit");
-    connect(actionExit,SIGNAL(triggered(bool)),parent,SLOT(exit()));
+//    actionExit = new QAction("Exit(&X)",parent);
+//    actionExit->setStatusTip("Exit");
+//    connect(actionExit,SIGNAL(triggered(bool)),parent,SLOT(exit()));
 
-    menuDevice = new QMenu("Device(&D)",ui->menuBar);
-    menuDevice->addAction(actionInit);
-    menuDevice->addAction(actionInitSilent);
+//    menuDevice = new QMenu("Device(&D)");
+//    menuDevice->addAction(actionInit);
+//    menuDevice->addAction(actionInitSilent);
 
-    separator = new QAction(parent);
-    separator->setSeparator(true);
-    menuDevice->addAction(separator);
-    menuDevice->addAction(actionExit);
+//    separator = new QAction(parent);
+//    separator->setSeparator(true);
+//    menuDevice->addAction(separator);
+//    menuDevice->addAction(actionExit);
 
-    // Function
-    actionLogConfig = new QAction("Log Config(&L)",parent);
-    actionLogViewer = new QAction("Log Viewer(&V)",parent);
+//    // Function
+//    actionLogConfig = new QAction("Log Config(&L)",parent);
+//    actionLogViewer = new QAction("Log Viewer(&V)",parent);
 
-    menuFunction = new QMenu("Function(&F)",ui->menuBar);
-    menuFunction->addAction(actionLogConfig);
-    menuFunction->addAction(actionLogViewer);
+//    menuFunction = new QMenu("Function(&F)");
+//    menuFunction->addAction(actionLogConfig);
+//    menuFunction->addAction(actionLogViewer);
 
-    // About
-    actionAbout = new QAction("About(&A)",parent);
+//    // About
+//    actionAbout = new QAction("About(&A)",parent);
 
-    menuHelp = new QMenu("Help(&H)",ui->menuBar);
-    menuHelp->addAction(actionAbout);
+//    menuHelp = new QMenu("Help(&H)");
+//    menuHelp->addAction(actionAbout);
 
-    // Menu
-    ui->menuBar->addAction(menuDevice->menuAction());
-    ui->menuBar->addAction(menuFunction->menuAction());
-    ui->menuBar->addAction(menuHelp->menuAction());
+//    menus.push_back(menuDevice);
+//    menus.push_back(menuFunction);
+//    menus.push_back(menuHelp);
 }
 
 void ChildWidgets::initMainLogTabWidget()
@@ -131,7 +130,7 @@ void ChildWidgets::initMainLogTabWidget()
     comLogTableView->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
     comLogTableView->horizontalHeader()->setSectionResizeMode(4,QHeaderView::ResizeToContents);
 
-    parent->mainLogTab->addTab(comLogTableView,"Com");
+//    parent->mainLogTab->addTab(comLogTableView,"Com");
 
     connect(this,SIGNAL(addComLogger(int)),comLogModel,SLOT(update(int)));
     connect(this,SIGNAL(addComLogger(int)),this,SLOT(addComLoggerTableView(int)));

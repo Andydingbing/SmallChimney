@@ -6,13 +6,17 @@
 #include <QTreeWidget>
 #include <QTabWidget>
 #include <QHBoxLayout>
+#include "global.h"
 #include "main_thread.h"
-#include "ui_mainwindow.h"
 #include "table_view.hpp"
 
 #include "thread_widget.h"
 #include "device_init_thread.h"
-#include "sequence.h"
+#include "../sequence/sequence.h"
+
+namespace Ui {
+    class MainWindow;
+}
 
 class ChildWidgetHelper;
 

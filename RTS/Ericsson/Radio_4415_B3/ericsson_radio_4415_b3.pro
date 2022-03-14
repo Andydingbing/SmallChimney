@@ -4,12 +4,19 @@ CONFIG += shared
 TEMPLATE = lib
 DEFINES += DLL_EXPORT RD_EXCEPTION
 
-QT += core gui network svg
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+#QT += core gui network svg
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-DESTDIR = ../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+#DESTDIR = ../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
 UI_DIR = ./ui
 INCLUDEPATH += ../..
+
+LIBS += \
+-llog \
+-ldriver \
+-linstrument \
+-lreport \
+-lsequence -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets
 
 HEADERS += \
     ericsson_radio_4415_b3_child_widget.h \

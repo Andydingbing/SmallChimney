@@ -15,7 +15,7 @@ public:
     ChildWidgets(MainWindow *parent);
 
     void init();
-    void initMenu();
+    void initMenu(QList<QMenu *> &menus);
     void initMainLogTabWidget();
     void mainTabCurrentChanged(int index);
     QString tabName(int idx) { return QString("Branch-%1").arg(char('A' + idx)); }
