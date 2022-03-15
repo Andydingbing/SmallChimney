@@ -8,11 +8,10 @@
 class QTreeWidget_helper
 {
 public:
-    static void itemList(QTreeWidgetItem *item, QList<QTreeWidgetItem *>::iterator *iter)
+    static void itemList(QTreeWidgetItem *item, QList<QTreeWidgetItem *> &list)
     {
         if (item->childCount() == 0) {
-            (*(*iter)) = item;
-            (*iter) ++;
+            list.push_back(item);
             return;
         }
 
@@ -20,7 +19,7 @@ public:
 
         for (int i = 0;i < item->childCount();++i) {
             childItem = item->child(i);
-            itemList(childItem,iter);
+            itemList(childItem,list);
         }
     }
 
@@ -28,14 +27,8 @@ public:
     {
         QList<QTreeWidgetItem *> list;
 
-        for (int i = 0;i < treeChildItems.size();++ i) {
-            list.push_back(nullptr);
-        }
-
-        QList<QTreeWidgetItem *>::iterator iter = list.begin();
-
         for (int i = 0;i < widget.topLevelItemCount();++i) {
-            itemList(widget.topLevelItem(i),&iter);
+            itemList(widget.topLevelItem(i),list);
         }
 
         return list;

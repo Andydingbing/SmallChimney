@@ -27,7 +27,7 @@ struct data_m_rx_rf_vga
     float temp_avg;
 };
 
-class rx_rf_vga_table_t : public item_table<data_f_rx_rf_vga,data_m_rx_rf_vga>
+class API rx_rf_vga_table_t : public item_table<data_f_rx_rf_vga,data_m_rx_rf_vga>
 {
 public:
     typedef data_f_rx_rf_vga data_f_t;

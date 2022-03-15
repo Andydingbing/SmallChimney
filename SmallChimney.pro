@@ -13,6 +13,7 @@ instrument \
 report \
 sequence \
 sequence_compiler \
+Qt/QHelper.pro \
 RTS \
 DDT \
 $$DEVICES \

@@ -21,7 +21,7 @@ struct data_m_tx_aclr
     float temp_avg;
 };
 
-class tx_aclr_table_t : public item_table<data_f_tx_aclr,data_m_tx_aclr>
+class API tx_aclr_table_t : public item_table<data_f_tx_aclr,data_m_tx_aclr>
 {
 public:
     typedef data_f_tx_aclr data_f_t;

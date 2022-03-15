@@ -1,5 +1,4 @@
 #include "table_model.h"
-#include "global.h"
 
 QVariant Q_Table_Model::data(const QModelIndex &index, int role) const
 {
@@ -8,7 +7,7 @@ QVariant Q_Table_Model::data(const QModelIndex &index, int role) const
 #else
     if (role == Qt::BackgroundRole) {
 #endif
-        return CLR_PROTECT_EYE;
+        return QColor(199,237,204);
     }
 
     return QVariant();

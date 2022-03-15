@@ -26,7 +26,7 @@ struct data_m_tx_vga
     float temp_avg;
 };
 
-class tx_vga_table_t : public item_table<data_f_tx_vga,data_m_tx_vga>
+class API tx_vga_table_t : public item_table<data_f_tx_vga,data_m_tx_vga>
 {
 public:
     typedef data_f_tx_vga data_f_t;

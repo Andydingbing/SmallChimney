@@ -15,7 +15,6 @@
 #include "config_table.h"
 #include "complex_sequence.h"
 #include <QCheckBox>
-#include <QMetaEnum>
 
 enum Project {
     Ericsson_Radio_4415_B3,
@@ -36,31 +35,6 @@ enum Mode {
 for (size_t i = 0;i < better_enum::_size();++i) { \
     box->addItem(QString::fromUtf8(better_enum::_names()[i])); \
 }
-
-
-class Global_Enum : public QObject
-{
-    Q_OBJECT
-
-#define ENUM_STRING_LIST(e) \
-    Q_ENUM(e##_t) \
-    static QStringList e() \
-    { \
-        QStringList list; \
-        const char *str = nullptr; \
-        for (int i = 0;;++i) { \
-            if ((str = QMetaEnum::fromType<radio_system_t>().valueToKey(i)) == nullptr) { \
-                break; \
-            } \
-            list.push_back(QString(str)); \
-        } \
-        return list; \
-    }
-
-public:
-    #include "device_types.h"
-    ENUM_STRING_LIST(radio_system)
-};
 
 
 template <typename T>

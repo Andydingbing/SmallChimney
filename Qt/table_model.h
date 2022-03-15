@@ -1,6 +1,7 @@
 #ifndef Q_TABLE_MODEL_H
 #define Q_TABLE_MODEL_H
 
+#include "qhelper_global.h"
 #include <QAbstractTableModel>
 #include "qwt_series_data.h"
 #include "qwt_plot_curve.h"
@@ -104,7 +105,7 @@
         } \
     };
 
-class Q_Table_Model : public QAbstractTableModel
+class QHELPER_EXPORT Q_Table_Model : public QAbstractTableModel
 {
     Q_OBJECT
 

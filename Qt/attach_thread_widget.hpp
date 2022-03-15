@@ -91,4 +91,4 @@ private:
     QVector<QWidget *> resumed;
 };
 
-#endif // Q_ATTACH_THREAD_WIDGET_H
+#endif

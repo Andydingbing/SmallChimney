@@ -51,4 +51,4 @@ private:
     uint32_t _avg_time_cur;
 };
 
-#endif // COMMON_ANALYZER_TRACE_HPP
+#endif

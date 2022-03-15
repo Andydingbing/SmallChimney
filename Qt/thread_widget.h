@@ -9,7 +9,7 @@
 #include "table_view.hpp"
 #include "config_table.h"
 
-class Q_Widget : public QWidget
+class QHELPER_EXPORT Q_Widget : public QWidget
 {
     Q_OBJECT
 
@@ -21,7 +21,7 @@ public slots:
 };
 
 
-class Q_Thread_Widget_Base : public Q_Widget, public Q_Attach_Thread_Widget
+class QHELPER_EXPORT Q_Thread_Widget_Base : public Q_Widget, public Q_Attach_Thread_Widget
 {
     Q_OBJECT
 

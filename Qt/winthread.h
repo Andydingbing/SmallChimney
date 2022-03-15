@@ -2,6 +2,7 @@
 #define Q_WINTHREAD_H
 
 #include <QThread>
+#include "qhelper_global.h"
 #include "config_table.h"
 #include "freq_string.hpp"
 #include "set_helper.hpp"
@@ -41,7 +42,7 @@
     initProgress(QString("Case : %1").arg(name),pts);
 
 
-class Q_Thread_Base : public QThread
+class QHELPER_EXPORT Q_Thread_Base : public QThread
 {
     Q_OBJECT
 
@@ -60,6 +61,7 @@ public:
 public:
     Q_Thread_Base(QObject *parent = nullptr);
     static int registerMetaType() { return qRegisterMetaType<Process>("Process"); }
+    void setMainWindow(QWidget *window);
     void initProgress(const QString name) { emit initProg(name); }
     void initProgress(const QString name, quint32 pts) { emit initProg(name,pts); }
     void setProgressPos(quint32 pos) { emit setProgPos(pos); }
@@ -86,12 +88,13 @@ public:
     static QString  g_threadName;
     static Q_Thread_Base *g_threadThread;
 
+    QWidget *mainWindow;
     Q_Config_Table_Delegate_Kase *configDelegate;
     Q_Result_Table_Delegate_Kase *resultDelegate;
 };
 
 
-class Q_Thread : public Q_Thread_Base
+class QHELPER_EXPORT Q_Thread : public Q_Thread_Base
 {
     Q_OBJECT
 
@@ -114,8 +117,8 @@ protected:
     set_helper::range_freq<uint64_t> freqRange;
 };
 
-void threadCheckBox(const QString &msg);
-void threadErrorBox(const QString &msg);
+QHELPER_EXPORT void threadCheckBox(const QString &msg);
+QHELPER_EXPORT void threadErrorBox(const QString &msg);
 
 bool ftpRetryBox();
 

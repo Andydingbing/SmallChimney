@@ -1,8 +1,8 @@
 #include "winthread.h"
 #include <QMessageBox>
-#include "mainwindow.h"
 #include <QDateTime>
 #include "thread_widget.h"
+#include "../instrument/instr.h"
 
 // Exception support.
 #ifdef RD_EXCEPTION
@@ -36,19 +36,23 @@ Q_Thread_Base::Q_Thread_Base(QObject *parent) :
     g_threadPausing = false;
 
     connect(this,SIGNAL(finished()),this,SLOT(deleteLater()));
-
-    connect(this,SIGNAL(initProg(QString)),g_MainW,SLOT(initProg(QString)));
-    connect(this,SIGNAL(initProg(QString,quint32)),g_MainW,SLOT(initProg(QString,quint32)));
-    connect(this,SIGNAL(setProgPos(quint32)),g_MainW,SLOT(setProgPos(quint32)));
-    connect(this,SIGNAL(addProgPos(quint32)),g_MainW,SLOT(addProgPos(quint32)));
-
-    connect(this,SIGNAL(threadCheckBox(QString)),
-           g_MainW,SLOT(threadCheckBox(QString)),Qt::BlockingQueuedConnection);
-
-    connect(this,SIGNAL(threadErrorBox(QString)),
-           g_MainW,SLOT(threadErrorBox(QString)),Qt::BlockingQueuedConnection);
 }
 
+void Q_Thread_Base::setMainWindow(QWidget *window)
+{
+    mainWindow = window;
+
+    connect(this,SIGNAL(initProg(QString)),mainWindow,SLOT(initProg(QString)));
+    connect(this,SIGNAL(initProg(QString,quint32)),mainWindow,SLOT(initProg(QString,quint32)));
+    connect(this,SIGNAL(setProgPos(quint32)),mainWindow,SLOT(setProgPos(quint32)));
+    connect(this,SIGNAL(addProgPos(quint32)),mainWindow,SLOT(addProgPos(quint32)));
+
+    connect(this,SIGNAL(threadCheckBox(QString)),
+        mainWindow,SLOT(threadCheckBox(QString)),Qt::BlockingQueuedConnection);
+
+    connect(this,SIGNAL(threadErrorBox(QString)),
+        mainWindow,SLOT(threadErrorBox(QString)),Qt::BlockingQueuedConnection);
+}
 
 Q_Thread::Q_Thread(QObject *parent) :
     Q_Thread_Base(parent)
@@ -63,7 +67,7 @@ Q_Thread::Q_Thread(QObject *parent) :
         connect(this,SIGNAL(done(bool)),parent,SLOT(done(bool)),Qt::BlockingQueuedConnection);
     }
 
-    connect(this,&Q_Thread::threadProcess,g_MainW,&MainWindow::threadProcess);
+    connect(this,SIGNAL(threadProcess(const Process p)),mainWindow,SLOT(threadProcess(const Process p)));
 
     Q_Thread_Widget_Base *p = dynamic_cast<Q_Thread_Widget_Base *>(parent);
 

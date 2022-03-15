@@ -185,9 +185,12 @@ LIBS += \
           -L$$LIB_DIR_FMTLIB \
        -L../$$LIB_DIR_FMTLIB \
     -L../../$$LIB_DIR_FMTLIB \
-    -L$$DESTDIR \
-    -L../$$DESTDIR \
-    -L$$LIB_DIR_QWT
+          -L$$LIB_DIR_QWT \
+       -L../$$LIB_DIR_QWT \
+    -L../../$$LIB_DIR_QWT \
+          -L$$DESTDIR \
+       -L../$$DESTDIR \
+    -L../../$$DESTDIR \
 
 
 message("$$VAR_ARCH $$make_spec")

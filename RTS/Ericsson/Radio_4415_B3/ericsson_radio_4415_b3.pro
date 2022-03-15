@@ -4,8 +4,8 @@ CONFIG += shared
 TEMPLATE = lib
 DEFINES += DLL_EXPORT RD_EXCEPTION
 
-#QT += core gui network svg
-#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui network svg
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 #DESTDIR = ../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
 UI_DIR = ./ui
@@ -16,7 +16,23 @@ LIBS += \
 -ldriver \
 -linstrument \
 -lreport \
--lsequence -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets
+-lEricsson_Radio_4415 \
+-lsequence -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets -lQHelper
+
+win32-g++ {
+    DEFINES += QWT_DLL
+    LIBS += -lqwt-qt5.dll
+}
+
+win32-clang-g++ {
+    DEFINES += QWT_DLL
+    LIBS += -lqwt-qt5.dll
+}
+
+win32-msvc {
+    equals(VAR_DEBUG_RELEASE, "debug")   { LIBS += -lqwtd }
+    equals(VAR_DEBUG_RELEASE, "release") { LIBS += -lqwt }
+}
 
 HEADERS += \
     ericsson_radio_4415_b3_child_widget.h \

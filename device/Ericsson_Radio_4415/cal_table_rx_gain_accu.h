@@ -23,7 +23,7 @@ struct data_m_rx_gain_accu
     float temp_avg;
 };
 
-class rx_gain_accu_table_t : public item_table<data_f_rx_gain_accu,data_m_rx_gain_accu>
+class API rx_gain_accu_table_t : public item_table<data_f_rx_gain_accu,data_m_rx_gain_accu>
 {
 public:
     typedef data_f_rx_gain_accu data_f_t;

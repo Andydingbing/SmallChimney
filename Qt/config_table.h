@@ -1,6 +1,7 @@
 #ifndef Q_CONFIG_TABLE_H
 #define Q_CONFIG_TABLE_H
 
+#include "qhelper_global.h"
 #include "preprocessor/suffix.h"
 #include <QTableView>
 #include <QStandardItemModel>
@@ -9,7 +10,7 @@
 #include <QLineEdit>
 #include <QLabel>
 
-class Q_Config_Table_View : public QTableView
+class QHELPER_EXPORT Q_Config_Table_View : public QTableView
 {
 public:
     Q_Config_Table_View(QWidget *parent = nullptr);
@@ -18,7 +19,7 @@ public:
 };
 
 
-class Q_Config_Table_Model : public QStandardItemModel
+class QHELPER_EXPORT Q_Config_Table_Model : public QStandardItemModel
 {
 public:
     Q_Config_Table_Model(QObject *parent = nullptr) : QStandardItemModel(parent) {}
@@ -48,7 +49,7 @@ public: \
 };
 
 
-class Q_Config_Table_Delegate : public QStyledItemDelegate
+class QHELPER_EXPORT Q_Config_Table_Delegate : public QStyledItemDelegate
 {
 public:
     Q_Config_Table_Delegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
@@ -68,7 +69,7 @@ public:
     QWidget **first() const OVERRIDE { return reinterpret_cast<QWidget **>(const_cast<type **>(&widget)); }
 };
 
-class Q_Config_Table_Delegate_Kase : public Q_Config_Table_Delegate
+class QHELPER_EXPORT Q_Config_Table_Delegate_Kase : public Q_Config_Table_Delegate
 {
 public:
     Q_Config_Table_Delegate_Kase(QObject *parent = nullptr);
@@ -78,7 +79,7 @@ public:
     FIRST_CONFIG_WIDGET(QLabel,labelConfig)
 };
 
-class Q_Result_Table_Delegate_Kase : public Q_Config_Table_Delegate
+class QHELPER_EXPORT Q_Result_Table_Delegate_Kase : public Q_Config_Table_Delegate
 {
 public:
     Q_Result_Table_Delegate_Kase(QObject *parent = nullptr);

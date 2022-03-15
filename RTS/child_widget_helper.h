@@ -54,7 +54,6 @@ public:
     virtual void initMenu(QList<QMenu *> &menus) {}
     virtual QString tabName(int idx) { return QString("RF-%1").arg(idx); }
 
-
 public slots:
     virtual void initChildWidgets();
 
