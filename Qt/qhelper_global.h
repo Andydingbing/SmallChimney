@@ -12,7 +12,7 @@
     #define QHELPER_EXPORT Q_DECL_IMPORT
 #endif
 
-class Global_Enum : public QObject
+class QHELPER_EXPORT Global_Enum : public QObject
 {
     Q_OBJECT
 

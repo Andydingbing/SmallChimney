@@ -1,6 +1,6 @@
 #include "ericsson_radio_4415_b3_widget.h"
 #include "ui_ericsson_radio_4415_b3.h"
-#include "ericsson_radio_4415_b3_global.h"
+#include "global.h"
 
 using namespace ns_ericsson;
 using namespace ns_radio_4415;
@@ -71,12 +71,12 @@ void Q_4415_Widget::on_lineEditRX_Freq_textEdited(const QString &arg1)
 
 void Q_4415_Widget::on_checkBoxRX_LNA_clicked(bool checked)
 {
-    Radio.rxrfsw(RFIdx,checked,ui->checkBoxRX_Att->isChecked());
+    Radio.rxrfsw(currentRFIdx(),checked,ui->checkBoxRX_Att->isChecked());
 }
 
 void Q_4415_Widget::on_checkBoxRX_Att_clicked(bool checked)
 {
-    Radio.rxrfsw(RFIdx,ui->checkBoxRX_LNA->isChecked(),checked);
+    Radio.rxrfsw(currentRFIdx(),ui->checkBoxRX_LNA->isChecked(),checked);
 }
 
 void Q_4415_Widget::on_checkBoxRX_AGC_clicked(bool checked)

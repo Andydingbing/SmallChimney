@@ -1,7 +1,7 @@
 #ifndef Q_ERICSSON_RADIO_4415_B3_Widget_H
 #define Q_ERICSSON_RADIO_4415_B3_Widget_H
 
-#include "ericsson_radio_4415_b3_global.h"
+#include "global.h"
 
 namespace ns_ericsson {
 namespace ns_radio_4415 {

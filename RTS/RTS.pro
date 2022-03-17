@@ -1,9 +1,6 @@
 include(../include/config.pri)
 
-include(Ericsson/Radio_6449.pri)
-include(Ericsson/Air_3268.pri)
-
-include(StarPoint/SP9500.pri)
+#include(StarPoint/SP9500.pri)
 
 QT += core gui network svg
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -27,10 +24,11 @@ LIBS += \
 -linstrument \
 -lreport \
 -lsequence \
--lEricsson_Radio_4415 \
--lEricsson_Radio_6449 \
--lEricsson_Air_3268 \
--lSP9500
+-lQHelper \
+-lRTS_helper \
+-lericsson_radio_4415_b3 \
+-lericsson_radio_6449_b42
+#-lSP9500
 
 win32-g++ {
     DEFINES += QWT_DLL
@@ -51,33 +49,21 @@ unix  { LIBS += -lrsnrpz -lfftw3 -lqwt}
 
 HEADERS += \
     global.h \
-    ../Qt/config_table.h \
-    ../Qt/table_model.h \
-    ../Qt/thread_widget.h \
-    ../Qt/qwt_plot_helper.h \
     main_thread.h \
     main_dialog.h \
     mainwindow.h \
     log_model.hpp \
     child_widget_helper.h \
-    device_init_thread.h \
-    winthread.h \
-    signal_analyzer_freq_widget.h
+    device_init_thread.h
 
 SOURCES += \
-    ../Qt/config_table.cpp \
-    ../Qt/table_model.cpp \
-    ../Qt/thread_widget.cpp \
-    ../Qt/qwt_plot_helper.cpp \
     global.cpp \
     main.cpp \
     main_thread.cpp \
     main_dialog.cpp \
     mainwindow.cpp \
     child_widget_helper.cpp \
-    device_init_thread.cpp \
-    winthread.cpp \
-    signal_analyzer_freq_widget.cpp
+    device_init_thread.cpp
 
 FORMS += \
     main_dialog.ui \

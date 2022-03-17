@@ -1,5 +1,6 @@
 #include "main_dialog.h"
 #include "mainwindow.h"
+#include "../RTS_helper/global.h"
 #include <QFileDialog>
 
 MainDialog::MainDialog(QWidget *parent) :

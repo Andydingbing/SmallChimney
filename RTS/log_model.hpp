@@ -1,7 +1,7 @@
 #ifndef Q_LOG_MODEL_H
 #define Q_LOG_MODEL_H
 
-#include "global.h"
+#include "../RTS_helper/global.h"
 #include "../Qt/table_model.h"
 
 class QMsgLogModel : public Q_Table_Model
@@ -60,4 +60,4 @@ public slots:
     }
 };
 
-#endif // Q_LOG_MODEL_H
+#endif

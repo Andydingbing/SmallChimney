@@ -4,8 +4,6 @@
 #include <math.h>
 #include "algo_math.hpp"
 
-#include "analyzer/trace.inline.hpp"
-
 static boost::mutex g_complex_sequence_lock;
 
 complex_sequence::complex_sequence()

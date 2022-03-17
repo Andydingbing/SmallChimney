@@ -1,12 +1,14 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include "../RTS_helper/global.h"
+#include "../Qt/QTreeWidget_helper.h"
+#include "global.h"
 #include <QMainWindow>
 #include <QSplitter>
 #include <QTreeWidget>
 #include <QTabWidget>
 #include <QHBoxLayout>
-#include "global.h"
 #include "main_thread.h"
 #include "table_view.hpp"
 
@@ -17,8 +19,6 @@
 namespace Ui {
     class MainWindow;
 }
-
-class ChildWidgetHelper;
 
 class QLabel;
 class QTreeWidgetItem;

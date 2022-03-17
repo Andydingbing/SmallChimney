@@ -156,18 +156,46 @@ INCLUDEPATH += \
     ../sequence \
     ../../sequence \
 
-contains(DEFINES,product) {
+DESTDIR     = ../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+OBJECTS_DIR =  ./$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+
+contains(DEFINES,device_api) {
     DEFINES += DLL_EXPORT
     CONFIG += shared
     CONFIG -= qt
     TEMPLATE = lib
     LIBS += -ldriver -llog -lreport
-    DESTDIR = ../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
-} else {
-    DESTDIR = ../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+    DESTDIR = ../../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
 }
 
-OBJECTS_DIR = ./$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+contains(DEFINES,frontend) {
+    DEFINES += QWT_DLL DLL_EXPORT RD_EXCEPTION
+    CONFIG += shared qt
+    TEMPLATE = lib
+    INCLUDEPATH += ../..
+
+    QT += core gui network svg
+    greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+    DESTDIR = ../../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+    UI_DIR  = ./ui
+
+    LIBS += \
+        -llog \
+        -ldriver \
+        -linstrument \
+        -lreport \
+        -lRTS_helper \
+        -lsequence \
+        -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets -lQHelper
+
+    win32-g++       { LIBS += -lqwt-qt5.dll }
+    win32-clang-g++ { LIBS += -lqwt-qt5.dll }
+    win32-msvc {
+        equals(VAR_DEBUG_RELEASE, "debug")   { LIBS += -lqwtd }
+        equals(VAR_DEBUG_RELEASE, "release") { LIBS += -lqwt }
+    }
+}
 
 LIBS += \
           -L../lib/$$VAR_ARCH \

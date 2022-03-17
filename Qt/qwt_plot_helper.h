@@ -1,10 +1,12 @@
 #ifndef QWT_PLOT_HELPER_H
 #define QWT_PLOT_HELPER_H
 
+#include "qhelper_global.h"
 #include "preprocessor/prefix.h"
 #include "qwt_plot.h"
 
-class QwtPlotHelper {
+class QHELPER_EXPORT QwtPlotHelper
+{
 public:
     static void init(QwtPlot *plot);
 

@@ -103,7 +103,7 @@ public:
         }
 
         Q_Thread_Base::g_threadThread = new thread_t(this);
-        Q_Thread_Base::g_threadThread->RFIdx = ::RFIdx;
+//        Q_Thread_Base::g_threadThread->RFIdx = ::g_tabIdx;
         Q_Thread_Base::g_threadThread->configDelegate = configDelegate;
         Q_Thread_Base::g_threadThread->resultDelegate = resultDelegate;
         Q_Thread_Base::g_threadThread->start();
@@ -136,9 +136,9 @@ public:
 
 #define KASE_WIDGET_CLASS_NAME(kase) Q_##kase##_Widget
 #define KASE_THREAD_CLASS_NAME(kase) Q_##kase##_Thread
-#define KASE_WIDGET_UI_CLASS_NAME(vendor,device,kase) Q_##vendor##_##device##_##kase##_Widget
+#define KASE_WIDGET_UI_CLASS_NAME(kase) Q_##kase##_Widget
 
-#define KASE_WIDGET_PREFIX(vendor,product,kase) \
+#define KASE_WIDGET_PREFIX(kase) \
     class KASE_THREAD_CLASS_NAME(kase); \
     class API KASE_WIDGET_CLASS_NAME(kase) : public Q_Thread_Widget<KASE_THREAD_CLASS_NAME(kase)> \
     { \
@@ -148,10 +148,10 @@ public:
         class Q_Result_Delegate; \
         Q_Config_Delegate *config; \
         Q_Result_Delegate *result; \
-        Ui::KASE_WIDGET_UI_CLASS_NAME(vendor,product,kase) *ui; \
+        Ui::KASE_WIDGET_UI_CLASS_NAME(kase) *ui; \
         void initUi() \
         { \
-            ui = new Ui::KASE_WIDGET_UI_CLASS_NAME(vendor,product,kase); \
+            ui = new Ui::KASE_WIDGET_UI_CLASS_NAME(kase); \
             ui->setupUi(this); \
         } \
     \

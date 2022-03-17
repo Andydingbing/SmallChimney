@@ -94,12 +94,12 @@
         MODEL_HEADER(__VA_ARGS__) \
         \
         int rowCount(const QModelIndex &) const \
-        { return (Radio.data_base(RFIdx)->db(kase)->data_reception_rows()); } \
+        { return (Radio.data_base(currentRFIdx())->db(kase)->data_reception_rows()); } \
         \
         QVariant data(const QModelIndex &index, int role) const \
         { \
             if (role == Qt::DisplayRole) { \
-                return QString::fromStdString(Radio.data_base(RFIdx)->db(kase)->data_reception(index.row(),index.column())); \
+                return QString::fromStdString(Radio.data_base(currentRFIdx())->db(kase)->data_reception(index.row(),index.column())); \
             } \
             return Q_Table_Model::data(index,role); \
         } \
@@ -174,11 +174,11 @@ public: \
     kase##_Curve(size_t key = 0) : Qwt_Series_Data(), keyIdx(key) { } \
     \
     size_t size() const \
-    { return Radio.data_base(RFIdx)->db(kase)->data_reception_points(keyIdx); } \
+    { return Radio.data_base(currentRFIdx())->db(kase)->data_reception_points(keyIdx); } \
     \
     QPointF sample(size_t i) const { \
-        return QPointF(Radio.data_base(RFIdx)->db(kase)->data_reception_x(keyIdx,i), \
-                       Radio.data_base(RFIdx)->db(kase)->data_reception_y(keyIdx,i)); \
+        return QPointF(Radio.data_base(currentRFIdx())->db(kase)->data_reception_x(keyIdx,i), \
+                       Radio.data_base(currentRFIdx())->db(kase)->data_reception_y(keyIdx,i)); \
     } \
 };
 

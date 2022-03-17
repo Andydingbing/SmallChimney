@@ -51,4 +51,6 @@ private:
     uint32_t _avg_time_cur;
 };
 
+#include "trace.inline.hpp"
+
 #endif

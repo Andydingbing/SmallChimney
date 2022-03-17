@@ -1,9 +1,8 @@
 TEMPLATE = subdirs
 
 DEVICES += \
-device/Ericsson_Radio_4415 \
-device/Ericsson_Radio_6449 \
-device/Ericsson_Air_3268 \
+device/Ericsson/Radio_4415/device_ericsson_radio_4415.pro \
+device/Ericsson/Radio_6449/device_ericsson_radio_6449.pro \
 device/StarPoint/SP9500
 
 SUBDIRS += \
@@ -15,9 +14,11 @@ sequence \
 sequence_compiler \
 Qt/QHelper.pro \
 RTS \
+RTS_helper \
 DDT \
 $$DEVICES \
-RTS/Ericsson/Radio_4415_B3/ericsson_radio_4415_b3.pro
+RTS/Ericsson/Radio_4415_B3/ericsson_radio_4415_b3.pro \
+RTS/Ericsson/Radio_6449_B42/ericsson_radio_6449_b42.pro
 
 instrument.depends = driver
 report.depends = log

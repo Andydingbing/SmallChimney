@@ -120,6 +120,6 @@ protected:
 QHELPER_EXPORT void threadCheckBox(const QString &msg);
 QHELPER_EXPORT void threadErrorBox(const QString &msg);
 
-bool ftpRetryBox();
+QHELPER_EXPORT bool ftpRetryBox();
 
 #endif

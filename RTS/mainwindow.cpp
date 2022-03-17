@@ -11,9 +11,8 @@
 #include <QMenu>
 #include <QStyleFactory>
 #include "device.h"
-#include "Ericsson/Radio_4415/ericsson_radio_4415_b3_child_widget.h"
-#include "Ericsson/Radio_6449/ericsson_radio_6449_b42_child_widget.h"
-#include "Ericsson/Air_3268/ericsson_air_3268_b42_child_widget.h"
+#include "Ericsson/Radio_4415_B3/child_widget.h"
+#include "Ericsson/Radio_6449_B42/child_widget.h"
 #include "StarPoint/SP9500/starpoint_sp9500_child_widget.h"
 #include "log_model.hpp"
 #include "device_init_thread.h"
@@ -67,11 +66,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Log.en(log_t::RD_LOG_ALL_ON,false);
 
-    childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(this));
-    childWidgets.push_back(new ns_ericsson::ns_radio_6449::ChildWidgets(this));
-    childWidgets.push_back(new ns_ericsson::ns_air_3268::ChildWidgets(this));
-    childWidgets.push_back(new ns_starpoint::ns_sp9500::ChildWidgets(this));
-
     mainSplitter  = new QSplitter(Qt::Horizontal,ui->centralWidget);
     rightSplitter = new QSplitter(Qt::Vertical);
 
@@ -99,6 +93,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mainLayout->setMargin(0);
     mainLayout->addWidget(mainSplitter);
     ui->centralWidget->setLayout(mainLayout);
+
+    childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(mainTree,mainTab));
+    childWidgets.push_back(new ns_ericsson::ns_radio_6449::ChildWidgets(mainTree,mainTab));
+//    childWidgets.push_back(new ns_starpoint::ns_sp9500::ChildWidgets(this));
 
     Log.set_default();
 }
@@ -384,7 +382,7 @@ void MainWindow::threadSPC()
         return;
     }
 
-    Q_Widget *widget = currentWidgets->currentWidget();
+    Q_Widget *widget = currentWidgets->currentWidget(mainTab->currentIndex());
 
     if (widget == nullptr) {
         return;
@@ -455,9 +453,9 @@ void MainWindow::threadProcess(const Q_Thread_Base::Process p)
 void MainWindow::mainTree_itemClicked(QTreeWidgetItem *item, int column)
 {
     disconnect(mainTab,&QTabWidget::currentChanged,this,&MainWindow::mainTab_currentChanged);
-    currentWidgets->mainTreeItemClicked(item,column);
+    currentWidgets->treeItemClicked(item,column);
     connect(mainTab,&QTabWidget::currentChanged,this,&MainWindow::mainTab_currentChanged);
-    mainTab->setCurrentIndex(int(RFIdx));
+    mainTab->setCurrentIndex(currentRFIdx());
 }
 
 
@@ -470,7 +468,7 @@ bool MainWindow::mainTreeSelectFirst(QTreeWidgetItem *item)
     if (item->childCount() == 0 && item->checkState(0) == Qt::Checked) {
         mainTree->setCurrentItem(item);
 
-        Q_Widget *widget = currentWidgets->currentWidget();
+        Q_Widget *widget = currentWidgets->currentWidget(mainTab->currentIndex());
 
         if (widget == nullptr) {
             return false;
@@ -538,7 +536,7 @@ void MainWindow::mainTab_currentChanged(int index)
         return;
     }
 
-    RFIdx = quint32(index);
+    setCurrentRFIdx(index);
 
-    currentWidgets->mainTabCurrentChanged(index);
+    currentWidgets->tabCurrentChanged(index);
 }

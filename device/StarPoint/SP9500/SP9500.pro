@@ -1,4 +1,4 @@
-DEFINES += product
+DEFINES += device_api
 
 include( ../../../include/config.pri )
 
