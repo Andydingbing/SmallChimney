@@ -1,6 +1,5 @@
 #include "device_init_thread.h"
 #include "mainwindow.h"
-#include "child_widget_helper.h"
 #include "device.h"
 
 void QDeviceInitThread::run()

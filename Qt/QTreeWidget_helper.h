@@ -47,6 +47,7 @@ struct QHELPER_EXPORT TreeChildItem {
     TreeChildItem(std::string &str,Qt::CheckState _checkState,void *_tabWidgets = nullptr);
 };
 
+QHELPER_EXPORT void setTree(QTreeWidget &tree, const QList<TreeChildItem *> &childItems);
 
 #define DECL_TREE(list,kase_class,n) \
 { \
@@ -72,7 +73,6 @@ public:
 
     TreeChildItem *containTreeChildItem(const std::list<std::string> &l) const;
 //    void reSortTreeChildItem(const sequence &s);
-    void setTree(const QList<TreeChildItem *> childItems);
     void treeItemClicked(QTreeWidgetItem *item, int column);
     QList<bool> checkList();
     QList<QTreeWidgetItem *> treeWidgetItemList();

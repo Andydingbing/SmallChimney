@@ -1,8 +1,6 @@
 #ifndef STARPOINT_SP9500_CHILD_WIDGET_H
 #define STARPOINT_SP9500_CHILD_WIDGET_H
 
-#include "child_widget_helper.h"
-
 namespace ns_starpoint {
 namespace ns_sp9500 {
 

@@ -53,7 +53,6 @@ HEADERS += \
     main_dialog.h \
     mainwindow.h \
     log_model.hpp \
-    child_widget_helper.h \
     device_init_thread.h
 
 SOURCES += \
@@ -62,7 +61,6 @@ SOURCES += \
     main_thread.cpp \
     main_dialog.cpp \
     mainwindow.cpp \
-    child_widget_helper.cpp \
     device_init_thread.cpp
 
 FORMS += \

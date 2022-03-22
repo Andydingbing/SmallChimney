@@ -67,7 +67,7 @@ void ChildWidgets::init()
     DECL_TREE("Calibration,RX-RF VGA",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
 
     treeChildItems = treeChildItemsBuiltIn;
-    setTree(treeChildItemsBuiltIn);
+    setTree(*tree,treeChildItemsBuiltIn);
 
 //    initMenu();
     initMainLogTabWidget();

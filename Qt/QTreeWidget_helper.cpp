@@ -17,10 +17,16 @@ TreeChildItem::TreeChildItem(string &str,Qt::CheckState _checkState,void *_tabWi
     }
 }
 
-ChildWidgetHelper::ChildWidgetHelper(QTreeWidget *treeWidget, QTabWidget *tabWidget) : QObject()
+QTreeWidgetItem *rootItem(const QString item,const QList<QTreeWidgetItem *> &rootItems)
 {
-    tree = treeWidget;
-    tab = tabWidget;
+    QList<QTreeWidgetItem *>::const_iterator iter;
+
+    for (iter = rootItems.constBegin();iter != rootItems.constEnd();++iter) {
+        if (item == (*iter)->text(0)) {
+            return *iter;
+        }
+    }
+    return nullptr;
 }
 
 QTreeWidgetItem *addTreeItem(const QString item,QTreeWidgetItem *parent)
@@ -38,17 +44,50 @@ QTreeWidgetItem *addTreeItem(const QString item,QTreeWidgetItem *parent)
     return parent->child(parent->childCount() - 1);
 }
 
-QTreeWidgetItem *rootItem(const QString item,const QList<QTreeWidgetItem *> &rootItems)
+void setTree(QTreeWidget &tree, const QList<TreeChildItem *> &childItems)
 {
-    QList<QTreeWidgetItem *>::const_iterator iter;
+    QList<TreeChildItem *>::const_iterator iterCI;
+    QList<QTreeWidgetItem *>::iterator iterItem;
+    QList<QTreeWidgetItem *> rootItems;
+    list<string>::const_iterator iterStr;
 
-    for (iter = rootItems.constBegin();iter != rootItems.constEnd();++iter) {
-        if (item == (*iter)->text(0)) {
-            return *iter;
+    for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
+        for (iterItem = rootItems.begin();iterItem != rootItems.end();++iterItem) {
+            if (*(*iterCI)->stringList.begin() == (*iterItem)->text(0).toStdString()) {
+                break;
+            }
+        }
+        if (iterItem == rootItems.end()) {
+            QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
+            QTreeWidgetItem *rootItem = new QTreeWidgetItem(&tree,QStringList(rootItemText));
+            rootItem->setFlags(rootItem->flags() | Qt::ItemIsAutoTristate);
+            rootItem->setCheckState(0,Qt::Unchecked);
+            rootItems.append(rootItem);
         }
     }
-    return nullptr;
+
+    for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
+        QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
+        QTreeWidgetItem *root = rootItem(rootItemText,rootItems);
+
+        iterStr = (*iterCI)->stringList.cbegin();
+        iterStr ++;
+        for (;iterStr != (*iterCI)->stringList.cend();++iterStr) {
+            root = addTreeItem(QString::fromStdString(*iterStr),root);
+        }
+    }
+
+    tree.expandAll();
 }
+
+
+ChildWidgetHelper::ChildWidgetHelper(QTreeWidget *treeWidget, QTabWidget *tabWidget) : QObject()
+{
+    tree = treeWidget;
+    tab = tabWidget;
+}
+
+
 
 quint32 parents(const QTreeWidgetItem *item)
 {
@@ -182,42 +221,6 @@ TreeChildItem * ChildWidgetHelper::containTreeChildItem(const list<string> &l) c
 //        }
 //    }
 //}
-
-void ChildWidgetHelper::setTree(const QList<TreeChildItem *> childItems)
-{
-    QList<TreeChildItem *>::const_iterator iterCI;
-    QList<QTreeWidgetItem *>::iterator iterItem;
-    QList<QTreeWidgetItem *> rootItems;
-    list<string>::const_iterator iterStr;
-
-    for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
-        for (iterItem = rootItems.begin();iterItem != rootItems.end();++iterItem) {
-            if (*(*iterCI)->stringList.begin() == (*iterItem)->text(0).toStdString()) {
-                break;
-            }
-        }
-        if (iterItem == rootItems.end()) {
-            QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
-            QTreeWidgetItem *rootItem = new QTreeWidgetItem(tree,QStringList(rootItemText));
-            rootItem->setFlags(rootItem->flags() | Qt::ItemIsAutoTristate);
-            rootItem->setCheckState(0,Qt::Unchecked);
-            rootItems.append(rootItem);
-        }
-    }
-
-    for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
-        QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
-        QTreeWidgetItem *root = rootItem(rootItemText,rootItems);
-
-        iterStr = (*iterCI)->stringList.cbegin();
-        iterStr ++;
-        for (;iterStr != (*iterCI)->stringList.cend();++iterStr) {
-            root = addTreeItem(QString::fromStdString(*iterStr),root);
-        }
-    }
-
-    tree->expandAll();
-}
 
 void ChildWidgetHelper::treeItemClicked(QTreeWidgetItem *item, int column)
 {
