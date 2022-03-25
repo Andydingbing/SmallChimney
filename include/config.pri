@@ -11,6 +11,13 @@ LIB_DIR_BOOST  = .
 LIB_DIR_PYTHON = .
 LIB_DIR_FMTLIB = .
 
+
+defineReplace (dependLib) {
+    win32-g++       { return ($$sprintf("-l$$1%1",".dll")) }
+    win32-clang-g++ { return ($$sprintf("-l$$1%1",".dll")) }
+    win32-msvc      { return ($$-l$$1) }
+}
+
 contains(QT_ARCH,i386) {
     VAR_ARCH = x86
     VAR_ARCH_BIT = 32
@@ -164,8 +171,10 @@ contains(DEFINES,device_api) {
     CONFIG += shared
     CONFIG -= qt
     TEMPLATE = lib
-    LIBS += -ldriver -llog -lreport
+    LIBS += -ldriver -lreport
     DESTDIR = ../../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+
+    LIBS += $$dependLib(log)
 }
 
 contains(DEFINES,frontend) {
@@ -181,13 +190,14 @@ contains(DEFINES,frontend) {
     UI_DIR  = ./ui
 
     LIBS += \
-        -llog \
         -ldriver \
         -linstrument \
         -lreport \
         -lRTS_helper \
         -lsequence \
         -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets -lQHelper
+
+    LIBS += $$dependLib(log)
 
     win32-g++       { LIBS += -lqwt-qt5.dll }
     win32-clang-g++ { LIBS += -lqwt-qt5.dll }

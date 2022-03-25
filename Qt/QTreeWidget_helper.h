@@ -4,6 +4,7 @@
 #include "thread_widget.h"
 #include <QList>
 #include <QWidget>
+#include <QMenu>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 

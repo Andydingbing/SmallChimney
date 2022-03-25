@@ -83,7 +83,7 @@ void Q_Cal_RX_RF_VGA_Widget::prepare(const bool is_exp)
 
 void Q_Cal_RX_RF_VGA_Widget::uiUpdate(const int first,const int last,const int kase)
 {
-    ignore_unused(last);
+    Q_UNUSED(last);
 
 //    ui->config_result->ui->ledResult->setColor(model.table->at(0).is_monotonic() ? Qt::green : Qt::red);
 //    result->checkBoxMonotonic->setChecked(model.table->at(0).is_monotonic());

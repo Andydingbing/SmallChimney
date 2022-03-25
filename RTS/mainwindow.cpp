@@ -139,6 +139,12 @@ void MainWindow::switchProject()
 
     currentWidgets = childWidgets.at(project);
     currentWidgets->init();
+
+    QList<QMenu *> menus;
+
+    currentWidgets->initMenu(menus);
+
+    addMenu(menuBar(),menus);
 }
 
 void MainWindow::deviceInit()

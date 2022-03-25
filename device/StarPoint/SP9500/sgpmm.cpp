@@ -19,6 +19,8 @@
 		return errno;																	\
 	}
 
+using namespace std;
+
 bool CSGPMMFile::PointKey::operator < (const PointKey &Key) const
 {
 	if (this->m_uiFreq < Key.m_uiFreq)

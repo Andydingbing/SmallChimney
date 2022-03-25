@@ -98,7 +98,7 @@ void Q_Cal_TX_VGA_Widget::prepare(const bool is_exp)
 
 void Q_Cal_TX_VGA_Widget::uiUpdate(const int first,const int last,const int kase)
 {
-    ignore_unused(first);
+    Q_UNUSED(first);
 
 //    result->lineEditDyRange->setText(QString("%1").arg(model.table->at(0).dynamic_range()));
     ui->tableView->selectRow(last);

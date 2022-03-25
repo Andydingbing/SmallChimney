@@ -35,14 +35,14 @@ public:
         data_f_t *d_f = static_cast<data_f_t *>(data);
         data_m_t d_m;
 
-        _data_m.clear();
+        this->_data_m.clear();
 
         for (uint32_t i = 0;i < pts;++i) {
             for (uint32_t j = 0;j < tap;++j) {
                 d_m.coef[j].i = d_f[i].real[j];
                 d_m.coef[j].q = d_f[i].imag[j];
             }
-            _data_m.push_back(d_m);
+            this->_data_m.push_back(d_m);
         }
     }
 

@@ -86,7 +86,7 @@ public:
 
         if (!boost::filesystem::exists(_path)) {
             if (!boost::filesystem::create_directory(_path)) {
-                throw ::runtime_error("Can't create" + _path);
+                throw ::runtime_err("Can't create" + _path);
             }
         }
 
@@ -97,7 +97,7 @@ public:
 
         if (!boost::filesystem::exists(_path)) {
             if (!boost::filesystem::create_directory(_path)) {
-                throw ::runtime_error("Can't create" + _path);
+                throw ::runtime_err("Can't create" + _path);
             }
         }
 
@@ -106,7 +106,7 @@ public:
 
         if (!boost::filesystem::exists(_path)) {
             if (!boost::filesystem::create_directory(_path)) {
-                throw ::runtime_error("Can't create" + _path);
+                throw ::runtime_err("Can't create" + _path);
             }
         }
 
@@ -313,11 +313,11 @@ protected:
         if (!is_file_valid(header)) {
             if (creat) {
                 if (!create(header)) {
-                    throw ::runtime_error("Can't create/open " + _path);
+                    throw ::runtime_err("Can't create/open " + _path);
                 }
             }
             if (!is_file_valid(header)) {
-                throw ::runtime_error("Invalid file : " + _path);
+                throw ::runtime_err("Invalid file : " + _path);
             }
         }
     }
@@ -361,11 +361,11 @@ protected:
     {
         stream.open(_path,std::ios::in | std::ios::out);
         if (!stream.is_open()) {
-            throw ::runtime_error("Can't read " + _path);
+            throw ::runtime_err("Can't read " + _path);
         }
         stream.seekg(offset_data,std::ios::beg);
         if (stream.bad()) {
-            throw ::runtime_error("Invalid file : " + _path);
+            throw ::runtime_err("Invalid file : " + _path);
         }
     }
 
@@ -373,11 +373,11 @@ protected:
     {
         stream.open(_path,std::ios::in | std::ios::out);
         if (!stream.is_open()) {
-            throw runtime_error("Can't Write " + _path);
+            throw runtime_err("Can't Write " + _path);
         }
         stream.seekp(offset_data,std::ios::beg);
         if (stream.bad()) {
-            throw runtime_error("Invalid file : " + _path);
+            throw runtime_err("Invalid file : " + _path);
         }
     }
 

@@ -47,14 +47,14 @@ public:
         data_f_t *d_f = static_cast<data_f_t *>(data);
         data_m_t d_m;
 
-        _data_m.clear();
+        this->_data_m.clear();
 
         for (uint32_t i = 0;i < pts;++i) {
             for (int j = 0;j < size;++j) {
                 d_m.offset[j] = d_f[i].offset[j];
             }
             d_m.temp_5 = float(d_f[i].temp[1]);
-            _data_m.push_back(d_m);
+            this->_data_m.push_back(d_m);
         }
     }
 

@@ -4,20 +4,16 @@ include( ../../../include/config.pri )
 
 LIBS += -lfftw3
 
-DESTDIR = ../$$DESTDIR
-
-win32 { LIBS += -lws2_32 }
+#win32 { LIBS += -lws2_32 }
 
 HEADERS += \
     ../../frontend.h \
-    ../../common/ftplib.h \
     ../arb_reader.h \
     spec.h \
     rf_driver.h \
     cal_file.h \
     dma_mgr.h \
     complex_sequence.h \
-    ftp.h \
     sp1401.h \
     sp1401_r1a.h \
     sp1401_r1b.h \
@@ -45,7 +41,6 @@ HEADERS += \
 
 SOURCES += \
     ../../frontend.cpp \
-    ../../common/ftplib.c \
     ../arb_reader.cpp \
     spec.cpp \
     rf_driver.cpp \

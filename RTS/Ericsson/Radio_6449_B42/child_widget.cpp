@@ -1,4 +1,5 @@
 #include "child_widget.h"
+#include <QAction>
 #include "ericsson_radio_6449_b42_widget.h"
 #include "cal_tx_vga.h"
 #include "cal_rx_rf_vga.h"
@@ -75,48 +76,46 @@ void ChildWidgets::init()
 
 void ChildWidgets::initMenu(QList<QMenu *> &menus)
 {
-    QAction *separator = nullptr;
+    // Device
+    actionInit = new QAction("Init(&I)");
+    actionInit->setStatusTip("Init Device");
 
-//    // Device
-//    actionInit = new QAction("Init(&I)",parent);
-//    actionInit->setStatusTip("Init Device");
-
-//    actionInitSilent = new QAction("Init Silent(&S)",parent);
-//    actionInitSilent->setStatusTip("Init Silent");
+    actionInitSilent = new QAction("Init Silent(&S)");
+    actionInitSilent->setStatusTip("Init Silent");
 
 //    connect(actionInit,SIGNAL(triggered(bool)),parent,SLOT(deviceInit()));
 //    connect(actionInitSilent,SIGNAL(triggered(bool)),parent,SLOT(deviceInitSilent()));
 
-//    actionExit = new QAction("Exit(&X)",parent);
-//    actionExit->setStatusTip("Exit");
+    QAction *separator = new QAction();
+    separator->setSeparator(true);
+
+    actionExit = new QAction("Exit(&X)");
+    actionExit->setStatusTip("Exit");
 //    connect(actionExit,SIGNAL(triggered(bool)),parent,SLOT(exit()));
 
-//    menuDevice = new QMenu("Device(&D)");
-//    menuDevice->addAction(actionInit);
-//    menuDevice->addAction(actionInitSilent);
+    menuDevice = new QMenu("Device(&D)");
+    menuDevice->addAction(actionInit);
+    menuDevice->addAction(actionInitSilent);
+    menuDevice->addAction(separator);
+    menuDevice->addAction(actionExit);
 
-//    separator = new QAction(parent);
-//    separator->setSeparator(true);
-//    menuDevice->addAction(separator);
-//    menuDevice->addAction(actionExit);
+    // Function
+    actionLogConfig = new QAction("Log Config(&L)");
+    actionLogViewer = new QAction("Log Viewer(&V)");
 
-//    // Function
-//    actionLogConfig = new QAction("Log Config(&L)",parent);
-//    actionLogViewer = new QAction("Log Viewer(&V)",parent);
+    menuFunction = new QMenu("Function(&F)");
+    menuFunction->addAction(actionLogConfig);
+    menuFunction->addAction(actionLogViewer);
 
-//    menuFunction = new QMenu("Function(&F)");
-//    menuFunction->addAction(actionLogConfig);
-//    menuFunction->addAction(actionLogViewer);
+    // About
+    actionAbout = new QAction("About(&A)");
 
-//    // About
-//    actionAbout = new QAction("About(&A)",parent);
+    menuHelp = new QMenu("Help(&H)");
+    menuHelp->addAction(actionAbout);
 
-//    menuHelp = new QMenu("Help(&H)");
-//    menuHelp->addAction(actionAbout);
-
-//    menus.push_back(menuDevice);
-//    menus.push_back(menuFunction);
-//    menus.push_back(menuHelp);
+    menus.push_back(menuDevice);
+    menus.push_back(menuFunction);
+    menus.push_back(menuHelp);
 }
 
 void ChildWidgets::initMainLogTabWidget()

@@ -5,6 +5,7 @@
 #include <QMetaEnum>
 #include <QObject>
 #include <QStringList>
+#include <QMenuBar>
 
 #ifdef QHELPER_DLL_EXPORT
     #define QHELPER_EXPORT Q_DECL_EXPORT
@@ -35,5 +36,7 @@ public:
     #include "device_types.h"
     ENUM_STRING_LIST(radio_system)
 };
+
+QHELPER_EXPORT void addMenu(QMenuBar *bar, QList<QMenu *> menus);
 
 #endif

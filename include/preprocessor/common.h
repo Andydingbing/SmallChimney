@@ -17,15 +17,15 @@
 #define INCLUDE_PREPROCESSOR_COMMON_H
 
 #include "warning.h"
-#include <boost/core/ignore_unused.hpp>
+//#include <boost/core/ignore_unused.hpp>
 
-using boost::ignore_unused;
+//using boost::ignore_unused;
 
 #define MACRO_ID(x) x
 
 #define PARAM_PICK_APPLY(macro,count) MACRO_ID(macro(count))
 
-#define NEED_SEMICOLON ignore_unused()
+#define NEED_SEMICOLON
 
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
 

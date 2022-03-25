@@ -5,17 +5,14 @@
 #define SN_WRONG 1	// sn read ok but wrong
 #define SN_RIGHT 2	// sn right
 
+#include "frontend.h"
 #include "libdriver.h"
+#include "cal_file.h"
 #include "sgpmm.h"
 #include "../arb_reader.h"
 #include "complex_sequence.h"
 #include "../test_data.hpp"
-#include "cal_file.h"
-#include <list>
-#include <boost/function.hpp>
-#include "freq_string.hpp"
 #include "traits.hpp"
-#include "frontend.h"
 
 const static float g_temp_star = 20.0f;
 const static float g_temp_stop = 70.0f;

@@ -11,7 +11,7 @@
 #define MODEL_HEADER(...) \
     int columnCount(const QModelIndex &parent) const \
     { \
-        ignore_unused(parent); return PP_COUNT(__VA_ARGS__); \
+        Q_UNUSED(parent); return PP_COUNT(__VA_ARGS__); \
     } \
     QVariant headerData(int section, Qt::Orientation orientation, int role) const \
     { \
@@ -68,7 +68,7 @@
 #define MODEL_DISPLAY_HEADER(...) \
     int columnCount(const QModelIndex &parent) const \
     { \
-        ignore_unused(parent); return PP_COUNT(__VA_ARGS__); \
+        Q_UNUSED(parent); return PP_COUNT(__VA_ARGS__); \
     } \
     QVariant headerData(int section, Qt::Orientation orientation, int role) const \
     { \

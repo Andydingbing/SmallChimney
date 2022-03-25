@@ -4,7 +4,6 @@
 #include "algo_math.hpp"
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/function.hpp>
 
 using namespace std;
 using namespace ns_starpoint;
@@ -51,14 +50,14 @@ int32_t sp1401::get_hw_ver(const char *sn,hw_ver_t &ver)
 string sp1401::hw_ver2str(hw_ver_t ver)
 {
     switch (ver) {
-        case HW_ERROR : return string("HW_ERROR");
-        case R1A      : return string("R1A");
-        case R1B      : return string("R1B");
-        case R1C      : return string("R1C");
-        case R1D      : return string("R1D");
-        case R1E      : return string("R1E");
-        case R1F      : return string("R1F");
-        case HW_VER_SP9500_MAX   : return string("unknown version");
+    case R1A : return string("R1A");
+    case R1B : return string("R1B");
+    case R1C : return string("R1C");
+    case R1D : return string("R1D");
+    case R1E : return string("R1E");
+    case R1F : return string("R1F");
+    case HW_ERROR : return string("HW_ERROR");
+    case HW_VER_SP9500_MAX : return string("unknown version");
     }
     return string("unknown version");
 }
@@ -66,14 +65,14 @@ string sp1401::hw_ver2str(hw_ver_t ver)
 string sp1401::hw_ver2sn_header(hw_ver_t ver)
 {
     switch (ver) {
-        case HW_ERROR : return string("SP1401ERR");
-        case R1A : return string("SP1401R1A");
-        case R1B : return string("SP1401R1B");
-        case R1C : return string("SP1401R1C");
-        case R1D : return string("SP1401R1D");
-        case R1E : return string("SP1401R1E");
-        case R1F : return string("SP1401R1F");
-        case HW_VER_SP9500_MAX : return string("SP1401ERR");
+    case R1A : return string("SP1401R1A");
+    case R1B : return string("SP1401R1B");
+    case R1C : return string("SP1401R1C");
+    case R1D : return string("SP1401R1D");
+    case R1E : return string("SP1401R1E");
+    case R1F : return string("SP1401R1F");
+    case HW_ERROR : return string("SP1401ERR");
+    case HW_VER_SP9500_MAX : return string("SP1401ERR");
     }
     return string("SP1401ERR");
 }

@@ -19,7 +19,6 @@ test \
 UI_DIR = ./ui
 
 LIBS += \
--llog \
 -ldriver \
 -linstrument \
 -lreport \
@@ -29,6 +28,8 @@ LIBS += \
 -lericsson_radio_4415_b3 \
 -lericsson_radio_6449_b42
 #-lSP9500
+
+LIBS += $$dependLib(log)
 
 win32-g++ {
     DEFINES += QWT_DLL

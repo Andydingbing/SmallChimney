@@ -76,7 +76,7 @@ void Q_Test_TX_ACLR_Widget::prepare(const bool is_exp)
 
 void Q_Test_TX_ACLR_Widget::uiUpdate(const int first,const int last,const int kase)
 {
-    ignore_unused(last);
+    Q_UNUSED(last);
 
     ui->tableView->selectRow(first);
 }

@@ -62,7 +62,7 @@ void Q_Test_RX_Gain_Accuracy_Widget::prepare(const bool is_exp)
 
 void Q_Test_RX_Gain_Accuracy_Widget::uiUpdate(const int first,const int last,const int kase)
 {
-    ignore_unused(first);
+    Q_UNUSED(first);
 //    result->lineEditAccu->setText(QString("%1").arg(data.table->at(0).accu()));
     ui->tableView->selectRow(last);
 }

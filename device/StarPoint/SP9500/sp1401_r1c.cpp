@@ -1,4 +1,4 @@
- #include "sp1401_r1c.h"
+#include "sp1401_r1c.h"
 #include "../chip/reg_def_sp9500.h"
 #include <math.h>
 #include "sleep_common.h"

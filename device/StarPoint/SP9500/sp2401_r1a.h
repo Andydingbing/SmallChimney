@@ -4,7 +4,6 @@
 #include "libdriver.h"
 #include "traits.hpp"
 #include "cal_table_rx_filter.h"
-#include <boost/smart_ptr.hpp>
 
 namespace ns_starpoint {
 namespace ns_sp9500 {
@@ -12,7 +11,6 @@ namespace ns_sp9500 {
 class API sp2401_r1a : ::noncopyable
 {
 public:
-    typedef boost::shared_ptr<sp2401_r1a> sptr;
     sp2401_r1a(uint32_t rf_idx);
 
 public:

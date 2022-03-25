@@ -24,6 +24,7 @@ public:
         sizePolicy.setHeightForWidth(this->sizePolicy().hasHeightForWidth());
         setSizePolicy(sizePolicy);
         setMinimumSize(QSize(0, 0));
+        setMaximumSize(QSize(280, 16777215));
 
         verticalLayout = new QVBoxLayout(this);
         verticalLayout->setSpacing(0);

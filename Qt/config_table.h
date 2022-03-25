@@ -73,7 +73,7 @@ class QHELPER_EXPORT Q_Config_Table_Delegate_Kase : public Q_Config_Table_Delega
 {
 public:
     Q_Config_Table_Delegate_Kase(QObject *parent = nullptr);
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 public:
     FIRST_CONFIG_WIDGET(QLabel,labelConfig)
@@ -83,7 +83,7 @@ class QHELPER_EXPORT Q_Result_Table_Delegate_Kase : public Q_Config_Table_Delega
 {
 public:
     Q_Result_Table_Delegate_Kase(QObject *parent = nullptr);
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 public:
     FIRST_CONFIG_WIDGET(QLabel,labelResult)
