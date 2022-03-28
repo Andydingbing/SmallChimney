@@ -2,9 +2,9 @@
 #define RTS_HELPER_GLOBAL_H
 
 #ifdef RTS_HELPER_DLL_EXPORT
-    #define RTS_HELPER_EXPORT        Q_DECL_EXPORT
+    #define RTS_HELPER_EXPORT Q_DECL_EXPORT
 #else
-    #define RTS_HELPER_EXPORT        Q_DECL_IMPORT
+    #define RTS_HELPER_EXPORT Q_DECL_IMPORT
 #endif
 
 #include "liblog.h"

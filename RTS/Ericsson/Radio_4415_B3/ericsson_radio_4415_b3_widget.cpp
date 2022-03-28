@@ -2,9 +2,6 @@
 #include "ui_ericsson_radio_4415_b3.h"
 #include "global.h"
 
-using namespace ns_ericsson;
-using namespace ns_radio_4415;
-
 Q_4415_Widget::Q_4415_Widget(QWidget *parent) :
     Q_Widget(parent),
     ui(new Ui::Q_Ericsson_4415_Widget)

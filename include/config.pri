@@ -12,7 +12,7 @@ LIB_DIR_PYTHON = .
 LIB_DIR_FMTLIB = .
 
 
-defineReplace (dependLib) {
+defineReplace(dependLib) {
     win32-g++       { return ($$sprintf("-l$$1%1",".dll")) }
     win32-clang-g++ { return ($$sprintf("-l$$1%1",".dll")) }
     win32-msvc      { return ($$-l$$1) }

@@ -1,8 +1,6 @@
 #include "cal_rx_rf_vga.h"
 
 using namespace std;
-using namespace ns_ericsson;
-using namespace ns_radio_4415;
 
 void Q_Cal_RX_RF_VGA_Thread::kase()
 {

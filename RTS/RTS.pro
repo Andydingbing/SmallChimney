@@ -1,20 +1,13 @@
 include(../include/config.pri)
 
-#include(StarPoint/SP9500.pri)
-
 QT += core gui network svg
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-DEFINES += RD_EXCEPTION
+DEFINES += RD_EXCEPTION QWT_DLL
 
 TARGET = RTS
 TEMPLATE = app
 RC_ICONS = RTS.ico
-
-INCLUDEPATH += \
-chip \
-test \
-../device
 
 UI_DIR = ./ui
 
@@ -32,21 +25,16 @@ LIBS += \
 LIBS += $$dependLib(log)
 
 win32-g++ {
-    DEFINES += QWT_DLL
     LIBS += -lqwt-qt5.dll
 }
 
 win32-clang-g++ {
-    DEFINES += QWT_DLL
     LIBS += -lqwt-qt5.dll
 }
 
 win32-msvc {
-    equals(VAR_DEBUG_RELEASE, "debug")   { LIBS += -lqwtd }
-    equals(VAR_DEBUG_RELEASE, "release") { LIBS += -lqwt }
+    LIBS += -lqwt
 }
-
-unix  { LIBS += -lrsnrpz -lfftw3 -lqwt}
 
 HEADERS += \
     global.h \

@@ -1,8 +1,5 @@
 #include "test_rx_gain_accuracy.h"
 
-using namespace ns_ericsson;
-using namespace ns_radio_4415;
-
 void Q_Test_RX_Gain_Accuracy_Thread::kase()
 {
     KASE_THREAD_START("RX Gain Accuracy",(1));

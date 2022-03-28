@@ -3,9 +3,6 @@
 
 #include "global.h"
 
-namespace ns_ericsson {
-namespace ns_radio_4415 {
-
 class Q_4415_Widget : public Q_Widget
 {
     Q_OBJECT
@@ -51,8 +48,5 @@ private slots:
 private:
     Ui::Q_Ericsson_4415_Widget *ui;
 };
-
-} // namespace ns_radio_4415
-} // namespace ns_ericsson
 
 #endif

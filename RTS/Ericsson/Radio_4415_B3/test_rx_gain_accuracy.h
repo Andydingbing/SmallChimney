@@ -1,10 +1,7 @@
-#ifndef ERICSSON_RADIO_4415_B3_TEST_RX_GAIN_ACCURACY_WIDGET_H
-#define ERICSSON_RADIO_4415_B3_TEST_RX_GAIN_ACCURACY_WIDGET_H
+#ifndef TEST_RX_GAIN_ACCURACY_WIDGET_H
+#define TEST_RX_GAIN_ACCURACY_WIDGET_H
 
 #include "global.h"
-
-namespace ns_ericsson {
-namespace ns_radio_4415 {
 
 KASE_MODEL(RX_Gain_Accu,"Branch","Power","Time")
 
@@ -22,8 +19,5 @@ KASE_RESULT(
 KASE_THREAD(Test_RX_Gain_Accuracy)
 
 KASE_WIDGET_SUFFIX()
-
-} // namespace ns_radio_4415
-} // namespace ns_ericsson
 
 #endif

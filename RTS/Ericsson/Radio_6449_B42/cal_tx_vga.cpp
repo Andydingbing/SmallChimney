@@ -1,8 +1,5 @@
 #include "cal_tx_vga.h"
 
-using namespace ns_ericsson;
-using namespace ns_radio_6449;
-
 void Q_Cal_TX_VGA_Thread::kase()
 {
     KASE_THREAD_START("TX VGA",(1));

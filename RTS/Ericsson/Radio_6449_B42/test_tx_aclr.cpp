@@ -1,8 +1,6 @@
 #include "test_tx_aclr.h"
 
 using namespace std;
-using namespace ns_ericsson;
-using namespace ns_radio_6449;
 
 void Q_Test_TX_ACLR_Thread::kase()
 {

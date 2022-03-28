@@ -12,4 +12,7 @@
 #include "ui_test_rx_gain_accuracy.h"
 #include "ui_test_tx_aclr.h"
 
+using namespace ns_ericsson;
+using namespace ns_radio_4415;
+
 #endif

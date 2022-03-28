@@ -4,9 +4,6 @@
 #include "global.h"
 #include <QMetaEnum>
 
-namespace ns_ericsson {
-namespace ns_radio_6449 {
-
 class Q_6449_Widget : public Q_Widget
 {
     Q_OBJECT
@@ -52,8 +49,5 @@ private slots:
 private:
     Ui::Q_Ericsson_6449_Widget *ui;
 };
-
-} // namespace ns_radio_6449
-} // namespace ns_ericsson
 
 #endif

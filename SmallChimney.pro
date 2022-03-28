@@ -3,7 +3,7 @@ TEMPLATE = subdirs
 DEVICES += \
 device/Ericsson/Radio_4415/device_ericsson_radio_4415.pro \
 device/Ericsson/Radio_6449/device_ericsson_radio_6449.pro \
-device/StarPoint/SP9500
+device/StarPoint/SP9500/device_starpoint_sp9500.pro
 
 SUBDIRS += \
 log \

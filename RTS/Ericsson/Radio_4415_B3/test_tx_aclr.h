@@ -1,10 +1,7 @@
-#ifndef ERICSSON_RADIO_4415_B3_TEST_TX_ACLR_WIDGET_H
-#define ERICSSON_RADIO_4415_B3_TEST_TX_ACLR_WIDGET_H
+#ifndef TEST_TX_ACLR_WIDGET_H
+#define TEST_TX_ACLR_WIDGET_H
 
 #include "global.h"
-
-namespace ns_ericsson {
-namespace ns_radio_4415 {
 
 KASE_MODEL(TX_ACLR,"-10M","-5M","5M","10M","Time")
 
@@ -22,8 +19,5 @@ KASE_RESULT(
 KASE_THREAD(Test_TX_ACLR)
 
 KASE_WIDGET_SUFFIX()
-
-} // namespace ns_radio_4415
-} // namespace ns_ericsson
 
 #endif
