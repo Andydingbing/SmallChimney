@@ -91,6 +91,17 @@ win32-msvc {
     } else {
         LIBS += -lfmtd
     }
+
+    INCLUDEPATH += \
+              $$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
+           ../$$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
+        ../../$$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
+              $$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
+           ../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
+        ../../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
+              $$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
+           ../$$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
+        ../../$$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
 }
 
 linux-g++ {
@@ -122,15 +133,6 @@ INCLUDEPATH += \
           $$VAR_INCLUDE_ROOT/include \
        ../$$VAR_INCLUDE_ROOT/include \
     ../../$$VAR_INCLUDE_ROOT/include \
-          $$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
-       ../$$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
-    ../../$$VAR_INCLUDE_ROOT/include/boost/$$BOOST_VER \
-          $$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
-       ../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
-    ../../$$VAR_INCLUDE_ROOT/include/fmt/$$FMTLIB_VER \
-          $$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
-       ../$$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
-    ../../$$VAR_INCLUDE_ROOT/include/qwt/$$QWT_VER \
           $$VAR_INCLUDE_ROOT/log \
        ../$$VAR_INCLUDE_ROOT/log \
     ../../$$VAR_INCLUDE_ROOT/log \

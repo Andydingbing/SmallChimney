@@ -81,13 +81,27 @@ void setTree(QTreeWidget &tree, const QList<TreeChildItem *> &childItems)
 }
 
 
-ChildWidgetHelper::ChildWidgetHelper(QTreeWidget *treeWidget, QTabWidget *tabWidget) : QObject()
+ChildWidgetHelper::ChildWidgetHelper() : QObject()
 {
-    tree = treeWidget;
-    tab = tabWidget;
+    setTreeWidget(nullptr);
+    setTabWidget(nullptr);
 }
 
+ChildWidgetHelper::ChildWidgetHelper(QTreeWidget *treeWidget, QTabWidget *tabWidget) : QObject()
+{
+    setTreeWidget(treeWidget);
+    setTabWidget(tabWidget);
+}
 
+void ChildWidgetHelper::setTreeWidget(QTreeWidget *treeWidget)
+{
+    tree = treeWidget;
+}
+
+void ChildWidgetHelper::setTabWidget(QTabWidget *tabWidget)
+{
+    tab = tabWidget;
+}
 
 quint32 parents(const QTreeWidgetItem *item)
 {

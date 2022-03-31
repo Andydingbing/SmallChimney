@@ -12,6 +12,7 @@ class API ChildWidgets : public ChildWidgetHelper
     Q_OBJECT
 
 public:
+    ChildWidgets();
     ChildWidgets(QTreeWidget *treeWidget, QTabWidget *tabWidget);
 
     void init();
@@ -42,7 +43,12 @@ private:
     QAction *actionAbout;
 
     Q_Table_View *comLogTableView;
+
+public:
+    static ChildWidgets *create() { return new ChildWidgets(); }
 };
+
+BOOST_DLL_ALIAS(ChildWidgets::create,create_plugin)
 
 } // namespace ns_radio_6449
 } // namespace ns_ericsson

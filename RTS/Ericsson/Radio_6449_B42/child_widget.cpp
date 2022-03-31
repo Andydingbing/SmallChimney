@@ -48,8 +48,12 @@ static int32_t initCallback()
     return 0;
 }
 
-ChildWidgets::ChildWidgets(QTreeWidget *treeWidget, QTabWidget *tabWidget) :
-    ChildWidgetHelper(treeWidget,tabWidget)
+ChildWidgets::ChildWidgets() : ChildWidgetHelper()
+{
+
+}
+
+ChildWidgets::ChildWidgets(QTreeWidget *treeWidget, QTabWidget *tabWidget) : ChildWidgetHelper(treeWidget,tabWidget)
 {
 
 }

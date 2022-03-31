@@ -11,12 +11,16 @@
 #include <QMenu>
 #include <QStyleFactory>
 #include "device.h"
-#include "Ericsson/Radio_4415_B3/child_widget.h"
+//#include "Ericsson/Radio_4415_B3/child_widget.h"
 #include "Ericsson/Radio_6449_B42/child_widget.h"
 #include "StarPoint/SP9500/starpoint_sp9500_child_widget.h"
 #include "log_model.hpp"
 #include "device_init_thread.h"
 #include "scroll_lineedit.h"
+
+#include <boost/dll/import.hpp>
+#include <boost/dll/shared_library.hpp>
+#include <boost/dll/runtime_symbol_info.hpp>
 
 #if (QT_VERSION < QT_VERSION_CHECK(5,0,0))
     #define setSectionResizeMode setResizeMode
@@ -94,9 +98,28 @@ MainWindow::MainWindow(QWidget *parent) :
     mainLayout->addWidget(mainSplitter);
     ui->centralWidget->setLayout(mainLayout);
 
-    childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(mainTree,mainTab));
+
+
+
+    boost::filesystem::path shared_library_path(boost::dll::program_location());
+    shared_library_path = shared_library_path.parent_path();
+    shared_library_path /= "ericsson_radio_4415_b3";
+    typedef ChildWidgetHelper* (pluginapi_create_t)();
+    boost::function<pluginapi_create_t> creator;
+
+    creator = boost::dll::import_alias<pluginapi_create_t>(
+        shared_library_path,
+        "create_plugin",
+        boost::dll::load_mode::append_decorations
+    );
+
+    static ChildWidgetHelper* plugin = creator();
+    plugin->setTreeWidget(mainTree);
+    plugin->setTabWidget(mainTab);
+    plugin->init();
+//    childWidgets.push_back(new ns_ericsson::ns_radio_4415::ChildWidgets(mainTree,mainTab));
+    childWidgets.push_back(plugin);
     childWidgets.push_back(new ns_ericsson::ns_radio_6449::ChildWidgets(mainTree,mainTab));
-//    childWidgets.push_back(new ns_starpoint::ns_sp9500::ChildWidgets(this));
 
     Log.set_default();
 }

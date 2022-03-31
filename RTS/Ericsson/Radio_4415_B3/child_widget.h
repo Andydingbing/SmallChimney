@@ -12,7 +12,9 @@ class API ChildWidgets : public ChildWidgetHelper
     Q_OBJECT
 
 public:
+    ChildWidgets();
     ChildWidgets(QTreeWidget *treeWidget, QTabWidget *tabWidget);
+    ~ChildWidgets();
 
     void init();
     void initMenu(QList<QMenu *> &menus);
@@ -42,9 +44,15 @@ private:
     QAction *actionAbout;
 
     Q_Table_View *comLogTableView;
+
+public:
+    static ChildWidgets *create();
 };
 
 } // namespace ns_radio_4415
 } // namespace ns_ericsson
+
+//BOOST_DLL_ALIAS(ns_ericsson::ns_radio_4415::ChildWidgets::create,create_plugin)
+extern "C" API const void *create_plugin;
 
 #endif

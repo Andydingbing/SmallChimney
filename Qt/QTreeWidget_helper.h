@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <boost/dll/alias.hpp>
 
 class QTreeWidget_helper
 {
@@ -68,7 +69,13 @@ class QHELPER_EXPORT ChildWidgetHelper : public QObject
     Q_OBJECT
 
 public:
+    ChildWidgetHelper();
     ChildWidgetHelper(QTreeWidget *treeWidget, QTabWidget *tabWidget);
+    virtual ~ChildWidgetHelper() {}
+
+    void setTreeWidget(QTreeWidget *treeWidget);
+    void setTabWidget(QTabWidget *tabWidget);
+
     Q_Widget *currentWidget(quint32 tabIndex);
     Qt::CheckState currentTreeItemCheckState();
 

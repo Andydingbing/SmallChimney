@@ -8,6 +8,9 @@
 using namespace ns_ericsson;
 using namespace ns_radio_4415;
 
+
+const void *create_plugin = reinterpret_cast<const void*>(reinterpret_cast<intptr_t>(&ChildWidgets::create));
+
 MODEL_PREFIX(Com_Log_Model,"","Time","Write","Read","Result");
 MODEL_ROWCNT(Radio.com_loggers());
 MODEL_COLUMN(0,QString("%1").arg(index.row()));
@@ -47,10 +50,27 @@ static int32_t initCallback()
     return 0;
 }
 
+ChildWidgets *ChildWidgets::create()
+{
+    static ChildWidgets cw;
+    LoggerMsg.stdprintf("%x\n",&cw);
+    return &cw;
+}
+
+ChildWidgets::ChildWidgets() : ChildWidgetHelper()
+{
+    LoggerMsg.stdprintf("Enter module\n");
+}
+
 ChildWidgets::ChildWidgets(QTreeWidget *treeWidget, QTabWidget *tabWidget) :
     ChildWidgetHelper(treeWidget,tabWidget)
 {
 
+}
+
+ChildWidgets::~ChildWidgets()
+{
+    LoggerMsg.stdprintf("Leave module\n");
 }
 
 void ChildWidgets::init()
@@ -70,7 +90,7 @@ void ChildWidgets::init()
     setTree(*tree,treeChildItemsBuiltIn);
 
 //    initMenu();
-    initMainLogTabWidget();
+//    initMainLogTabWidget();
 }
 
 void ChildWidgets::initMenu(QList<QMenu *> &menus)
