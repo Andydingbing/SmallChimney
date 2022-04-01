@@ -11,8 +11,10 @@ LIBS += \
 -lsequence -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets
 
 HEADERS += \
-    global.h
+    global.h \
+    QTreeWidget_helper.h
 
 SOURCES += \
-    global.cpp
+    global.cpp \
+    QTreeWidget_helper.cpp
 

@@ -51,12 +51,40 @@ uint32_t trim_front(char **ptr,container_t<char> &args);
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_front(const char* const src,const char **ptr,container_t<char> &args);
 
-uint32_t trim_front(char **ptr,const size_t n,...);
+template<typename T = size_t,typename traits_t = traits_int<T>>
+uint32_t trim_front(char **ptr,const T n,...)
+{
+    std::list<char> args;
+    va_list ap;
+
+    va_start(ap,n);
+
+    for (size_t i = 0;i < n;++i) {
+        args.push_back(char(va_arg(ap,int)));
+    }
+
+    va_end(ap);
+    return trim_front(ptr,args);
+}
 
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_front(char *ptr,container_t<char> &args);
 
-uint32_t trim_front(char *ptr,const size_t n,...);
+template<typename T = size_t,typename traits_t = traits_int<T>>
+uint32_t trim_front(char *ptr,const T n,...)
+{
+    std::list<char> args;
+    va_list ap;
+
+    va_start(ap,n);
+
+    for (size_t i = 0;i < n;++i) {
+        args.push_back(char(va_arg(ap,int)));
+    }
+
+    va_end(ap);
+    return trim_front(ptr,args);
+}
 
 template<typename str_t,
          template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
@@ -69,7 +97,8 @@ uint32_t trim_front(str_t &str,container_t<char> &args)
     return n;
 }
 
-uint32_t trim_front(std::string &str,const size_t n,...)
+template<typename T = size_t,typename traits_t = traits_int<T>>
+uint32_t trim_front(std::string &str,const T n,...)
 {
     std::list<char> args;
     va_list ap;
@@ -81,7 +110,7 @@ uint32_t trim_front(std::string &str,const size_t n,...)
     }
 
     va_end(ap);
-    return trim_front(str,args);
+    return trim_front<std::string>(str,args);
 }
 
 
@@ -103,14 +132,43 @@ uint32_t trim_back(char **ptr,container_t<char> &args);
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_back(const char* const src,const char **ptr,container_t<char> &args);
 
-uint32_t trim_back(char **ptr,const size_t n,...);
+template<typename T = size_t,typename traits_t = traits_int<T>>
+uint32_t trim_back(char **ptr,const T n,...)
+{
+    std::list<char> args;
+    va_list ap;
+
+    va_start(ap,n);
+
+    for (size_t i = 0;i < n;++i) {
+        args.push_back(char(va_arg(ap,int)));
+    }
+
+    va_end(ap);
+    return trim_back(ptr,args);
+}
 
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_back(char *ptr,container_t<char> &args);
 
-uint32_t trim_back(char *ptr,const size_t n,...);
+template<typename T = size_t,typename traits_t = traits_int<T>>
+uint32_t trim_back(char *ptr,const T n,...)
+{
+    std::list<char> args;
+    va_list ap;
 
-uint32_t trim_back(std::string &str,std::list<char> &args)
+    va_start(ap,n);
+
+    for (size_t i = 0;i < n;++i) {
+        args.push_back(char(va_arg(ap,int)));
+    }
+
+    va_end(ap);
+    return trim_back(ptr,args);
+}
+
+template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t = std::list>
+uint32_t trim_back(std::string &str,container_t<char> &args)
 {
     char *ptr = const_cast<char *>(str.c_str());
     uint32_t n = trim_back(ptr,args);
@@ -121,7 +179,8 @@ uint32_t trim_back(std::string &str,std::list<char> &args)
     return n;
 }
 
-uint32_t trim_back(std::string &str,const size_t n,...)
+template<typename T = size_t,typename traits_t = traits_int<T>>
+uint32_t trim_back(std::string &str,const T n,...)
 {
     std::list<char> args;
     va_list ap;

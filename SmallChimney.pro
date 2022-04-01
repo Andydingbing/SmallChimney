@@ -17,8 +17,7 @@ RTS \
 RTS_helper \
 DDT \
 $$DEVICES \
-RTS/Ericsson/Radio_4415_B3/ericsson_radio_4415_b3.pro \
-RTS/Ericsson/Radio_6449_B42/ericsson_radio_6449_b42.pro
+RTS/Ericsson/Radio_4415_B3/ericsson_radio_4415_b3.pro
 
 instrument.depends = driver
 report.depends = log

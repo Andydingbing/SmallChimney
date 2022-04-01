@@ -7,7 +7,7 @@
 namespace ns_ericsson {
 namespace ns_radio_6449 {
 
-class API ChildWidgets : public ChildWidgetHelper
+class API ChildWidgets : public ChildWidgetHelper, public PlugIn
 {
     Q_OBJECT
 

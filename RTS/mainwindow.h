@@ -2,7 +2,7 @@
 #define MAIN_WINDOW_H
 
 #include "../RTS_helper/global.h"
-#include "../Qt/QTreeWidget_helper.h"
+#include "../RTS_helper/QTreeWidget_helper.h"
 #include "global.h"
 #include <QMainWindow>
 #include <QSplitter>
@@ -44,8 +44,8 @@ public:
     QLabel *labelVerRF;
 
 public:
-    QList<ChildWidgetHelper *> childWidgets;
-    ChildWidgetHelper *currentWidgets;
+    QList<PlugIn *> childWidgets;
+    PlugIn *currentWidgets;
 
 public:
     QMsgLogModel *msgLogModel;

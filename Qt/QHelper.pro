@@ -31,7 +31,6 @@ HEADERS += \
     table_model.h \
     winthread.h \
     thread_widget.h \
-    QTreeWidget_helper.h \
     qwt_plot_helper.h
 
 SOURCES += \
@@ -40,6 +39,5 @@ SOURCES += \
     table_model.cpp \
     winthread.cpp \
     thread_widget.cpp \
-    QTreeWidget_helper.cpp \
     qwt_plot_helper.cpp
 

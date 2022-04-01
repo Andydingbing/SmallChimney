@@ -8,8 +8,11 @@
 using namespace ns_ericsson;
 using namespace ns_radio_4415;
 
+BOOST_DLL_ALIAS(ns_ericsson::ns_radio_4415::ChildWidgets::create,create_plugin)
 
-const void *create_plugin = reinterpret_cast<const void*>(reinterpret_cast<intptr_t>(&ChildWidgets::create));
+//const void *create_plugin = reinterpret_cast<const void*>(&ChildWidgets::create);
+
+//const void *create_plugin = reinterpret_cast<const void*>(reinterpret_cast<intptr_t>(&ChildWidgets::create));
 
 MODEL_PREFIX(Com_Log_Model,"","Time","Write","Read","Result");
 MODEL_ROWCNT(Radio.com_loggers());
@@ -52,20 +55,14 @@ static int32_t initCallback()
 
 ChildWidgets *ChildWidgets::create()
 {
-    static ChildWidgets cw;
-    LoggerMsg.stdprintf("%x\n",&cw);
-    return &cw;
+    ChildWidgets *cw = new ChildWidgets();
+    LoggerMsg.stdprintf("%x\n",cw);
+    return cw;
 }
 
-ChildWidgets::ChildWidgets() : ChildWidgetHelper()
+ChildWidgets::ChildWidgets() : PlugIn()
 {
     LoggerMsg.stdprintf("Enter module\n");
-}
-
-ChildWidgets::ChildWidgets(QTreeWidget *treeWidget, QTabWidget *tabWidget) :
-    ChildWidgetHelper(treeWidget,tabWidget)
-{
-
 }
 
 ChildWidgets::~ChildWidgets()
@@ -86,10 +83,9 @@ void ChildWidgets::init()
     DECL_TREE("Calibration,TX-VGA",Q_Cal_TX_VGA_Widget,Radio.channels());
     DECL_TREE("Calibration,RX-RF VGA",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
 
-    treeChildItems = treeChildItemsBuiltIn;
-    setTree(*tree,treeChildItemsBuiltIn);
+    _treeChildItems = _treeChildItemsBuiltIn;
+//    setTree(*tree,treeChildItemsBuiltIn);
 
-//    initMenu();
 //    initMainLogTabWidget();
 }
 
@@ -150,15 +146,10 @@ void ChildWidgets::initMainLogTabWidget()
 
 //    parent->mainLogTab->addTab(comLogTableView,"Com");
 
-    connect(this,SIGNAL(addComLogger(int)),comLogModel,SLOT(update(int)));
-    connect(this,SIGNAL(addComLogger(int)),this,SLOT(addComLoggerTableView(int)));
+//    QObject::connect(this,SIGNAL(addComLogger(int)),comLogModel,SLOT(update(int)));
+//    QObject::connect(this,SIGNAL(addComLogger(int)),this,SLOT(addComLoggerTableView(int)));
 
     Radio.set_log_callback(ChildWidgets::addComLoggerCallback);
-}
-
-void ChildWidgets::mainTabCurrentChanged(int index)
-{
-
 }
 
 void ChildWidgets::addComLoggerCallback()
@@ -166,9 +157,9 @@ void ChildWidgets::addComLoggerCallback()
 //    emit addComLogger(Radio.com_loggers());
 }
 
-void ChildWidgets::addComLoggerTableView(int row)
-{
-    comLogTableView->scrollToBottom();
-    comLogTableView->selectRow(row - 1);
-    comLogTableView->resizeRowToContents(row - 1);
-}
+//void ChildWidgets::addComLoggerTableView(int row)
+//{
+//    comLogTableView->scrollToBottom();
+//    comLogTableView->selectRow(row - 1);
+//    comLogTableView->resizeRowToContents(row - 1);
+//}

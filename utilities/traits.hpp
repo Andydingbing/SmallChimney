@@ -89,4 +89,4 @@ template<> class traits_uint<uint16_t> { typedef uint16_t data_t; };
 template<> class traits_uint<uint32_t> { typedef uint32_t data_t; };
 template<> class traits_uint<uint64_t> { typedef uint64_t data_t; };
 
-#endif // RD_UTILITIES_TRAITS_H
+#endif

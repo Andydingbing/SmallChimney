@@ -154,6 +154,9 @@ INCLUDEPATH += \
           ../Qt \
        ../../Qt \
     ../../../Qt \
+          ../RTS_helper \
+       ../../RTS_helper \
+    ../../../RTS_helper \
     ./chip \
     ../device/chip \
     ./common \

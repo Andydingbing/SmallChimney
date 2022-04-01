@@ -51,21 +51,6 @@ uint32_t trim_front(const char* const src,const char **ptr,container_t<char> &ar
     return trim_front(&ptr,args);
 }
 
-uint32_t trim_front(char **ptr,const size_t n,...)
-{
-    std::list<char> args;
-    va_list ap;
-
-    va_start(ap,n);
-
-    for (size_t i = 0;i < n;++i) {
-        args.push_back(char(va_arg(ap,int)));
-    }
-
-    va_end(ap);
-    return trim_front(ptr,args);
-}
-
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_front(char *ptr,container_t<char> &args)
 {
@@ -74,21 +59,6 @@ uint32_t trim_front(char *ptr,container_t<char> &args)
 
     memcpy(ptr,p,strlen(p) + 1);
     return n;
-}
-
-uint32_t trim_front(char *ptr,const size_t n,...)
-{
-    std::list<char> args;
-    va_list ap;
-
-    va_start(ap,n);
-
-    for (size_t i = 0;i < n;++i) {
-        args.push_back(char(va_arg(ap,int)));
-    }
-
-    va_end(ap);
-    return trim_front(ptr,args);
 }
 
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
@@ -123,21 +93,6 @@ uint32_t trim_back(const char* const src,const char **ptr,container_t<char> &arg
     return trim_back(&ptr,args);
 }
 
-uint32_t trim_back(char **ptr,const size_t n,...)
-{
-    std::list<char> args;
-    va_list ap;
-
-    va_start(ap,n);
-
-    for (size_t i = 0;i < n;++i) {
-        args.push_back(char(va_arg(ap,int)));
-    }
-
-    va_end(ap);
-    return trim_back(ptr,args);
-}
-
 template<template<typename T = char,typename allocator_t = std::allocator<T>> class container_t>
 uint32_t trim_back(char *ptr,container_t<char> &args)
 {
@@ -150,22 +105,6 @@ uint32_t trim_back(char *ptr,container_t<char> &args)
 
     return n;
 }
-
-uint32_t trim_back(char *ptr,const size_t n,...)
-{
-    std::list<char> args;
-    va_list ap;
-
-    va_start(ap,n);
-
-    for (size_t i = 0;i < n;++i) {
-        args.push_back(char(va_arg(ap,int)));
-    }
-
-    va_end(ap);
-    return trim_back(ptr,args);
-}
-
 
 template<typename seperator_string_t,
          typename result_string_t,

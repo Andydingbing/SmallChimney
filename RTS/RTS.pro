@@ -17,8 +17,7 @@ LIBS += \
 -lreport \
 -lsequence \
 -lQHelper \
--lRTS_helper \
--lericsson_radio_6449_b42
+-lRTS_helper
 
 LIBS += $$dependLib(log)
 
