@@ -19,12 +19,12 @@ void itemList(QTreeWidgetItem *item, QList<QTreeWidgetItem *> &list)
     }
 }
 
-QList<QTreeWidgetItem *> itemList(QTreeWidget &widget)
+QList<QTreeWidgetItem *> itemList(QTreeWidget *tree)
 {
     QList<QTreeWidgetItem *> list;
 
-    for (int i = 0;i < widget.topLevelItemCount();++i) {
-        itemList(widget.topLevelItem(i),list);
+    for (int i = 0;i < tree->topLevelItemCount();++i) {
+        itemList(tree->topLevelItem(i),list);
     }
 
     return list;
@@ -101,14 +101,14 @@ bool compare(const list<string> &stringList,const QTreeWidgetItem *item)
     return true;
 }
 
-void setTree(QTreeWidget &tree, const QList<TreeChildItem *> &childItems)
+void setTree(QTreeWidget *tree, const QList<TreeChildItem *> *childItems)
 {
     QList<TreeChildItem *>::const_iterator iterCI;
     QList<QTreeWidgetItem *>::iterator iterItem;
     QList<QTreeWidgetItem *> rootItems;
     list<string>::const_iterator iterStr;
 
-    for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
+    for (iterCI = childItems->constBegin();iterCI != childItems->constEnd();++iterCI) {
         for (iterItem = rootItems.begin();iterItem != rootItems.end();++iterItem) {
             if (*(*iterCI)->stringList.begin() == (*iterItem)->text(0).toStdString()) {
                 break;
@@ -116,14 +116,14 @@ void setTree(QTreeWidget &tree, const QList<TreeChildItem *> &childItems)
         }
         if (iterItem == rootItems.end()) {
             QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
-            QTreeWidgetItem *rootItem = new QTreeWidgetItem(&tree,QStringList(rootItemText));
+            QTreeWidgetItem *rootItem = new QTreeWidgetItem(tree,QStringList(rootItemText));
             rootItem->setFlags(rootItem->flags() | Qt::ItemIsAutoTristate);
             rootItem->setCheckState(0,Qt::Unchecked);
             rootItems.append(rootItem);
         }
     }
 
-    for (iterCI = childItems.constBegin();iterCI != childItems.constEnd();++iterCI) {
+    for (iterCI = childItems->constBegin();iterCI != childItems->constEnd();++iterCI) {
         QString rootItemText = QString::fromStdString(*((*iterCI)->stringList.begin()));
         QTreeWidgetItem *root = rootItem(rootItemText,rootItems);
 
@@ -134,7 +134,7 @@ void setTree(QTreeWidget &tree, const QList<TreeChildItem *> &childItems)
         }
     }
 
-    tree.expandAll();
+    tree->expandAll();
 }
 
 Q_Widget *currentWidget(QTreeWidget *tree, QList<TreeChildItem *> *items, quint32 index)
@@ -152,6 +152,32 @@ Q_Widget *currentWidget(QTreeWidget *tree, QList<TreeChildItem *> *items, quint3
     }
     return nullptr;
 }
+
+void checkList(const QTreeWidgetItem *item, QList<bool> &list)
+{
+    if (item->childCount() == 0) {
+        list.push_back(item->checkState(0) == Qt::Checked);
+        return;
+    }
+
+    QTreeWidgetItem *childItem = nullptr;
+
+    for (int i = 0;i < item->childCount();++i) {
+        childItem = item->child(i);
+        checkList(childItem,list);
+    }
+}
+
+QList<bool> checkList(QTreeWidget *tree)
+{
+    QList<bool> list;
+
+    for (int i = 0;i < tree->topLevelItemCount();++i) {
+        checkList(tree->topLevelItem(i),list);
+    }
+    return list;
+}
+
 
 ChildWidgetHelper::ChildWidgetHelper() : QObject()
 {
@@ -263,28 +289,6 @@ void setCheckStateParent(QTreeWidgetItem *item)
 //    }
 //}
 
-void ChildWidgetHelper::treeItemClicked(QTreeWidgetItem *item, int column)
-{
-    QList<TreeChildItem *>::const_iterator iterItems;
-
-//    setCheckStateChild(item,item->checkState(0));
-//    setCheckStateParent(item);
-
-    for (iterItems = _treeChildItems->constBegin();iterItems != _treeChildItems->constEnd();++iterItems) {
-        if (compare((*iterItems)->stringList,item)) {
-            if (item->checkState(0) != (*iterItems)->checkState) {
-                break;
-            }
-
-            tab->clear();
-            for (int i = 0;i < (*iterItems)->tabWidgets->size();++i) {
-                tab->addTab((*iterItems)->tabWidgets->at(i),tabName(i));
-            }
-            break;
-        }
-    }
-    updateCheckState();
-}
 
 void ChildWidgetHelper::initChildWidgets()
 {

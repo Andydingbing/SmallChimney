@@ -5,14 +5,7 @@
 #include "test_tx_aclr.h"
 #include "test_rx_gain_accuracy.h"
 
-using namespace ns_ericsson;
-using namespace ns_radio_4415;
-
-BOOST_DLL_ALIAS(ns_ericsson::ns_radio_4415::ChildWidgets::create,create_plugin)
-
-//const void *create_plugin = reinterpret_cast<const void*>(&ChildWidgets::create);
-
-//const void *create_plugin = reinterpret_cast<const void*>(reinterpret_cast<intptr_t>(&ChildWidgets::create));
+BOOST_DLL_ALIAS(ChildWidgets::create,create_plugin)
 
 MODEL_PREFIX(Com_Log_Model,"","Time","Write","Read","Result");
 MODEL_ROWCNT(Radio.com_loggers());
@@ -56,18 +49,11 @@ static int32_t initCallback()
 ChildWidgets *ChildWidgets::create()
 {
     ChildWidgets *cw = new ChildWidgets();
-    LoggerMsg.stdprintf("%x\n",cw);
     return cw;
 }
 
 ChildWidgets::ChildWidgets() : PlugIn()
 {
-    LoggerMsg.stdprintf("Enter module\n");
-}
-
-ChildWidgets::~ChildWidgets()
-{
-    LoggerMsg.stdprintf("Leave module\n");
 }
 
 void ChildWidgets::init()
@@ -84,7 +70,6 @@ void ChildWidgets::init()
     DECL_TREE("Calibration,RX-RF VGA",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
 
     _treeChildItems = _treeChildItemsBuiltIn;
-//    setTree(*tree,treeChildItemsBuiltIn);
 
 //    initMainLogTabWidget();
 }

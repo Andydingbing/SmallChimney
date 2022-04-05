@@ -1,17 +1,14 @@
-#ifndef ERICSSON_RADIO_4415_B3_CHILD_WIDGET_H
-#define ERICSSON_RADIO_4415_B3_CHILD_WIDGET_H
+#ifndef CHILD_WIDGET_H
+#define CHILD_WIDGET_H
 
 #include "plugin.h"
 #include "table_view.hpp"
-
-namespace ns_ericsson {
-namespace ns_radio_4415 {
 
 class API ChildWidgets : public PlugIn
 {
 public:
     ChildWidgets();
-    ~ChildWidgets();
+    ~ChildWidgets() {}
 
     void treeItemClicked(QTreeWidgetItem *item, int column) {}
     void tabCurrentChanged(int index) {}
@@ -40,10 +37,5 @@ private:
 public:
     static ChildWidgets *create();
 };
-
-} // namespace ns_radio_4415
-} // namespace ns_ericsson
-
-//extern "C" API const void *create_plugin;
 
 #endif

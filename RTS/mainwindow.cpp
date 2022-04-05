@@ -11,9 +11,6 @@
 #include <QMenu>
 #include <QStyleFactory>
 #include "device.h"
-//#include "Ericsson/Radio_4415_B3/child_widget.h"
-//#include "Ericsson/Radio_6449_B42/child_widget.h"
-//#include "StarPoint/SP9500/starpoint_sp9500_child_widget.h"
 #include "log_model.hpp"
 #include "device_init_thread.h"
 #include "scroll_lineedit.h"
@@ -25,6 +22,8 @@
 #if (QT_VERSION < QT_VERSION_CHECK(5,0,0))
     #define setSectionResizeMode setResizeMode
 #endif
+
+using namespace std;
 
 QHBoxLayout MainWindow::childDlgLayout;
 MainWindow *g_MainW = nullptr;
@@ -60,9 +59,9 @@ QMenu* hasMenu(const QString &str,const QMenu *menu)
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    currentWidgets(nullptr),
     ui(new Ui::MainWindow),
-    thread(nullptr)
+    thread(nullptr),
+    currentPlugIn(nullptr)
 {
     ui->setupUi(this);
 
@@ -99,28 +98,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->centralWidget->setLayout(mainLayout);
 
 
-
-
     boost::filesystem::path shared_library_path(boost::dll::program_location());
     shared_library_path = shared_library_path.parent_path();
     shared_library_path /= "ericsson_radio_4415_b3";
-    typedef PlugIn* (pluginapi_create_t)();
-    static boost::function<pluginapi_create_t> creator;
 
-//    boost::dll::shared_library sl;
-//    sl.load(shared_library_path.parent_path() /= "RTS_helper",boost::dll::load_mode::append_decorations);
 
-    creator = boost::dll::import_alias<pluginapi_create_t>(
+    plugInCreator = boost::dll::import_alias<pluginapi_create_t>(
         shared_library_path,
         "create_plugin",
         boost::dll::load_mode::append_decorations
     );
 
-    PlugIn* plugin = creator();
+    plugIns.push_back(plugInCreator());
 
-    childWidgets.push_back(plugin);
-
-//    Log.set_default();
+    Log.set_default();
 }
 
 MainWindow::~MainWindow()
@@ -159,14 +150,15 @@ void MainWindow::switchProject()
     mainLogTab->clear();
     mainLogTab->addTab(msgTableView,"Message");
 
-    currentWidgets = childWidgets.at(project);
-    currentWidgets->init();
+    currentPlugIn = plugIns.at(project);
+    currentPlugIn->init();
 
     QList<QMenu *> menus;
 
-    currentWidgets->initMenu(menus);
+    currentPlugIn->initMenu(menus);
 
     addMenu(menuBar(),menus);
+    setTree(mainTree,currentPlugIn->treeChildItems());
 }
 
 void MainWindow::deviceInit()
@@ -406,11 +398,11 @@ void MainWindow::threadSPC()
 
     actionSPC->setIcon(style()->standardIcon(sp));
 
-    if (currentWidgets == nullptr) {
+    if (currentPlugIn == nullptr) {
         return;
     }
 
-    Q_Widget *widget = currentWidget(mainTree,currentWidgets->treeChildItems(),mainTab->currentIndex());
+    Q_Widget *widget = currentWidget(mainTree,currentPlugIn->treeChildItems(),mainTab->currentIndex());
 
     if (widget == nullptr) {
         return;
@@ -478,10 +470,87 @@ void MainWindow::threadProcess(const Q_Thread_Base::Process p)
     }
 }
 
+quint32 parents(const QTreeWidgetItem *item)
+{
+    QTreeWidgetItem *parent = item->parent();
+    quint32 i = 0;
+
+    while (parent != nullptr) {
+        parent = parent->parent();
+        ++ i;
+    }
+    return i;
+}
+
+bool compare(const list<string> &stringList,const QTreeWidgetItem *item)
+{
+    list<string>::const_reverse_iterator iter = stringList.crbegin();
+    const QTreeWidgetItem *parent = item;
+    quint32 i = parents(item);
+
+    if (i != quint32(stringList.size() - 1)) {
+        return false;
+    }
+
+    for (quint32 j = 0;j <= i;++ j,++ iter) {
+        if (parent->text(0).toStdString() != *iter) {
+            return false;
+        }
+        parent = parent->parent();
+    }
+    return true;
+}
+
+void MainWindow::updateCheckState(const QTreeWidgetItem *item, QList<TreeChildItem *>::iterator *iterTCI)
+{
+    if (item->childCount() == 0) {
+        (*(*iterTCI))->checkState = item->checkState(0);
+        (*iterTCI) ++;
+        return;
+    }
+
+    QTreeWidgetItem *childItem = nullptr;
+
+    for (int i = 0;i < item->childCount();++i) {
+        childItem = item->child(i);
+        updateCheckState(childItem,iterTCI);
+    }
+}
+
+void MainWindow::updateCheckState()
+{
+    QList<TreeChildItem *>::iterator iterChildItems = currentPlugIn->treeChildItems()->begin();
+
+    for (int i = 0;i < mainTree->topLevelItemCount();++i) {
+        updateCheckState(mainTree->topLevelItem(i),&iterChildItems);
+    }
+}
+
 void MainWindow::mainTree_itemClicked(QTreeWidgetItem *item, int column)
 {
     disconnect(mainTab,&QTabWidget::currentChanged,this,&MainWindow::mainTab_currentChanged);
-    currentWidgets->treeItemClicked(item,column);
+
+    QList<TreeChildItem *> *childItems = currentPlugIn->treeChildItems();
+    QList<TreeChildItem *>::const_iterator iterChildItems;
+
+//    setCheckStateChild(item,item->checkState(0));
+//    setCheckStateParent(item);
+
+    for (iterChildItems = childItems->constBegin();iterChildItems != childItems->constEnd();++iterChildItems) {
+        if (compare((*iterChildItems)->stringList,item)) {
+            if (item->checkState(0) != (*iterChildItems)->checkState) {
+                break;
+            }
+
+            mainTab->clear();
+            for (int i = 0;i < (*iterChildItems)->tabWidgets->size();++i) {
+                mainTab->addTab((*iterChildItems)->tabWidgets->at(i),currentPlugIn->tabName(i));
+            }
+            break;
+        }
+    }
+    updateCheckState();
+
     connect(mainTab,&QTabWidget::currentChanged,this,&MainWindow::mainTab_currentChanged);
     mainTab->setCurrentIndex(currentRFIdx());
 }
@@ -496,7 +565,7 @@ bool MainWindow::mainTreeSelectFirst(QTreeWidgetItem *item)
     if (item->childCount() == 0 && item->checkState(0) == Qt::Checked) {
         mainTree->setCurrentItem(item);
 
-        Q_Widget *widget = currentWidget(mainTree,currentWidgets->treeChildItems(),mainTab->currentIndex());
+        Q_Widget *widget = currentWidget(mainTree,currentPlugIn->treeChildItems(),mainTab->currentIndex());
 
         if (widget == nullptr) {
             return false;
@@ -535,27 +604,27 @@ void MainWindow::mainTree_selectFirst()
 
 void MainWindow::runThread(const int idx)
 {
-//    QList<bool> checkList = currentWidgets->checkList();
-//    QList<bool>::const_iterator iterCheckList = checkList.constBegin();
+    QList<bool> treeCheckList = checkList(mainTree);
+    QList<bool>::const_iterator iterCheckList = treeCheckList.constBegin();
 
-//    QList<QTreeWidgetItem *> treeWidgetItemList = currentWidgets->treeWidgetItemList();
-//    QList<QTreeWidgetItem *>::const_iterator iterItem = treeWidgetItemList.constBegin();
+    QList<QTreeWidgetItem *> treeItemList = itemList(mainTree);
+    QList<QTreeWidgetItem *>::const_iterator iterItem = treeItemList.constBegin();
 
-//    int i = 0;
+    int i = 0;
 
-//    for (;iterCheckList != checkList.constEnd();++iterCheckList,++iterItem) {
-//        if (*iterCheckList == true) {
-//            if (i == idx) {
-//                mainTree->setCurrentItem(*iterItem);
-//                break;
-//            }
-//            i ++;
-//        }
-//    }
+    for (;iterCheckList != treeCheckList.constEnd();++iterCheckList,++iterItem) {
+        if (*iterCheckList == true) {
+            if (i == idx) {
+                mainTree->setCurrentItem(*iterItem);
+                break;
+            }
+            i ++;
+        }
+    }
 
-//    mainTree_itemClicked(*iterItem,0);
+    mainTree_itemClicked(*iterItem,0);
 
-//    threadSPC();
+    threadSPC();
 }
 
 void MainWindow::mainTab_currentChanged(int index)
@@ -566,5 +635,5 @@ void MainWindow::mainTab_currentChanged(int index)
 
     setCurrentRFIdx(index);
 
-    currentWidgets->tabCurrentChanged(index);
+    currentPlugIn->tabCurrentChanged(index);
 }

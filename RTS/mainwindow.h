@@ -44,10 +44,6 @@ public:
     QLabel *labelVerRF;
 
 public:
-    QList<PlugIn *> childWidgets;
-    PlugIn *currentWidgets;
-
-public:
     QMsgLogModel *msgLogModel;
 
     QProgressBar *mainProgressBar;
@@ -57,6 +53,8 @@ public:
     QHBoxLayout *mainTabLayout;
 
 public:
+    typedef PlugIn* (pluginapi_create_t)();
+
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
@@ -98,6 +96,8 @@ private:
     void initMsgLogDlg();
 
     bool mainTreeSelectFirst(QTreeWidgetItem *item);
+    void updateCheckState(const QTreeWidgetItem *item, QList<TreeChildItem *>::iterator *iterTCI);
+    void updateCheckState();
 
 signals:
     void addMsgList(int row);
@@ -130,6 +130,11 @@ public:
     QAction *actionStop;
 
     Q_Main_Thread *thread;
+
+public:
+    boost::function<pluginapi_create_t> plugInCreator;
+    QList<PlugIn *> plugIns;
+    PlugIn *currentPlugIn;
 };
 
 extern MainWindow *g_MainW;

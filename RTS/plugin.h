@@ -48,6 +48,7 @@ public:
     virtual void tabCurrentChanged(int index) = 0;
     virtual void init() = 0;
     virtual void initMenu(QList<QMenu *> &menus) = 0;
+    virtual QString tabName(int idx) = 0;
 
     QList<TreeChildItem *> *treeChildItemsBuiltIn() { return &_treeChildItemsBuiltIn; }
     QList<TreeChildItem *> *treeChildItems() { return &_treeChildItems; }

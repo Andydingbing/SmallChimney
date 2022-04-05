@@ -12,21 +12,10 @@
 #include <boost/dll/alias.hpp>
 
 
-
-
-QList<QTreeWidgetItem *> itemList(QTreeWidget &widget);
-
-
-//struct RTS_HELPER_EXPORT TreeChildItem {
-//    std::list<std::string> stringList;
-//    Qt::CheckState checkState;
-//    QList<Q_Widget *> *tabWidgets;
-
-//    TreeChildItem(std::string &str,Qt::CheckState _checkState,void *_tabWidgets = nullptr);
-//};
-
-RTS_HELPER_EXPORT void setTree(QTreeWidget &tree, const QList<TreeChildItem *> &childItems);
+RTS_HELPER_EXPORT void setTree(QTreeWidget *tree, const QList<TreeChildItem *> *childItems);
 RTS_HELPER_EXPORT Q_Widget *currentWidget(QTreeWidget *tree, QList<TreeChildItem *> *items, quint32 index);
+RTS_HELPER_EXPORT QList<bool> checkList(QTreeWidget *tree);
+RTS_HELPER_EXPORT QList<QTreeWidgetItem *> itemList(QTreeWidget *tree);
 
 class RTS_HELPER_EXPORT ChildWidgetHelper : public QObject
 {
@@ -36,14 +25,13 @@ public:
     ChildWidgetHelper();
     ChildWidgetHelper(QTreeWidget *treeWidget, QTabWidget *tabWidget);
     virtual ~ChildWidgetHelper() {}
-    virtual QString tabName(int idx) { return QString("RF-%1").arg(idx); }
+
     void setTreeWidget(QTreeWidget *treeWidget);
     void setTabWidget(QTabWidget *tabWidget);
 //    Qt::CheckState currentTreeItemCheckState();
 
 //    TreeChildItem *containTreeChildItem(const std::list<std::string> &l) const;
 //    void reSortTreeChildItem(const sequence &s);
-    void treeItemClicked(QTreeWidgetItem *item, int column);
     QList<bool> checkList();
     QList<QTreeWidgetItem *> treeWidgetItemList();
 
