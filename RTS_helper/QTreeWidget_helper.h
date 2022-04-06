@@ -23,31 +23,28 @@ class RTS_HELPER_EXPORT ChildWidgetHelper : public QObject
 
 public:
     ChildWidgetHelper();
-    ChildWidgetHelper(QTreeWidget *treeWidget, QTabWidget *tabWidget);
     virtual ~ChildWidgetHelper() {}
 
-    void setTreeWidget(QTreeWidget *treeWidget);
-    void setTabWidget(QTabWidget *tabWidget);
 //    Qt::CheckState currentTreeItemCheckState();
 
 //    TreeChildItem *containTreeChildItem(const std::list<std::string> &l) const;
 //    void reSortTreeChildItem(const sequence &s);
-    QList<bool> checkList();
-    QList<QTreeWidgetItem *> treeWidgetItemList();
+//    QList<bool> checkList();
+//    QList<QTreeWidgetItem *> treeWidgetItemList();
 
 public slots:
     virtual void initChildWidgets();
 
 private:
     void printItems();
-    void updateCheckState(const QTreeWidgetItem *item, QList<TreeChildItem *>::iterator *iterTCI);
-    void updateCheckState();
-    void checkList(const QTreeWidgetItem *item, QList<bool>::iterator *iter);
-    void treeWidgetItemList(QTreeWidgetItem *item, QList<QTreeWidgetItem *>::iterator *iter);
+//    void updateCheckState(const QTreeWidgetItem *item, QList<TreeChildItem *>::iterator *iterTCI);
+//    void updateCheckState();
+//    void checkList(const QTreeWidgetItem *item, QList<bool>::iterator *iter);
+//    void treeWidgetItemList(QTreeWidgetItem *item, QList<QTreeWidgetItem *>::iterator *iter);
 
 public:
-    QTreeWidget *tree;
-    QTabWidget *tab;
+//    QTreeWidget *tree;
+//    QTabWidget *tab;
     QList<TreeChildItem *> *_treeChildItemsBuiltIn;
     QList<TreeChildItem *> *_treeChildItems;
     int _selectedItems;

@@ -2,6 +2,7 @@
 #define Q_WINTHREAD_H
 
 #include <QThread>
+#include <QMainWindow>
 #include "qhelper_global.h"
 #include "config_table.h"
 #include "freq_string.hpp"
@@ -61,7 +62,7 @@ public:
 public:
     Q_Thread_Base(QObject *parent = nullptr);
     static int registerMetaType() { return qRegisterMetaType<Process>("Process"); }
-    void setMainWindow(QWidget *window);
+    void setMainWindow(const QMainWindow *window = nullptr);
     void initProgress(const QString name) { emit initProg(name); }
     void initProgress(const QString name, quint32 pts) { emit initProg(name,pts); }
     void setProgressPos(quint32 pos) { emit setProgPos(pos); }
@@ -88,7 +89,7 @@ public:
     static QString  g_threadName;
     static Q_Thread_Base *g_threadThread;
 
-    QWidget *mainWindow;
+    QMainWindow *mainWindow;
     Q_Config_Table_Delegate_Kase *configDelegate;
     Q_Result_Table_Delegate_Kase *resultDelegate;
 };

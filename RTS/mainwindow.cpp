@@ -423,7 +423,7 @@ void MainWindow::threadSPC()
     }
 
     actionSPC->setIcon(style()->standardIcon(sp));
-    threadWidget->threadSPC();
+    threadWidget->threadSPC(this);
     connect(Q_Thread::g_threadThread,SIGNAL(done(bool)),
             thread,SLOT(childThreadDone(bool)),Qt::BlockingQueuedConnection);
 }

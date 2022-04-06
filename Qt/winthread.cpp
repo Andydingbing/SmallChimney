@@ -30,7 +30,8 @@ Q_Thread_Base *Q_Thread_Base::g_threadThread = nullptr;
 
 Q_Thread_Base::Q_Thread_Base(QObject *parent) :
     QThread(parent),
-    RFIdx(0)
+    RFIdx(0),
+    mainWindow(nullptr)
 {
     g_threadStop = false;
     g_threadPausing = false;
@@ -38,9 +39,9 @@ Q_Thread_Base::Q_Thread_Base(QObject *parent) :
     connect(this,SIGNAL(finished()),this,SLOT(deleteLater()));
 }
 
-void Q_Thread_Base::setMainWindow(QWidget *window)
+void Q_Thread_Base::setMainWindow(const QMainWindow *window)
 {
-    mainWindow = window;
+    mainWindow = const_cast<QMainWindow *>(window);
 
     connect(this,SIGNAL(initProg(QString)),mainWindow,SLOT(initProg(QString)));
     connect(this,SIGNAL(initProg(QString,quint32)),mainWindow,SLOT(initProg(QString,quint32)));
@@ -52,6 +53,9 @@ void Q_Thread_Base::setMainWindow(QWidget *window)
 
     connect(this,SIGNAL(threadErrorBox(QString)),
         mainWindow,SLOT(threadErrorBox(QString)),Qt::BlockingQueuedConnection);
+
+    connect(this,SIGNAL(threadProcess(const Process p)),
+        mainWindow,SLOT(threadProcess(const Process p)));
 }
 
 Q_Thread::Q_Thread(QObject *parent) :
@@ -66,8 +70,6 @@ Q_Thread::Q_Thread(QObject *parent) :
 
         connect(this,SIGNAL(done(bool)),parent,SLOT(done(bool)),Qt::BlockingQueuedConnection);
     }
-
-    connect(this,SIGNAL(threadProcess(const Process p)),mainWindow,SLOT(threadProcess(const Process p)));
 
     Q_Thread_Widget_Base *p = dynamic_cast<Q_Thread_Widget_Base *>(parent);
 

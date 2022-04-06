@@ -3,6 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <QTextEdit>
+#include <QMainWindow>
 #include "attach_thread_widget.hpp"
 #include "winthread.h"
 #include "table_model.h"
@@ -30,7 +31,7 @@ public:
 
     virtual void init();
 
-    virtual void threadSPC() = 0;
+    virtual void threadSPC(const QMainWindow *mainWindow = nullptr) = 0;
     virtual void prepare(const bool is_exp = false) { Q_UNUSED(is_exp) }
 
     void registerModelView(Q_Table_Model *model,Q_Table_View *view);
@@ -65,10 +66,10 @@ public:
 
     virtual void Set() {}
 
-    void threadSPC() OVERRIDE
+    void threadSPC(const QMainWindow *mainWindow = nullptr) OVERRIDE
     {
         if (Q_Thread_Base::g_threadThread == nullptr) {
-            return threadStart();
+            return threadStart(mainWindow);
         }
 
         if (Q_Thread_Base::g_threadPausing) {
@@ -78,7 +79,7 @@ public:
         return threadPause();
     }
 
-    void threadStart()
+    void threadStart(const QMainWindow *mainWindow = nullptr)
     {
         if (Q_Thread_Base::g_threadThread != nullptr) {
             threadErrorBox(Q_Thread_Base::g_threadName);
@@ -106,6 +107,7 @@ public:
 //        Q_Thread_Base::g_threadThread->RFIdx = ::g_tabIdx;
         Q_Thread_Base::g_threadThread->configDelegate = configDelegate;
         Q_Thread_Base::g_threadThread->resultDelegate = resultDelegate;
+        Q_Thread_Base::g_threadThread->setMainWindow(mainWindow);
         Q_Thread_Base::g_threadThread->start();
     }
 
