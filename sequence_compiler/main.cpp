@@ -12,6 +12,7 @@ int main(int argv,char *argc[])
     s.compile();
     COMPILER_ERR;
 
+    s.print_plugin();
     s.print_vendor();
     s.print_product();
     s.print_include();

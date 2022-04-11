@@ -30,7 +30,7 @@ win32-clang-g++ {
 }
 
 win32-msvc {
-    LIBS += -lqwt
+    LIBS += -lqwtd
 }
 
 HEADERS += \

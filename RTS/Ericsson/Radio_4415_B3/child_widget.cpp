@@ -1,9 +1,12 @@
 #include "child_widget.h"
+#include "fmt/core.h"
 #include "ericsson_radio_4415_b3_widget.h"
 #include "cal_tx_vga.h"
 #include "cal_rx_rf_vga.h"
 #include "test_tx_aclr.h"
 #include "test_rx_gain_accuracy.h"
+
+using namespace std;
 
 BOOST_DLL_ALIAS(ChildWidgets::create,create_plugin)
 
@@ -54,6 +57,16 @@ ChildWidgets *ChildWidgets::create()
 
 ChildWidgets::ChildWidgets() : PlugIn()
 {
+}
+
+string ChildWidgets::version()
+{
+    return "1.0";
+}
+
+string ChildWidgets::tabName(int idx)
+{
+    return fmt::format("Branch-{:c}",char('A' + idx));
 }
 
 void ChildWidgets::init()

@@ -10,12 +10,13 @@ public:
     ChildWidgets();
     ~ChildWidgets() {}
 
+    std::string version();
+    std::string tabName(int idx);
     void treeItemClicked(QTreeWidgetItem *item, int column) {}
     void tabCurrentChanged(int index) {}
     void init();
     void initMenu(QList<QMenu *> &menus);
     void initMainLogTabWidget();
-    QString tabName(int idx) { return QString("Branch-%1").arg(char('A' + idx)); }
 
     static void addComLoggerCallback();
 

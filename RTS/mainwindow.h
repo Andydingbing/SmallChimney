@@ -53,8 +53,6 @@ public:
     QHBoxLayout *mainTabLayout;
 
 public:
-    typedef PlugIn* (pluginapi_create_t)();
-
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 

@@ -145,6 +145,9 @@ void sequence::set_path(const string &path)
 
 int32_t sequence::compile()
 {
+    fseek(_fp,0,SEEK_SET);
+
+    ASSERT(parse_plugin());
     ASSERT(parse_vendor());
     ASSERT(parse_product());
 
@@ -175,12 +178,38 @@ void sequence::resort(const list<list<string>> &t,list<list<string *>> &sorted_t
     }
 }
 
+int32_t sequence::parse_plugin()
+{
+    char *str = _buf;
+    const char header_plugin[] = "Plugin";
+
+    ASSERT(read_one_line(&str));
+
+    if (strncmp(str,header_plugin,strlen(header_plugin))) {
+        COMPILER_ERR("Must start with \"Plugin\".");
+    }
+
+    str += strlen(header_plugin);
+
+    trim_front(&str);
+
+    if (*str != ':') {
+        COMPILER_ERR("Missing \":\" after \"Plugin\".");
+    }
+
+    str += 1;
+    trim_front(&str);
+    trim_back(str);
+    plugin = str;
+    add_line(Plugin,&plugin);
+    return 0;
+}
+
 int32_t sequence::parse_vendor()
 {
     char *str = _buf;
     const char header_vendor[] = "Vendor";
 
-    fseek(_fp,0,SEEK_SET);
     ASSERT(read_one_line(&str));
 
     if (strncmp(str,header_vendor,strlen(header_vendor))) {
@@ -632,6 +661,13 @@ uint32_t sequence::trim_back(char *ptr)
 
 uint32_t sequence::trim_back(string &str)
 { return ::trim_back(str,3,'\n',' ','\t'); }
+
+void sequence::print_plugin()
+{
+    if (!plugin.empty()) {
+        cout << "Plugin : " << plugin << endl;
+    }
+}
 
 void sequence::print_vendor()
 {

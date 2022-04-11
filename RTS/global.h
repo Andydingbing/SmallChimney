@@ -1,6 +1,8 @@
 #ifndef RTS_GLOBAL_H
 #define RTS_GLOBAL_H
 
+#include "plugin.h"
+
 enum Project {
     Ericsson_Radio_4415_B3,
     Ericsson_Radio_6449_B42,
@@ -13,6 +15,8 @@ enum Mode {
     Sequence,
     Manual
 };
+
+void searchPlugin(const char *path,std::list<std::string> &plugin);
 
 extern Project project;
 extern Mode mode;

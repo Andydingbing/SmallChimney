@@ -23,6 +23,7 @@ class API sequence
 {
 public:
     enum syntax_t {
+        Plugin,
         Vendor,
         Product,
         Include,
@@ -56,6 +57,7 @@ public:
     { tree_builtin = t; }
 
     int32_t compile();
+    int32_t parse_plugin();
     int32_t parse_vendor();
     int32_t parse_product();
 
@@ -89,6 +91,7 @@ private:
     uint32_t trim_back(std::string &str);
 
 public:
+    void print_plugin();
     void print_vendor();
     void print_product();
     void print_include();
@@ -97,6 +100,7 @@ public:
 
 public:
     std::list<line_t> lines;
+    std::string plugin;
     std::string vendor;
     std::list<std::string> product;
     std::list<sequence> sub_sequence;

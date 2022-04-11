@@ -1,4 +1,5 @@
 DEFINES += device_api
+VENDOR = StarPoint
 
 include( ../../../include/config.pri )
 

@@ -26,5 +26,4 @@ sequence_compiler.depends = sequence
 DDT.depends = log driver
 RTS.depends = \
     sequence \
-    instrument \
-    $$DEVICES
+    instrument

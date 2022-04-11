@@ -19,6 +19,9 @@
 #include <boost/dll/shared_library.hpp>
 #include <boost/dll/runtime_symbol_info.hpp>
 
+#include "windows.h"
+#include "WinBase.h"
+
 #if (QT_VERSION < QT_VERSION_CHECK(5,0,0))
     #define setSectionResizeMode setResizeMode
 #endif
@@ -98,15 +101,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->centralWidget->setLayout(mainLayout);
 
 
+    list<string> plugin;
+    searchPlugin(boost::dll::program_location().parent_path().string().c_str(),plugin);
+
     boost::filesystem::path shared_library_path(boost::dll::program_location());
     shared_library_path = shared_library_path.parent_path();
-    shared_library_path /= "ericsson_radio_4415_b3";
+
+
+    shared_library_path /= "Ericsson";
+    AddDllDirectory(shared_library_path.c_str());
+    shared_library_path /= "ericsson_radio_4415_b3.dll";
 
 
     plugInCreator = boost::dll::import_alias<pluginapi_create_t>(
         shared_library_path,
         "create_plugin",
-        boost::dll::load_mode::append_decorations
+        boost::dll::load_mode::load_with_altered_search_path
     );
 
     plugIns.push_back(plugInCreator());
@@ -544,7 +554,7 @@ void MainWindow::mainTree_itemClicked(QTreeWidgetItem *item, int column)
 
             mainTab->clear();
             for (int i = 0;i < (*iterChildItems)->tabWidgets->size();++i) {
-                mainTab->addTab((*iterChildItems)->tabWidgets->at(i),currentPlugIn->tabName(i));
+                mainTab->addTab((*iterChildItems)->tabWidgets->at(i),QString::fromStdString(currentPlugIn->tabName(i)));
             }
             break;
         }

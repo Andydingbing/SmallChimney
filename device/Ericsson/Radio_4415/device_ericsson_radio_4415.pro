@@ -1,4 +1,5 @@
 DEFINES += device_api
+VENDOR = Ericsson
 
 include(../../../include/config.pri)
 

@@ -1,7 +1,6 @@
 #ifndef RTS_PLUGIN_H
 #define RTS_PLUGIN_H
 
-#include "global.h"
 #include "thread_widget.h"
 #include "../utilities/string_util.hpp"
 #include <string>
@@ -44,11 +43,12 @@ class PlugIn
 {
 public:
     virtual ~PlugIn() {}
+    virtual std::string version() = 0;
+    virtual std::string tabName(int idx) = 0;
     virtual void treeItemClicked(QTreeWidgetItem *item, int column) = 0;
     virtual void tabCurrentChanged(int index) = 0;
     virtual void init() = 0;
     virtual void initMenu(QList<QMenu *> &menus) = 0;
-    virtual QString tabName(int idx) = 0;
 
     QList<TreeChildItem *> *treeChildItemsBuiltIn() { return &_treeChildItemsBuiltIn; }
     QList<TreeChildItem *> *treeChildItems() { return &_treeChildItems; }
@@ -56,5 +56,7 @@ public:
     QList<TreeChildItem *> _treeChildItemsBuiltIn;
     QList<TreeChildItem *> _treeChildItems;
 };
+
+typedef PlugIn* (pluginapi_create_t)();
 
 #endif

@@ -177,12 +177,16 @@ contains(DEFINES,device_api) {
     CONFIG -= qt
     TEMPLATE = lib
     LIBS += -ldriver -lreport
+
     DESTDIR = ../../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+    LIBS += -L$$DESTDIR
+    DESTDIR = ../../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec/$$VENDOR
+    LIBS += -L$$DESTDIR
 
     LIBS += $$dependLib(log)
 }
 
-contains(DEFINES,frontend) {
+contains(DEFINES,ui_api) {
     DEFINES += QWT_DLL DLL_EXPORT RD_EXCEPTION
     CONFIG += shared qt
     TEMPLATE = lib
@@ -192,6 +196,9 @@ contains(DEFINES,frontend) {
     greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
     DESTDIR = ../../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec
+    LIBS += -L$$DESTDIR
+    DESTDIR = ../../../$$VAR_ARCH/$$VAR_DEBUG_RELEASE/$$make_spec/$$VENDOR
+    LIBS += -L$$DESTDIR
     UI_DIR  = ./ui
 
     LIBS += \
