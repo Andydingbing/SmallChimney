@@ -11,6 +11,7 @@ public:
     ~ChildWidgets() {}
 
     std::string version();
+    std::string projectMenu();
     std::string tabName(int idx);
     void treeItemClicked(QTreeWidgetItem *item, int column) {}
     void tabCurrentChanged(int index) {}

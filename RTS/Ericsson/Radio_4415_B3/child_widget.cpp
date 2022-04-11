@@ -64,6 +64,11 @@ string ChildWidgets::version()
     return "1.0";
 }
 
+string ChildWidgets::projectMenu()
+{
+    return "Ericsson,Radio 4415 B3";
+}
+
 string ChildWidgets::tabName(int idx)
 {
     return fmt::format("Branch-{:c}",char('A' + idx));

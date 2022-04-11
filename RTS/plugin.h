@@ -36,7 +36,6 @@ struct TreeChildItem
     item->checkState = Qt::Checked; \
     item->tabWidgets = reinterpret_cast<QList<Q_Widget *> *>(kase_class##s); \
     _treeChildItemsBuiltIn.append(item); \
-    /*MainWindow::childDlgLayout.addWidget(kase_class##s->at(i));*/ \
 }
 
 class PlugIn
@@ -44,6 +43,7 @@ class PlugIn
 public:
     virtual ~PlugIn() {}
     virtual std::string version() = 0;
+    virtual std::string projectMenu() = 0;
     virtual std::string tabName(int idx) = 0;
     virtual void treeItemClicked(QTreeWidgetItem *item, int column) = 0;
     virtual void tabCurrentChanged(int index) = 0;
