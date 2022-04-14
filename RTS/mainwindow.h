@@ -28,12 +28,6 @@ class QAction;
 
 class QMsgLogModel;
 
-struct MapProjectMenu {
-    Project project;
-    QStringList menu;
-    MapProjectMenu(const Project p, const QString &m);
-};
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -81,7 +75,6 @@ public slots:
 
 public:
     bool verifySequence(const QString &path);
-    void addMapProjectMenu(const Project project,const QString &menu);
     void addMsgListCallback() { emit addMsgList(int(Log.msgs())); }
 
 private:
@@ -108,9 +101,6 @@ private slots:
     void mainTab_currentChanged(int index);
 
 public:
-    QList<MapProjectMenu> mapProjectMenu;
-
-public:
     Ui::MainWindow *ui;
 
     QSplitter *mainSplitter;
@@ -131,12 +121,11 @@ public:
 
 public:
     QList<boost::function<pluginapi_create_t>> plugInCreators;
-    QList<PlugIn *> plugIns;
-    PlugIn *currentPlugIn;
+    QList<Plugin *> plugIns;
+    Plugin *currentPlugIn;
 };
 
 extern MainWindow *g_MainW;
-extern Project project;
 extern sequence mainSequence;
 
 #endif

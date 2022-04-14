@@ -4,7 +4,7 @@
 #include "plugin.h"
 #include "table_view.hpp"
 
-class API ChildWidgets : public PlugIn
+class API ChildWidgets : public Plugin
 {
 public:
     ChildWidgets();

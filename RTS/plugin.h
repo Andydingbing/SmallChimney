@@ -37,11 +37,11 @@ struct TreeChildItem
     _treeChildItemsBuiltIn.append(item); \
 }
 
-class PlugIn
+class Plugin
 {
 public:
-    PlugIn(int32_t (*hash_generator)() = plugin_hash_generator) : _hash(hash_generator()) {}
-    virtual ~PlugIn() {}
+    Plugin(int32_t (*hash_generator)() = plugin_hash_generator) : _hash(hash_generator()) {}
+    virtual ~Plugin() {}
 
     virtual std::string version() = 0;
     virtual std::string projectMenu() = 0;
@@ -67,6 +67,6 @@ protected:
     QList<TreeChildItem *> _treeChildItems;
 };
 
-typedef PlugIn* (pluginapi_create_t)();
+typedef Plugin* (pluginapi_create_t)();
 
 #endif

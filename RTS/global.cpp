@@ -10,7 +10,6 @@
 
 using namespace std;
 
-Project project = Ericsson_Radio_4415_B3;
 Mode mode = Sequence;
 
 bool isValidPlugin(const char *path)

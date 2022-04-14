@@ -9,10 +9,10 @@ void QDeviceInitThread::run()
     emit threadProcess(Started);
     initProgress(QString("Init"),100);
 
-    switch(project) {
-    case Ericsson_Radio_4415_B3 : { result = initSP9500X(); break; }
-    default      : { return; }
-    }
+//    switch(project) {
+//    case Ericsson_Radio_4415_B3 : { result = initSP9500X(); break; }
+//    default      : { return; }
+//    }
 
     if (result == false) {
         emit threadProcess(End_Except);

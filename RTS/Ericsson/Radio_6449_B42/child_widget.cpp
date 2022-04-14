@@ -55,7 +55,7 @@ ChildWidgets *ChildWidgets::create()
     return cw;
 }
 
-ChildWidgets::ChildWidgets() : PlugIn()
+ChildWidgets::ChildWidgets() : Plugin()
 {
 }
 

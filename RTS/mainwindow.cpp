@@ -37,12 +37,6 @@ double QFreqScrollLineEdit::stepCtrl    = 5e6;
 double QFreqScrollLineEdit::stepShift   = 10e6;
 
 
-MapProjectMenu::MapProjectMenu(const Project p, const QString &m)
-{
-    project = p;
-    menu = m.split(',');
-}
-
 QMenu* hasMenu(const QString &str,const QMenu *menu)
 {
     QObjectList child = menu->children();
@@ -102,19 +96,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     list<string> pluginPath;
     list<string>::const_iterator iterPluginPath;
-    boost::function<pluginapi_create_t> pluginCreator;
+    boost::function<pluginapi_create_t> *pluginCreator = nullptr;
 
     searchPlugin(boost::dll::program_location().parent_path().string().c_str(),pluginPath);
 
     for (iterPluginPath = pluginPath.cbegin();iterPluginPath != pluginPath.cend();++iterPluginPath) {
-        plugInCreators.push_back(pluginCreator);
-        pluginCreator = boost::dll::import_alias<pluginapi_create_t>(
+        pluginCreator = new boost::function<pluginapi_create_t>;
+        plugInCreators.push_back(*pluginCreator);
+        *pluginCreator = boost::dll::import_alias<pluginapi_create_t>(
             *iterPluginPath,
             "create_plugin",
             boost::dll::load_mode::load_with_altered_search_path
         );
 
-        plugIns.push_back(pluginCreator());
+        plugIns.push_back((*pluginCreator)());
         plugIns.back()->set_path(*iterPluginPath);
     }
 
@@ -131,22 +126,24 @@ MainWindow::~MainWindow()
 void MainWindow::switchProject()
 {
     QAction *action = (QAction *)(sender());
-    QStringList str;
-    QList<MapProjectMenu>::const_iterator iter = mapProjectMenu.cbegin();
+    QString str;
+    QList<Plugin *>::const_iterator iterPlugin = plugIns.cbegin();
     QMenu *menu = (QMenu *)(action->parent());
+    QMenu *menuChild = nullptr;
 
     str.push_front(action->text());
 
     while (menu != nullptr && menu->inherits("QMenu")) {
-        str.push_front(menu->title());
+        str.push_front(menu->title() + ",");
+        menuChild = menu;
         menu = (QMenu *)(menu->parent());
     }
 
-    str.pop_front();
+    str.remove(0,menuChild->title().size() + 1);
 
-    for (;iter != mapProjectMenu.cend();++iter) {
-        if (iter->menu == str) {
-            project = iter->project;
+    for (;iterPlugin != plugIns.cend();++iterPlugin) {
+        if ((*iterPlugin)->projectMenu() == str.toStdString()) {
+            currentPlugIn = *iterPlugin;
         }
     }
 
@@ -159,7 +156,6 @@ void MainWindow::switchProject()
     mainLogTab->clear();
     mainLogTab->addTab(msgTableView,"Message");
 
-    currentPlugIn = plugIns.at(project);
     currentPlugIn->init();
 
     QList<QMenu *> menus;
@@ -205,11 +201,6 @@ bool MainWindow::verifySequence(const QString &path)
     return r;
 }
 
-void MainWindow::addMapProjectMenu(const Project project,const QString &menu)
-{
-    mapProjectMenu.push_back(MapProjectMenu(project,menu));
-}
-
 void MainWindow::initMenu()
 {
     menuProject = new QMenu("Project(&P)",ui->menuBar);
@@ -219,12 +210,7 @@ void MainWindow::initMenu()
 
     ui->menuBar->addMenu(menuProject);
 
-    addMapProjectMenu(Ericsson_Radio_4415_B3,"Ericsson,Radio 4415 B3");
-    addMapProjectMenu(Ericsson_Radio_6449_B42,"Ericsson,Radio 6449 B42");
-    addMapProjectMenu(Ericsson_Air_3268_B47,"Ericsson,Air 3268 B47");
-    addMapProjectMenu(StarPoint_SP9500,"StarPoint,SP9500");
-
-    QList<PlugIn *>::const_iterator iterPlugin = plugIns.cbegin();
+    QList<Plugin *>::const_iterator iterPlugin = plugIns.cbegin();
 
     for (;iterPlugin != plugIns.cend();++iterPlugin) {
         parent = menuProject;

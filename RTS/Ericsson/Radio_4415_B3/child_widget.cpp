@@ -55,7 +55,7 @@ ChildWidgets *ChildWidgets::create()
     return cw;
 }
 
-ChildWidgets::ChildWidgets() : PlugIn()
+ChildWidgets::ChildWidgets() : Plugin()
 {
 }
 
@@ -117,14 +117,6 @@ void ChildWidgets::initMenu(QList<QMenu *> &menus)
     menuDevice->addAction(separator);
     menuDevice->addAction(actionExit);
 
-    // Function
-    actionLogConfig = new QAction("Log Config(&L)");
-    actionLogViewer = new QAction("Log Viewer(&V)");
-
-    menuFunction = new QMenu("Function(&F)");
-    menuFunction->addAction(actionLogConfig);
-    menuFunction->addAction(actionLogViewer);
-
     // About
     actionAbout = new QAction("About(&A)");
 
@@ -132,7 +124,6 @@ void ChildWidgets::initMenu(QList<QMenu *> &menus)
     menuHelp->addAction(actionAbout);
 
     menus.push_back(menuDevice);
-    menus.push_back(menuFunction);
     menus.push_back(menuHelp);
 }
 
