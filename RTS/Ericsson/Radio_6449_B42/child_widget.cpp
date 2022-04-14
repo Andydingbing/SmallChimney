@@ -1,13 +1,14 @@
 #include "child_widget.h"
-#include <QAction>
+#include "fmt/core.h"
 #include "ericsson_radio_6449_b42_widget.h"
 #include "cal_tx_vga.h"
 #include "cal_rx_rf_vga.h"
 #include "test_tx_aclr.h"
 #include "test_rx_gain_accuracy.h"
 
-using namespace ns_ericsson;
-using namespace ns_radio_6449;
+using namespace std;
+
+BOOST_DLL_ALIAS(ChildWidgets::create,create_plugin)
 
 MODEL_PREFIX(Com_Log_Model,"","Time","Write","Read","Result");
 MODEL_ROWCNT(Radio.com_loggers());
@@ -48,14 +49,29 @@ static int32_t initCallback()
     return 0;
 }
 
-ChildWidgets::ChildWidgets() : ChildWidgetHelper()
+ChildWidgets *ChildWidgets::create()
 {
-
+    ChildWidgets *cw = new ChildWidgets();
+    return cw;
 }
 
-ChildWidgets::ChildWidgets(QTreeWidget *treeWidget, QTabWidget *tabWidget) : ChildWidgetHelper(treeWidget,tabWidget)
+ChildWidgets::ChildWidgets() : PlugIn()
 {
+}
 
+string ChildWidgets::version()
+{
+    return "1.0";
+}
+
+string ChildWidgets::projectMenu()
+{
+    return "Ericsson,Radio 6449 B42";
+}
+
+string ChildWidgets::tabName(int idx)
+{
+    return fmt::format("Branch-{:c}",char('A' + idx));
 }
 
 void ChildWidgets::init()
@@ -71,11 +87,9 @@ void ChildWidgets::init()
     DECL_TREE("Calibration,TX-VGA",Q_Cal_TX_VGA_Widget,Radio.channels());
     DECL_TREE("Calibration,RX-RF VGA",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
 
-    treeChildItems = treeChildItemsBuiltIn;
-    setTree(*tree,treeChildItemsBuiltIn);
+    _treeChildItems = _treeChildItemsBuiltIn;
 
-//    initMenu();
-    initMainLogTabWidget();
+//    initMainLogTabWidget();
 }
 
 void ChildWidgets::initMenu(QList<QMenu *> &menus)
@@ -135,25 +149,6 @@ void ChildWidgets::initMainLogTabWidget()
 
 //    parent->mainLogTab->addTab(comLogTableView,"Com");
 
-    connect(this,SIGNAL(addComLogger(int)),comLogModel,SLOT(update(int)));
-    connect(this,SIGNAL(addComLogger(int)),this,SLOT(addComLoggerTableView(int)));
-
-    Radio.set_log_callback(ChildWidgets::addComLoggerCallback);
-}
-
-void ChildWidgets::mainTabCurrentChanged(int index)
-{
-
-}
-
-void ChildWidgets::addComLoggerCallback()
-{
-//    emit addComLogger(Radio.com_loggers());
-}
-
-void ChildWidgets::addComLoggerTableView(int row)
-{
-    comLogTableView->scrollToBottom();
-    comLogTableView->selectRow(row - 1);
-    comLogTableView->resizeRowToContents(row - 1);
+//    QObject::connect(this,SIGNAL(addComLogger(int)),comLogModel,SLOT(update(int)));
+//    QObject::connect(this,SIGNAL(addComLogger(int)),this,SLOT(addComLoggerTableView(int)));
 }

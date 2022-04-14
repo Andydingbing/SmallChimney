@@ -1,4 +1,5 @@
-DEFINES += frontend
+DEFINES += ui_api
+VENDOR = Ericsson
 LIBS += -ldevice_ericsson_radio_6449
 
 include(../../../include/config.pri)
