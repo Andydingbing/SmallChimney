@@ -75,7 +75,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mainSplitter  = new QSplitter(Qt::Horizontal,ui->centralWidget);
     rightSplitter = new QSplitter(Qt::Vertical);
 
-    initMenu();
     initToolBar();
     initMsgLogDlg();
     initStatusBar();
@@ -101,25 +100,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->centralWidget->setLayout(mainLayout);
 
 
-    list<string> plugin;
-    searchPlugin(boost::dll::program_location().parent_path().string().c_str(),plugin);
+    list<string> pluginPath;
+    list<string>::const_iterator iterPluginPath;
+    boost::function<pluginapi_create_t> pluginCreator;
 
-    boost::filesystem::path shared_library_path(boost::dll::program_location());
-    shared_library_path = shared_library_path.parent_path();
+    searchPlugin(boost::dll::program_location().parent_path().string().c_str(),pluginPath);
 
+    for (iterPluginPath = pluginPath.cbegin();iterPluginPath != pluginPath.cend();++iterPluginPath) {
+        plugInCreators.push_back(pluginCreator);
+        pluginCreator = boost::dll::import_alias<pluginapi_create_t>(
+            *iterPluginPath,
+            "create_plugin",
+            boost::dll::load_mode::load_with_altered_search_path
+        );
 
-    shared_library_path /= "Ericsson";
-    AddDllDirectory(shared_library_path.c_str());
-    shared_library_path /= "ericsson_radio_4415_b3.dll";
+        plugIns.push_back(pluginCreator());
+        plugIns.back()->set_path(*iterPluginPath);
+    }
 
-
-    plugInCreator = boost::dll::import_alias<pluginapi_create_t>(
-        shared_library_path,
-        "create_plugin",
-        boost::dll::load_mode::load_with_altered_search_path
-    );
-
-    plugIns.push_back(plugInCreator());
+    initMenu();
 
     Log.set_default();
 }
@@ -214,6 +213,9 @@ void MainWindow::addMapProjectMenu(const Project project,const QString &menu)
 void MainWindow::initMenu()
 {
     menuProject = new QMenu("Project(&P)",ui->menuBar);
+    QMenu *parent = menuProject;
+    QMenu *subMenu = nullptr;
+    QAction *action = nullptr;
 
     ui->menuBar->addMenu(menuProject);
 
@@ -222,23 +224,29 @@ void MainWindow::initMenu()
     addMapProjectMenu(Ericsson_Air_3268_B47,"Ericsson,Air 3268 B47");
     addMapProjectMenu(StarPoint_SP9500,"StarPoint,SP9500");
 
-    QList<MapProjectMenu>::const_iterator iterMap = mapProjectMenu.cbegin();
+    QList<PlugIn *>::const_iterator iterPlugin = plugIns.cbegin();
 
-    for (;iterMap != mapProjectMenu.cend();++iterMap) {
-        QMenu *parent = menuProject;
-        QMenu *subMenu = nullptr;
-        QAction *action = nullptr;
-        int i = 0;
+    for (;iterPlugin != plugIns.cend();++iterPlugin) {
+        parent = menuProject;
+        subMenu = nullptr;
+        action = nullptr;
 
-        for (;i < iterMap->menu.size() - 1;++i) {
-            if ((subMenu = hasMenu(iterMap->menu.at(i),parent)) == nullptr) {
-                subMenu = new QMenu(iterMap->menu.at(i),parent);
+        list<string> menu;
+        list<string>::const_iterator iterMenu;
+
+        split((*iterPlugin)->projectMenu(),",",menu);
+
+        for (iterMenu = menu.cbegin();iterMenu != -- menu.cend();++iterMenu) {
+            if ((subMenu = hasMenu(QString::fromStdString(*iterMenu),parent)) == nullptr) {
+                subMenu = new QMenu(QString::fromStdString(*iterMenu),parent);
                 parent->addMenu(subMenu);
             }
             parent = subMenu;
         }
 
-        action = new QAction(iterMap->menu.at(i),parent);
+        action = new QAction(QString::fromStdString(*iterMenu),parent);
+        action->setToolTip(QString::fromStdString((*iterPlugin)->path()));
+        action->setStatusTip(QString::fromStdString((*iterPlugin)->path()));
         connect(action,SIGNAL(triggered()),this,SLOT(switchProject()));
         parent->addAction(action);
     }

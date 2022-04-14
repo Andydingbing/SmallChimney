@@ -2,6 +2,7 @@
 #define RTS_PLUGIN_H
 
 #include "thread_widget.h"
+#include "../plugin/global.h"
 #include "../utilities/string_util.hpp"
 #include <string>
 #include <QList>
@@ -23,8 +24,6 @@ struct TreeChildItem
 #define DECL_TREE(item_string_list,kase_class,n) \
 { \
     std::string str = item_string_list; \
-    std::list<std::string> seperator; \
-    seperator.push_back(","); \
     TreeChildItem *item = new TreeChildItem; \
     QList<kase_class *> * kase_class##s = new QList<kase_class *>; \
     for (size_t i = 0;i < n;i ++) { \
@@ -32,7 +31,7 @@ struct TreeChildItem
         kase_class##s->at(i)->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding); \
         kase_class##s->at(i)->setVisible(false); \
     } \
-    split(str.c_str(),seperator,item->stringList); \
+    split(str,",",item->stringList); \
     item->checkState = Qt::Checked; \
     item->tabWidgets = reinterpret_cast<QList<Q_Widget *> *>(kase_class##s); \
     _treeChildItemsBuiltIn.append(item); \
@@ -41,7 +40,9 @@ struct TreeChildItem
 class PlugIn
 {
 public:
+    PlugIn(int32_t (*hash_generator)() = plugin_hash_generator) : _hash(hash_generator()) {}
     virtual ~PlugIn() {}
+
     virtual std::string version() = 0;
     virtual std::string projectMenu() = 0;
     virtual std::string tabName(int idx) = 0;
@@ -50,9 +51,18 @@ public:
     virtual void init() = 0;
     virtual void initMenu(QList<QMenu *> &menus) = 0;
 
+    int32_t hash() const { return _hash; }
+    void set_hash(const int32_t h) { _hash = h; }
+
+    std::string path() const { return _path; }
+    void set_path(const std::string &p) { _path = p; }
+
     QList<TreeChildItem *> *treeChildItemsBuiltIn() { return &_treeChildItemsBuiltIn; }
     QList<TreeChildItem *> *treeChildItems() { return &_treeChildItems; }
 
+protected:
+    int32_t _hash;
+    std::string _path;
     QList<TreeChildItem *> _treeChildItemsBuiltIn;
     QList<TreeChildItem *> _treeChildItems;
 };

@@ -130,7 +130,7 @@ public:
     Q_Main_Thread *thread;
 
 public:
-    boost::function<pluginapi_create_t> plugInCreator;
+    QList<boost::function<pluginapi_create_t>> plugInCreators;
     QList<PlugIn *> plugIns;
     PlugIn *currentPlugIn;
 };

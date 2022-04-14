@@ -201,6 +201,19 @@ template<typename seperator_string_t,
          template<typename _Tp = result_string_t,   typename allocator_t = std::allocator<_Tp>> class result_container_t>
 void split(const char *ptr,const seperator_container_t<seperator_string_t> &seperator,result_container_t<result_string_t> &result);
 
+template<typename seperator_string_t,
+         typename result_string_t,
+         template<typename _Tp = seperator_string_t,typename allocator_t = std::allocator<_Tp>> class seperator_container_t,
+         template<typename _Tp = result_string_t,   typename allocator_t = std::allocator<_Tp>> class result_container_t>
+void split(const std::string &str,const seperator_container_t<seperator_string_t> &seperator,result_container_t<result_string_t> &result)
+{ return split(str.c_str(),seperator,result); }
+
+template<typename seperator_string_t,
+         typename result_string_t,
+         template<typename _Tp = result_string_t,typename allocator_t = std::allocator<_Tp>> class result_container_t>
+void split(const std::string &str,const seperator_string_t &seperator,result_container_t<result_string_t> &result)
+{ return split(str.c_str(),std::list<std::string>(1,seperator),result); }
+
 #include "string_util.inl"
 
 #endif

@@ -12,6 +12,7 @@ instrument \
 report \
 sequence \
 sequence_compiler \
+plugin \
 Qt/QHelper.pro \
 RTS \
 RTS_helper \
