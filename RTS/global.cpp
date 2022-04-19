@@ -37,15 +37,22 @@ void searchPlugin(const char *path,list<string> &plugin)
 
     boost::filesystem::path shared_library_path;
 
+    boost::winapi::UINT_ errorMode = GetErrorMode();
+    SetErrorMode(boost::winapi::SEM_FAILCRITICALERRORS_);
+
     for (dir_iter pos(path);pos != end;++pos) {
         if (boost::filesystem::is_directory(*pos)) {
             continue;
         }
 
-        AddDllDirectory(pos->path().parent_path().c_str());
+        DLL_DIRECTORY_COOKIE cookie = AddDllDirectory(pos->path().parent_path().c_str());
 
         if (isValidPlugin(pos->path().string().c_str())) {
             plugin.push_back(pos->path().string());
+        } else {
+            RemoveDllDirectory(cookie);
         }
     }
+
+    SetErrorMode(errorMode);
 }

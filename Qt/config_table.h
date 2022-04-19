@@ -90,6 +90,29 @@ public:
 };
 
 
+
+
+//KASE__CONFIG(QTextEdit, textEditFreq, "Freq")
+//KASE__CONFIG(QLineEdit, lineEditAtt,  "")
+
+
+//class Q_Config_Model_Delegate : public Q_Config_Table_Model, public Q_Config_Table_Delegate
+//{
+//public:
+//    Q_Config_Model_Delegate(QObject *parent = nullptr) :
+//        Q_Config_Table_Model(parent),
+//        Q_Config_Table_Delegate(parent)
+//    {
+//        _item.clear();
+////        _item << "Freq"; QTextEdit *textEditFreq = new QTextEdit;
+////        _item << "";     QLineEdit *lineEditAtt = new QLineEdit;
+//    }
+
+
+//};
+
+
+
 #define CONFIG_TABLE_KASE(...) \
 class Q_Config_Model : public Q_Config_Table_Model { \
 public: \

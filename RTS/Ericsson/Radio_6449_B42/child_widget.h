@@ -25,10 +25,6 @@ private:
     QAction *actionInitSilent;
     QAction *actionExit;
 
-    QMenu *menuFunction;
-    QAction *actionLogConfig;
-    QAction *actionLogViewer;
-
     QMenu *menuHelp;
     QAction *actionAbout;
 

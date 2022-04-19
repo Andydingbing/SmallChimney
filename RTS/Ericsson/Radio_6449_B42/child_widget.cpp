@@ -86,10 +86,14 @@ void ChildWidgets::init()
 
     DECL_TREE("Calibration,TX-VGA",Q_Cal_TX_VGA_Widget,Radio.channels());
     DECL_TREE("Calibration,RX-RF VGA",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,RX-RF VGA,1",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,RX-RF VGA,2",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,RX-RF VGA,3",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,RX-RF VGA,1,1",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,RX-RF VGA,1,2",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
+    DECL_TREE("Calibration,RX-RF VGA,1,3",Q_Cal_RX_RF_VGA_Widget,Radio.channels());
 
     _treeChildItems = _treeChildItemsBuiltIn;
-
-//    initMainLogTabWidget();
 }
 
 void ChildWidgets::initMenu(QList<QMenu *> &menus)
@@ -117,14 +121,6 @@ void ChildWidgets::initMenu(QList<QMenu *> &menus)
     menuDevice->addAction(separator);
     menuDevice->addAction(actionExit);
 
-    // Function
-    actionLogConfig = new QAction("Log Config(&L)");
-    actionLogViewer = new QAction("Log Viewer(&V)");
-
-    menuFunction = new QMenu("Function(&F)");
-    menuFunction->addAction(actionLogConfig);
-    menuFunction->addAction(actionLogViewer);
-
     // About
     actionAbout = new QAction("About(&A)");
 
@@ -132,7 +128,6 @@ void ChildWidgets::initMenu(QList<QMenu *> &menus)
     menuHelp->addAction(actionAbout);
 
     menus.push_back(menuDevice);
-    menus.push_back(menuFunction);
     menus.push_back(menuHelp);
 }
 
@@ -146,9 +141,4 @@ void ChildWidgets::initMainLogTabWidget()
     comLogTableView->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Stretch);
     comLogTableView->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
     comLogTableView->horizontalHeader()->setSectionResizeMode(4,QHeaderView::ResizeToContents);
-
-//    parent->mainLogTab->addTab(comLogTableView,"Com");
-
-//    QObject::connect(this,SIGNAL(addComLogger(int)),comLogModel,SLOT(update(int)));
-//    QObject::connect(this,SIGNAL(addComLogger(int)),this,SLOT(addComLoggerTableView(int)));
 }
