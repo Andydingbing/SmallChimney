@@ -62,14 +62,14 @@ void Q_Test_TX_ACLR_Thread::kase()
 void Q_Test_TX_ACLR_Widget::init()
 {
     registerModelView(&model,ui->tableView);
-    config->textEditFreq->setText("1842.5M");
+    Config("Freq",QTextEdit)->setText("1842.5M");
 
     Q_Thread_Widget::init();
 }
 
 void Q_Test_TX_ACLR_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_kase(currentRFIdx(),TX_ACLR,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(currentRFIdx(),TX_ACLR,Config("Freq",QTextEdit)->toPlainText().toStdString(),is_exp);
 }
 
 void Q_Test_TX_ACLR_Widget::uiUpdate(const int first,const int last,const int kase)

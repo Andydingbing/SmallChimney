@@ -103,7 +103,9 @@ QWidget* Q_Config_Table_Delegate_Kase::createEditor(
         return nullptr;
     }
 
-    QWidget *widget = static_cast<QWidget *>(*(first() + index.row()));
+    int row = index.row();
+
+    QWidget *widget = (row == 0 ? *first() : delegatedWidgets.at(row - 1));
     widget->setParent(parent);
 
     if (widget->property("frame").toBool()) {
@@ -121,7 +123,6 @@ QWidget* Q_Config_Table_Delegate_Kase::createEditor(
 
     return widget;
 }
-
 
 Q_Result_Table_Delegate_Kase::Q_Result_Table_Delegate_Kase(QObject *parent) :
     Q_Config_Table_Delegate(parent)
@@ -146,7 +147,9 @@ QWidget* Q_Result_Table_Delegate_Kase::createEditor(
         return nullptr;
     }
 
-    QWidget *widget = static_cast<QWidget *>(*(first() + index.row()));
+    int row = index.row();
+
+    QWidget *widget = (row == 0 ? *first() : delegatedWidgets.at(row - 1));
     widget->setParent(parent);
 
     if (widget->property("frame").toBool()) {

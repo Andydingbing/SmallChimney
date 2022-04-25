@@ -8,15 +8,14 @@ KASE_CURVE(TX_VGA)
 
 KASE_WIDGET_PREFIX(Cal_TX_VGA)
 
-KASE_CONFIG(
-    QTextEdit, textEditFreq, "Freq",
-    QLineEdit, lineEditAtt, "")
+KASE_CONFIG("Freq", QTextEdit)
+KASE_CONFIG("",     QLineEdit)
 
-KASE_RESULT(
-    QLineEdit, lineEditDyRange, "Dynamic Range")
+KASE_RESULT("Dynamic Range", QLineEdit)
 
-    TX_VGA_Model model;
-    TX_VGA_Curve curve;
+KASE_WIDGET :
+TX_VGA_Model model;
+TX_VGA_Curve curve;
 
 KASE_THREAD(Cal_TX_VGA)
 

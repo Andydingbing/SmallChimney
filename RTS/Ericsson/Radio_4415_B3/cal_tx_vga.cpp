@@ -74,8 +74,10 @@ void Q_Cal_TX_VGA_Thread::kase()
 void Q_Cal_TX_VGA_Widget::init()
 {
     registerModelView(&model,ui->tableView);
-    config->textEditFreq->setText("1842.5M");
-    result->lineEditDyRange->setText("");
+
+    Config("Freq",QTextEdit)->setText("1842.5M");
+
+    Result("Dynamic Range",QLineEdit)->setText("");
 
     initPlot(ui->plot,0,4000,-5,35.0);
     ui->plot->setTitle("DAC/Range");
@@ -88,7 +90,7 @@ void Q_Cal_TX_VGA_Widget::init()
 
 void Q_Cal_TX_VGA_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_kase(currentRFIdx(),TX_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(currentRFIdx(),TX_VGA,Config("Freq",QTextEdit)->toPlainText().toStdString(),is_exp);
 
     ui->plot->replot();
 }

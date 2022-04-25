@@ -51,7 +51,7 @@ void Q_Cal_RX_RF_VGA_Thread::kase()
     Radio.rx(RFIdx,freq);
     Radio.rxcpriconf(RFIdx);
     Radio.rxagc(RFIdx,false);
-    Radio.rxrfvgaswp(RFIdx,config->lineEditAtt->text().toStdString(),&data);
+    Radio.rxrfvgaswp(RFIdx,Config("Att Bit",QLineEdit)->text().toStdString(),&data);
 
     emit uiUpdate(0,17,RX_RF_VGA);
 }
@@ -59,10 +59,12 @@ void Q_Cal_RX_RF_VGA_Thread::kase()
 void Q_Cal_RX_RF_VGA_Widget::init()
 {
     registerModelView(&model,ui->tableView);
-    config->textEditFreq->setText("1747.5M");
-    config->lineEditAtt->setText("0:1:16,23");
-    result->checkBoxMonotonic->setChecked(false);
-    result->lineEditDyRange->setText("");
+
+    Config("Freq",QTextEdit)->setText("1747.5M");
+    Config("Att Bit",QLineEdit)->setText("0:1:16,23");
+
+    Result("Monotonic",QCheckBox)->setChecked(false);
+    Result("Dynamic Range",QLineEdit)->setText("");
 
     initPlot(ui->plot,0,32,70.0,110.0);
     ui->plot->setTitle("Att bit/Power");
@@ -75,7 +77,7 @@ void Q_Cal_RX_RF_VGA_Widget::init()
 
 void Q_Cal_RX_RF_VGA_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_kase(currentRFIdx(),RX_RF_VGA,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(currentRFIdx(),RX_RF_VGA,Config("Freq",QTextEdit)->toPlainText().toStdString(),is_exp);
     ui->plot->replot();
 }
 

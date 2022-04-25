@@ -46,15 +46,15 @@ void Q_Test_RX_Gain_Accuracy_Thread::kase()
 void Q_Test_RX_Gain_Accuracy_Widget::init()
 {
     registerModelView(&model,ui->tableView);
-    config->textEditFreq->setText("1747.5M");
-    result->lineEditAccu->setText("");
+    Config("Freq",QTextEdit)->setText("1747.5M");
+    Result("Accuracy",QLineEdit)->setText("");
 
     Q_Thread_Widget::init();
 }
 
 void Q_Test_RX_Gain_Accuracy_Widget::prepare(const bool is_exp)
 {
-    Radio.prepare_kase(currentRFIdx(),RX_Gain_Accu,config->textEditFreq->toPlainText().toStdString(),is_exp);
+    Radio.prepare_kase(currentRFIdx(),RX_Gain_Accu,Config("Freq",QTextEdit)->toPlainText().toStdString(),is_exp);
 }
 
 void Q_Test_RX_Gain_Accuracy_Widget::uiUpdate(const int first,const int last,const int kase)

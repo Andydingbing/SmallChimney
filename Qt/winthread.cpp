@@ -28,10 +28,33 @@ bool Q_Thread_Base::g_threadPausing = false;
 QString Q_Thread_Base::g_threadName = QString("");
 Q_Thread_Base *Q_Thread_Base::g_threadThread = nullptr;
 
+QWidget * matchConfigWidget(const QString &item,const QStringList &items,const QList<QWidget *> widgets)
+{
+    if (items.size() - 1 != widgets.size()) {
+        return nullptr;
+    }
+
+    QStringList::const_iterator iterItem = items.cbegin() + 1;
+    QList<QWidget *>::const_iterator iterWidget = widgets.cbegin();
+
+    for (;iterItem != items.cend();++iterItem,++iterWidget) {
+        if (*iterItem == item) {
+            break;
+        }
+    }
+
+    return *iterWidget;
+}
+
+
 Q_Thread_Base::Q_Thread_Base(QObject *parent) :
     QThread(parent),
     RFIdx(0),
-    mainWindow(nullptr)
+    mainWindow(nullptr),
+    configModel(nullptr),
+    configDelegate(nullptr),
+    resultModel(nullptr),
+    resultDelegate(nullptr)
 {
     g_threadStop = false;
     g_threadPausing = false;
@@ -57,6 +80,17 @@ void Q_Thread_Base::setMainWindow(const QMainWindow *window)
     connect(this,SIGNAL(threadProcess(const Process p)),
         mainWindow,SLOT(threadProcess(const Process p)));
 }
+
+QWidget* Q_Thread_Base::config(const QString &item) const
+{
+    return matchConfigWidget(item,configModel->_item,configDelegate->delegatedWidgets);
+}
+
+QWidget* Q_Thread_Base::result(const QString &item) const
+{
+    return matchConfigWidget(item,resultModel->_item,resultDelegate->delegatedWidgets);
+}
+
 
 Q_Thread::Q_Thread(QObject *parent) :
     Q_Thread_Base(parent)

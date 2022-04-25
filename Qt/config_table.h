@@ -30,7 +30,9 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const;
 
-protected:
+    void addItemTitle(const QString &title) { _item.push_back(title); }
+
+public:
     QStringList _item;
 };
 
@@ -69,6 +71,7 @@ public:
     QWidget **first() const OVERRIDE { return reinterpret_cast<QWidget **>(const_cast<type **>(&widget)); }
 };
 
+
 class QHELPER_EXPORT Q_Config_Table_Delegate_Kase : public Q_Config_Table_Delegate
 {
 public:
@@ -77,6 +80,7 @@ public:
 
 public:
     FIRST_CONFIG_WIDGET(QLabel,labelConfig)
+    QList<QWidget *> delegatedWidgets;
 };
 
 class QHELPER_EXPORT Q_Result_Table_Delegate_Kase : public Q_Config_Table_Delegate
@@ -87,50 +91,18 @@ public:
 
 public:
     FIRST_CONFIG_WIDGET(QLabel,labelResult)
+    QList<QWidget *> delegatedWidgets;
 };
 
 
+#define KASE_CONFIG(config_title,class_name) \
+    configModel->addItemTitle(config_title); configDelegate->delegatedWidgets.push_back(new class_name);
 
+#define KASE_RESULT(result_title,class_name) \
+    resultModel->addItemTitle(result_title); resultDelegate->delegatedWidgets.push_back(new class_name);
 
-//KASE__CONFIG(QTextEdit, textEditFreq, "Freq")
-//KASE__CONFIG(QLineEdit, lineEditAtt,  "")
-
-
-//class Q_Config_Model_Delegate : public Q_Config_Table_Model, public Q_Config_Table_Delegate
-//{
-//public:
-//    Q_Config_Model_Delegate(QObject *parent = nullptr) :
-//        Q_Config_Table_Model(parent),
-//        Q_Config_Table_Delegate(parent)
-//    {
-//        _item.clear();
-////        _item << "Freq"; QTextEdit *textEditFreq = new QTextEdit;
-////        _item << "";     QLineEdit *lineEditAtt = new QLineEdit;
-//    }
-
-
-//};
-
-
-
-#define CONFIG_TABLE_KASE(...) \
-class Q_Config_Model : public Q_Config_Table_Model { \
-public: \
-    Q_Config_Model(QObject *parent = nullptr) : Q_Config_Table_Model(parent) \
-    { \
-        _item.clear(); \
-        _item << PARAM_PICK_1_OF_3_3(<<,,, __VA_ARGS__); \
-        _item.push_front("");\
-        setRowCount(rowCount(QModelIndex())); \
-        setColumnCount(columnCount(QModelIndex())); \
-    } \
-}; \
-class Q_Config_Delegate : public Q_Config_Table_Delegate_Kase { \
-public: \
-    Q_Config_Delegate(QObject *parent = nullptr) \
-    { PARAM_PICK_2_OF_3_2_1(,,= new,;,__VA_ARGS__) } \
-    PARAM_PICK_2_OF_3_1(,,*,;,__VA_ARGS__) \
-};
+#define Config(config_title,class_name) ((class_name *)(config(config_title)))
+#define Result(result_title,class_name) ((class_name *)(result(result_title)))
 
 #define RESULT_TABLE_KASE(...) \
 class Q_Result_Model : public Q_Config_Table_Model { \

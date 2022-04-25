@@ -42,6 +42,7 @@
     emit threadProcess(Started); \
     initProgress(QString("Case : %1").arg(name),pts);
 
+QWidget * matchConfigWidget(const QString &item,const QStringList &items,const QList<QWidget *> widgets);
 
 class QHELPER_EXPORT Q_Thread_Base : public QThread
 {
@@ -67,6 +68,8 @@ public:
     void initProgress(const QString name, quint32 pts) { emit initProg(name,pts); }
     void setProgressPos(quint32 pos) { emit setProgPos(pos); }
     void addProgressPos(quint32 off) { emit addProgPos(off); }
+    QWidget* config(const QString &item) const;
+    QWidget* result(const QString &item) const;
 
 signals:
     void initProg(const QString name);
@@ -90,7 +93,10 @@ public:
     static Q_Thread_Base *g_threadThread;
 
     QMainWindow *mainWindow;
+    Q_Config_Table_Model *configModel;
     Q_Config_Table_Delegate_Kase *configDelegate;
+
+    Q_Result_Table_Model *resultModel;
     Q_Result_Table_Delegate_Kase *resultDelegate;
 };
 

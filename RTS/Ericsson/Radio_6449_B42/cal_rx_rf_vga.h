@@ -8,16 +8,15 @@ KASE_CURVE(RX_RF_VGA)
 
 KASE_WIDGET_PREFIX(Cal_RX_RF_VGA)
 
-KASE_CONFIG(
-    QTextEdit, textEditFreq, "Freq",
-    QLineEdit, lineEditAtt, "Att Bit")
+KASE_CONFIG("Freq",    QTextEdit)
+KASE_CONFIG("Att Bit", QLineEdit)
 
-KASE_RESULT(
-    QCheckBox, checkBoxMonotonic, "Monotonic",
-    QLineEdit, lineEditDyRange, "Dynamic Range")
+KASE_RESULT("Monotonic",     QCheckBox)
+KASE_RESULT("Dynamic Range", QLineEdit)
 
-    RX_RF_VGA_Model model;
-    RX_RF_VGA_Curve curve;
+KASE_WIDGET :
+RX_RF_VGA_Model model;
+RX_RF_VGA_Curve curve;
 
 KASE_THREAD(Cal_RX_RF_VGA)
 

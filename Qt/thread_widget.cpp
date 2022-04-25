@@ -26,6 +26,16 @@ void Q_Thread_Widget_Base::registerModelView(Q_Table_Model *model,Q_Table_View *
     connect(this,SIGNAL(reset()),model,SLOT(reset()));
 }
 
+QWidget* Q_Thread_Widget_Base::config(const QString &item) const
+{
+    return matchConfigWidget(item,configModel->_item,configDelegate->delegatedWidgets);
+}
+
+QWidget* Q_Thread_Widget_Base::result(const QString &item) const
+{
+    return matchConfigWidget(item,resultModel->_item,resultDelegate->delegatedWidgets);
+}
+
 void Q_Thread_Widget_Base::done(bool success)
 {
     Q_Thread_Base::g_threadThread = nullptr;
