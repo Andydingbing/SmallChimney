@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 LIBS += \
 -linstrument \
 -lreport \
--lsequence -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets
+-lsequence
 
 win32-g++ {
     LIBS += -lqwt-qt5.dll

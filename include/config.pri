@@ -208,7 +208,7 @@ contains(DEFINES,ui_api) {
         -lRTS_helper \
         -lsequence \
         -lplugin \
-        -lQt5Core -lQt5Gui -lQt5Network -lQt5svg -lQt5Widgets -lQHelper
+        -lQHelper
 
     LIBS += $$dependLib(log)
 
