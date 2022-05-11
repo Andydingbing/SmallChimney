@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Q_Test_TX_ACLR_Thread::kase()
+void Q_Test_TX_ACLR_Widget::Thread::kase()
 {
     KASE_THREAD_START("TX ACLR",(1));
 

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Q_Cal_RX_RF_VGA_Thread::kase()
+void Q_Cal_RX_RF_VGA_Widget::Thread::kase()
 {
     KASE_THREAD_START("RX RF VGA",(32768));
 

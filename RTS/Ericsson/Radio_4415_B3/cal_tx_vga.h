@@ -6,7 +6,7 @@
 KASE_MODEL(TX_VGA,"DAC","Range","Time")
 KASE_CURVE(TX_VGA)
 
-KASE_WIDGET_PREFIX(Cal_TX_VGA)
+KASE_PREFIX(Cal_TX_VGA)
 
 KASE_CONFIG("Freq", QTextEdit)
 KASE_CONFIG("",     QLineEdit)
@@ -17,8 +17,8 @@ KASE_WIDGET :
 TX_VGA_Model model;
 TX_VGA_Curve curve;
 
-KASE_THREAD(Cal_TX_VGA)
+KASE_THREAD :
 
-KASE_WIDGET_SUFFIX()
+KASE_SUFFIX()
 
 #endif

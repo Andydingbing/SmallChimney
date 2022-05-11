@@ -1,6 +1,6 @@
 #include "test_rx_gain_accuracy.h"
 
-void Q_Test_RX_Gain_Accuracy_Thread::kase()
+void Q_Test_RX_Gain_Accuracy_Widget::Thread::kase()
 {
     KASE_THREAD_START("RX Gain Accuracy",(1));
 

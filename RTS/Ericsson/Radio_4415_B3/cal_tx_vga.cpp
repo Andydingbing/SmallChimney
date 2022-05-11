@@ -1,6 +1,6 @@
 #include "cal_tx_vga.h"
 
-void Q_Cal_TX_VGA_Thread::kase()
+void Q_Cal_TX_VGA_Widget::Thread::kase()
 {
     KASE_THREAD_START("TX VGA",(1));
 

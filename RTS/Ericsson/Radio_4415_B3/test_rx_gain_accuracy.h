@@ -5,7 +5,7 @@
 
 KASE_MODEL(RX_Gain_Accu,"Branch","Power","Time")
 
-KASE_WIDGET_PREFIX(Test_RX_Gain_Accuracy)
+KASE_PREFIX(Test_RX_Gain_Accuracy)
 
 KASE_CONFIG("Freq", QTextEdit)
 KASE_CONFIG("Att Bit", QLineEdit)
@@ -15,8 +15,8 @@ KASE_RESULT("Accuracy", QLineEdit)
 KASE_WIDGET :
 RX_Gain_Accu_Model model;
 
-KASE_THREAD(Test_RX_Gain_Accuracy)
+KASE_THREAD :
 
-KASE_WIDGET_SUFFIX()
+KASE_SUFFIX()
 
 #endif

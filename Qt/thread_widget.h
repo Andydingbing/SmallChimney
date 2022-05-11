@@ -31,6 +31,7 @@ public:
 
     virtual void init();
 
+    virtual Q_Thread_Base *instanceThread() = 0;
     virtual void threadSPC(const QMainWindow *mainWindow = nullptr) = 0;
     virtual void prepare(const bool is_exp = false) { Q_UNUSED(is_exp) }
 
@@ -61,7 +62,6 @@ public:
 };
 
 
-template<typename thread_t>
 class Q_Thread_Widget : public Q_Thread_Widget_Base
 {
 public:
@@ -106,7 +106,7 @@ public:
             iter->second->selectRow(0);
         }
 
-        Q_Thread_Base::g_threadThread = new thread_t(this);
+        Q_Thread_Base::g_threadThread = instanceThread();
 //        Q_Thread_Base::g_threadThread->RFIdx = ::g_tabIdx;
         Q_Thread_Base::g_threadThread->configModel = configModel;
         Q_Thread_Base::g_threadThread->configDelegate = configDelegate;
@@ -142,12 +142,10 @@ public:
 };
 
 #define KASE_WIDGET_CLASS_NAME(kase) Q_##kase##_Widget
-#define KASE_THREAD_CLASS_NAME(kase) Q_##kase##_Thread
 #define KASE_WIDGET_UI_CLASS_NAME(kase) Q_##kase##_Widget
 
-#define KASE_WIDGET_PREFIX(kase) \
-    class KASE_THREAD_CLASS_NAME(kase); \
-    class API KASE_WIDGET_CLASS_NAME(kase) : public Q_Thread_Widget<KASE_THREAD_CLASS_NAME(kase)> \
+#define KASE_PREFIX(kase) \
+    class API KASE_WIDGET_CLASS_NAME(kase) : public Q_Thread_Widget \
     { \
     public: \
         KASE_WIDGET_CLASS_NAME(kase)(QWidget *parent) : \
@@ -198,19 +196,23 @@ public:
         public
 
 
-#define KASE_THREAD(kase_name) \
-    }; \
-    class API KASE_THREAD_CLASS_NAME(kase_name) : public Q_Thread \
+#define KASE_THREAD \
+    class Thread : public Q_Thread \
     { \
     public: \
-        KASE_THREAD_CLASS_NAME(kase_name)(QObject *parent) : \
-            Q_Thread(parent) \
+        Thread(QObject *parent) : Q_Thread(parent) \
         { \
         } \
         void kase(); \
-    public:
+    public
 
-#define KASE_WIDGET_SUFFIX() \
+#define KASE_SUFFIX() \
+    }; \
+    Q_Thread_Base *instanceThread() \
+    { \
+        Thread *thread = new Thread(this); \
+        return (Q_Thread_Base *)thread; \
+    } \
     };
 
 #endif
