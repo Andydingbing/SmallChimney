@@ -16,7 +16,7 @@ struct data_m_freq_response
     float pwr;
 };
 
-class freq_response_table_t : public item_table<data_f_freq_response,data_m_freq_response>
+class API freq_response_table_t : public item_table<data_f_freq_response,data_m_freq_response>
 {
 public:
     typedef data_f_freq_response data_f_t;

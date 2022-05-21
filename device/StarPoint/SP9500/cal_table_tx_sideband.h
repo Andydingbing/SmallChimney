@@ -28,7 +28,7 @@ struct data_m_tx_sideband
     float temp_5;
 };
 
-class tx_sideband_table_t : public item_table<data_f_tx_sideband,data_m_tx_sideband>
+class API tx_sideband_table_t : public item_table<data_f_tx_sideband,data_m_tx_sideband>
 {
 public:
     typedef data_f_tx_sideband data_f_t;

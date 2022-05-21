@@ -151,9 +151,10 @@ INCLUDEPATH += \
           $$VAR_INCLUDE_ROOT/device/common \
        ../$$VAR_INCLUDE_ROOT/device/common \
     ../../$$VAR_INCLUDE_ROOT/device/common \
-          ../Qt \
-       ../../Qt \
-    ../../../Qt \
+             ../Qt \
+          ../../Qt \
+       ../../../Qt \
+    ../../../../Qt \
           ../RTS_helper \
        ../../RTS_helper \
     ../../../RTS_helper \

@@ -217,6 +217,6 @@ bool API instr_ps_get_voltage_max(double &vol_mV);
 bool API instr_ps_trigger_set_current(const double curr_mA);
 bool API instr_ps_trigger_get_current(double &curr_mA);
 
-#endif // LIB_INSTR_H
+#endif
 
 

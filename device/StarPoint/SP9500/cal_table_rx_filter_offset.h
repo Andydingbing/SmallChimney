@@ -21,7 +21,7 @@ struct data_m_rx_filter_offset
     float temp_5;
 };
 
-class rx_filter_offset_table_t : public item_table<data_f_rx_filter_offset,data_m_rx_filter_offset>
+class API rx_filter_offset_table_t : public item_table<data_f_rx_filter_offset,data_m_rx_filter_offset>
 {
 public:
     typedef data_f_rx_filter_offset data_f_t;

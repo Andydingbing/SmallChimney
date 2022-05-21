@@ -5,7 +5,8 @@
 #include <boost/property_tree/ini_parser.hpp>
 
 using namespace std;
-using namespace rd;
+using namespace ns_starpoint;
+using namespace ns_sp9500;
 using namespace ns_sp1401;
 using namespace boost;
 using namespace boost::property_tree;

@@ -29,7 +29,7 @@ struct data_m_tx_pwr
     short att3 : 8;
 };
 
-class tx_pwr_table_t : public item_table<data_f_tx_pwr,data_m_tx_pwr>
+class API tx_pwr_table_t : public item_table<data_f_tx_pwr,data_m_tx_pwr>
 {
 public:
     typedef data_f_tx_pwr data_f_t;

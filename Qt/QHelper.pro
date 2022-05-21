@@ -27,6 +27,7 @@ win32-msvc {
 
 HEADERS += \
     qhelper_global.h \
+    scroll_lineedit.h \
     config_table.h \
     table_model.h \
     winthread.h \

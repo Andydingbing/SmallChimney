@@ -26,7 +26,7 @@ struct data_m_tx_lol
     float temp_5;
 };
 
-class tx_lol_table_t : public item_table<data_f_tx_lol,data_m_tx_lol>
+class API tx_lol_table_t : public item_table<data_f_tx_lol,data_m_tx_lol>
 {
 public:
     typedef data_f_tx_lol data_f_t;

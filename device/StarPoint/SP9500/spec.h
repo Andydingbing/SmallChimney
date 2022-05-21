@@ -20,7 +20,8 @@
 #include "../cal_table.h"
 #include "set_helper.hpp"
 
-namespace rd {
+namespace ns_starpoint {
+namespace ns_sp9500 {
 
 class API spec
 {
@@ -80,7 +81,8 @@ private:
     static std::string path();
 };
 
-} // namespace rd
+} // namespace ns_starpoint
+} // namespace ns_sp9500
 
 #endif
 

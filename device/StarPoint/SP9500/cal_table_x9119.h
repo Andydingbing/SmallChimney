@@ -19,7 +19,7 @@ struct data_m_x9119
     uint16_t value;
 };
 
-class x9119_table_t : public item_table<data_f_x9119,data_m_x9119>
+class API x9119_table_t : public item_table<data_f_x9119,data_m_x9119>
 {
 public:
     typedef data_f_x9119 data_f_t;

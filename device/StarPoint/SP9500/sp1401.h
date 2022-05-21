@@ -11,7 +11,7 @@
 #include "sgpmm.h"
 #include "../arb_reader.h"
 #include "complex_sequence.h"
-#include "../test_data.hpp"
+//#include "../test_data.hpp"
 #include "traits.hpp"
 
 const static float g_temp_star = 20.0f;

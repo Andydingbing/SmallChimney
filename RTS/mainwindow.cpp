@@ -32,10 +32,6 @@ QHBoxLayout MainWindow::childDlgLayout;
 MainWindow *g_MainW = nullptr;
 sequence mainSequence;
 
-double QFreqScrollLineEdit::stepDefault = 1e6;
-double QFreqScrollLineEdit::stepCtrl    = 5e6;
-double QFreqScrollLineEdit::stepShift   = 10e6;
-
 
 QMenu* hasMenu(const QString &str,const QMenu *menu)
 {

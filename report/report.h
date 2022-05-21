@@ -24,6 +24,9 @@ public:
     const item_table_base *db(const item_table_t &table) const;
     const item_table_base *db(const int32_t table) const;
 
+#define DB_ITEM_TABLE(children,base) static_cast<const children *>(base)
+#define DB_ITEM_TABLE_DECLARE(ptr,children,base) const children *ptr = static_cast<const children *>(base)
+
 public:
     int32_t make_sure_has(const item_table_t table,item_table_base *t);
 

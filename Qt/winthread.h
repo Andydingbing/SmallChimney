@@ -16,8 +16,6 @@
     } \
 }
 
-#define THREAD_ERROR_BOX(msg) { emit threadErrorBox(msg); }
-
 #define cancelPoint() \
 {   if (Q_Thread_Base::g_threadStop) { \
         emit threadProcess(End_Manual); \
@@ -34,6 +32,7 @@
     cancelPoint() \
 }
 
+#define THREAD_ERROR_BOX(msg) { emit threadErrorBox(msg); }
 
 #define KASE_THREAD_START(name,pts) \
     cancelPoint(); \

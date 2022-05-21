@@ -41,7 +41,7 @@ struct data_m_rx_ref
     rx_state_m_t state[3];
 };
 
-class rx_ref_table_t : public item_table<data_f_rx_ref,data_m_rx_ref>
+class API rx_ref_table_t : public item_table<data_f_rx_ref,data_m_rx_ref>
 {
 public:
     typedef data_f_rx_ref data_f_t;
