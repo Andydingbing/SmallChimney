@@ -7,6 +7,7 @@ using namespace ns_sp9500;
 
 data_f_tx_pwr::data_f_tx_pwr()
 {
+    pwr = 0.0;
     d_gain = 0.0;
     att0 = 0.0;
     att1 = 0.0;

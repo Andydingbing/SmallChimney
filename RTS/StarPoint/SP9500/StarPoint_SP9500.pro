@@ -16,7 +16,8 @@ HEADERS += \
     sp1401_r1f_adv_widget.h \
     temp_ctrl_widget.h \
     cal_tx_lo_leak.h \
-    cal_tx_sideband.h
+    cal_tx_sideband.h \
+    cal_tx_pwr.h
 
 SOURCES += \
     global.cpp \
@@ -30,7 +31,8 @@ SOURCES += \
     sp1401_r1f_adv_widget.cpp \
     temp_ctrl_widget.cpp \
     cal_tx_lo_leak.cpp \
-    cal_tx_sideband.cpp
+    cal_tx_sideband.cpp \
+    cal_tx_pwr.cpp
 
 FORMS += \
     ../../chip/adf5355.ui \
@@ -42,5 +44,6 @@ FORMS += \
     sp1401_r1f_adv.ui \
     temp_ctrl_widget.ui \
     cal_tx_lo_leak.ui \
-    cal_tx_sideband.ui
+    cal_tx_sideband.ui \
+    cal_tx_pwr.ui
 

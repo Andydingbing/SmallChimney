@@ -83,7 +83,7 @@ void Q_Cal_TX_Sideband_Widget::Thread::calUseSA(double &thM, uint16_t &am_i_m, u
     am_i_m = 8192;
     am_q_m = 8192;
 
-    DB_ITEM_TABLE_DECLARE(lol_table,tx_lol_table_t,SP1401->data_base()->db(cal_table_t::TX_LOL));
+    DECLARE_DB_ITEM_TABLE(lol_table,tx_lol_table_t,SP1401->data_base()->db(cal_table_t::TX_LOL));
     tx_lol_table_t::data_f_t data_lol;
 
     lol_table->get(freq,data_lol);

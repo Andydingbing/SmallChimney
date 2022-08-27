@@ -3,12 +3,14 @@
 
 #include "item_table.hpp"
 #include "global_header.h"
+#include "frontend.h"
 
 namespace ns_starpoint {
 namespace ns_sp9500 {
 
 struct API data_f_tx_pwr : item_table_base::data_f_base_t
 {
+    double pwr;
     double d_gain;
     double att0;
     double att1;
@@ -21,12 +23,14 @@ struct API data_f_tx_pwr : item_table_base::data_f_base_t
 
 struct data_m_tx_pwr
 {
+    float pwr;
     float d_gain;
-    float temp_5;
     short att0 : 8;	// att = attx / 2.0,so this can be a short.
     short att1 : 8;
     short att2 : 8;
     short att3 : 8;
+    float temp_5;
+    float rsv0;
 };
 
 class API tx_pwr_table_t : public item_table<data_f_tx_pwr,data_m_tx_pwr>

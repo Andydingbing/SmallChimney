@@ -10,6 +10,18 @@
 
 BETTER_ENUM(io_mode_t, int32_t, IO, OUTPUT, LOOP, INPUT, CLOSE)
 
+struct chain_state_t
+{
+    int32_t *states;
+    uint32_t n;
+};
+
+chain_state_t* chain_state_new();
+int32_t chain_state_init(chain_state_t *chain_state);
+int32_t chain_state_to_uint64(chain_state_t *chain_state,uint32_t offset,uint64_t *out);
+int32_t chain_state_from_uint64(chain_state_t *chain_state,uint32_t offset,uint64_t in);
+int32_t chain_state_del(chain_state_t *chain_state);
+
 class API frontend : noncopyable
 {
 public:

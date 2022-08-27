@@ -16,4 +16,4 @@ INSTR_FAMILY(keysight_603xa,keysight_6033a,"6033A");
 INSTR_FAMILY(keysight_603xa,keysight_6035a,"6035A");
 INSTR_FAMILY(keysight_603xa,keysight_6038a,"6038A");
 
-#endif // INSTRUMENT_PS_KEYSIGHT_603XA_H
+#endif

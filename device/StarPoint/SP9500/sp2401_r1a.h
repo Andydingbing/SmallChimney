@@ -3,6 +3,7 @@
 
 #include "libdriver.h"
 #include "traits.hpp"
+#include "cal_table_tx_filter.h"
 #include "cal_table_rx_filter.h"
 
 namespace ns_starpoint {
@@ -96,6 +97,7 @@ public:
     int32_t set_tx_filter_truncation(uint32_t digit);
     int32_t set_tx_filter_sw(bool en);
     int32_t set_tx_filter(double *real,double *imag);
+    int32_t set_tx_filter(data_m_tx_filter &data);
     int32_t set_ddc(double freq);
     int32_t set_rx_filter_truncation(uint32_t digit);
     int32_t set_rx_filter_sw(rx_filter_t filter);

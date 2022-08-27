@@ -36,9 +36,11 @@ namespace ns_sp9500 {
 class API sp1401_r1c : public sp1401
 {
 public:
-    typedef boost::shared_ptr<sp1401_r1c> sptr;
     virtual ~sp1401_r1c() {}
     DECLARE_SP1401(sp1401_r1c)
+
+    virtual void tx_guess_base_state(io_mode_t &mode,data_f_tx_pwr &data) OVERRIDE;
+    virtual void rx_guess_base_state(io_mode_t &mode,data_f_rx_ref &data) OVERRIDE;
 
 public:
     enum lo_t {

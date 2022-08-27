@@ -9,9 +9,11 @@ namespace ns_sp9500 {
 class API sp1401_r1f : public sp1401_r1e
 {
 public:
-    typedef boost::shared_ptr<sp1401_r1f> sptr;
     sp1401_r1f(uint32_t rf_idx,uint32_t rfu_idx) :
         sp1401_r1e(rf_idx,rfu_idx) {}
+
+    void tx_guess_base_state(io_mode_t &mode,data_f_tx_pwr &data) OVERRIDE;
+    void rx_guess_base_state(io_mode_t &mode,data_f_rx_ref &data) OVERRIDE;
 
     int32_t open_board();
     int32_t set_adf5355(lo_t lo,uint64_t freq);

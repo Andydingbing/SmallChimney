@@ -8,6 +8,7 @@ namespace ns_starpoint {
 namespace ns_sp9500 {
 
 struct API rx_state_f_t {
+    double ref;
     double temp[4];
     int64_t ad_offset;
     int16_t lna_att;
@@ -22,10 +23,12 @@ struct API rx_state_f_t {
 };
 
 struct rx_state_m_t {
+    float ref;
     float temp;
     float att1;
     float att2;
     float att3;
+    float rsv0;
     int32_t ad_offset;
     short lna_att : 8;
     short att_019 : 8;

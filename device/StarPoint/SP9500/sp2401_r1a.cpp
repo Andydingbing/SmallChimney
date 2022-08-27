@@ -355,6 +355,30 @@ int32_t sp2401_r1a::set_tx_filter(double *real,double *imag)
 	return 0;
 }
 
+int32_t sp2401_r1a::set_tx_filter(data_m_tx_filter &data)
+{
+    RFU_K7_REG_DECLARE_2(0x00ec,0x20ec);
+    RFU_K7_REG_DECLARE_2(0x00ed,0x20ed);
+    RFU_K7_REG_DECLARE_2(0x00ee,0x20ee);
+    RFU_K7_REG_DECLARE_2(0x00ef,0x20ef);
+    RFU_K7_REG_DECLARE_2(0x00f0,0x20f0);
+    RFU_K7_REG_DECLARE_2(0x00f1,0x20f1);
+
+    for (int32_t i = 0;i < dl_filter_tap_2i;i ++) {
+        RFU_K7_REG_2(0x00ed,0x20ed).addr = unsigned(i);
+        RFU_K7_REG_2(0x00ef,0x20ef).real = unsigned(data.coef[i].i);
+        RFU_K7_REG_2(0x00f0,0x20f0).imag = unsigned(data.coef[i].q);
+        RFU_K7_REG_2(0x00ee,0x20ee).sum  = unsigned(data.coef[i].i + data.coef[i].q);
+        RFU_K7_W_2(0x00ed,0x20ed);
+        RFU_K7_W_2(0x00ee,0x20ee);
+        RFU_K7_W_2(0x00ef,0x20ef);
+        RFU_K7_W_2(0x00f0,0x20f0);
+        RFU_K7_OP_2(0x00ec,0x20ec);
+    }
+    RFU_K7_OP_2(0x00f1,0x20f1);
+    return 0;
+}
+
 int32_t sp2401_r1a::set_ddc(double freq)
 {
     RFU_K7_REG_DECLARE_2(0x007d,0x207d);

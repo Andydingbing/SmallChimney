@@ -31,6 +31,7 @@
 //#include "ui_fpga.h"
 #include "ui_cal_tx_lo_leak.h"
 #include "ui_cal_tx_sideband.h"
+#include "ui_cal_tx_pwr.h"
 
 using namespace ns_starpoint;
 using namespace ns_sp9500;

@@ -6,6 +6,65 @@ using namespace std;
 using namespace boost;
 using namespace boost::filesystem;
 
+chain_state_t* chain_state_new()
+{
+    chain_state_t *chain_state = (chain_state_t *)(malloc(sizeof(chain_state_t)));
+
+    return chain_state;
+}
+
+int32_t chain_state_init(chain_state_t *chain_state)
+{
+    if (!chain_state) {
+        chain_state = chain_state_new();
+    }
+
+    if (!chain_state) {
+        return -1;
+    }
+
+    chain_state->states = (int32_t *)(malloc(chain_state->n * sizeof(int32_t)));
+
+    return chain_state->states == NULL;
+}
+
+int32_t chain_state_to_uint64(chain_state_t *chain_state,uint32_t offset,uint64_t *out)
+{
+    if (!chain_state || chain_state->n < offset) {
+        return -1;
+    }
+
+    out = (uint64_t *)(&chain_state->states[offset]);
+    return 0;
+}
+
+
+int32_t chain_state_from_uint64(chain_state_t *chain_state,uint32_t offset,uint64_t in)
+{
+    if (!chain_state || chain_state->n < offset) {
+        return -1;
+    }
+
+    memcpy(&chain_state->states[offset],&in,sizeof(uint64_t));
+    return 0;
+}
+
+int32_t chain_state_del(chain_state_t *chain_state)
+{
+    if (!chain_state) {
+        return 0;
+    }
+
+    if (chain_state->states) {
+        free(chain_state->states);
+        chain_state->states = NULL;
+        chain_state->n = 0;
+    }
+
+    free(chain_state);
+    return 0;
+}
+
 frontend::frontend()
 {
     _rf_idx = 0;

@@ -17,9 +17,8 @@
 #define INCLUDE_PREPROCESSOR_COMMON_H
 
 #include "warning.h"
-//#include <boost/core/ignore_unused.hpp>
 
-//using boost::ignore_unused;
+#define ignore_unused(x) (void)x;
 
 #define MACRO_ID(x) x
 

@@ -5,6 +5,7 @@
 #include "sleep_common.h"
 #include "algo_chip.hpp"
 
+using namespace std;
 using namespace ns_starpoint;
 using namespace ns_sp9500;
 using namespace ns_sp1401;
@@ -738,4 +739,30 @@ int32_t sp1401_r1a::set_rx_if1_hmc694_vgg2(double vol)
 {
     INT_CHECK(set_ltc2666(6,vol));
 	return 0;
+}
+
+void sp1401_r1a::tx_guess_base_state(io_mode_t &mode,data_f_tx_pwr &data)
+{
+    ignore_unused(mode);
+
+    data.pwr = -30.0;
+    data.d_gain = 0.0;
+    data.att1 = 10.0;
+    data.att2 = 0.0;
+    data.att3 = 0.0;
+}
+
+void sp1401_r1a::rx_guess_base_state(io_mode_t &mode,data_f_rx_ref &data)
+{
+    ignore_unused(mode);
+
+    data.state[0].ref = -10.0;
+    data.state[0].lna_att = RX_ATT;
+    data.state[0].att1 = 0.0;
+    data.state[0].att2 = 0.0;
+
+    data.state[1].ref = -30.0;
+    data.state[1].lna_att = RX_LNA;
+    data.state[1].att1 = 0.0;
+    data.state[1].att2 = 0.0;
 }

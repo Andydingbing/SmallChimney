@@ -9,7 +9,6 @@ namespace ns_sp9500 {
 class API sp1401_r1e : public sp1401_r1c
 {
 public:
-    typedef boost::shared_ptr<sp1401_r1e> sptr;
     sp1401_r1e(uint32_t rf_idx,uint32_t rfu_idx) :
         sp1401_r1c(rf_idx,rfu_idx) {}
 

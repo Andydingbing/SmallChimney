@@ -13,6 +13,7 @@
 #include "complex_sequence.h"
 //#include "../test_data.hpp"
 #include "traits.hpp"
+#include "array.hpp"
 
 const static float g_temp_star = 20.0f;
 const static float g_temp_stop = 70.0f;
@@ -24,7 +25,6 @@ namespace ns_sp9500 {
 class API sp1401 : public frontend
 {
 public:
-    typedef boost::shared_ptr<sp1401> sptr;
     sp1401();
     virtual ~sp1401() {}
 
@@ -103,6 +103,9 @@ public:
     virtual int32_t set_tx_modulator_en(bool en) = 0;
     virtual int32_t set_pwr_en(bool en) = 0;
     virtual int32_t get_io_mode(io_mode_t &mode) = 0;
+
+    virtual void tx_guess_base_state(io_mode_t &mode,data_f_tx_pwr &data) = 0;
+    virtual void rx_guess_base_state(io_mode_t &mode,data_f_rx_ref &data) = 0;
 
 public:
     ns_sp1401::bw_t bw() const { return _cal_file->bw(); }

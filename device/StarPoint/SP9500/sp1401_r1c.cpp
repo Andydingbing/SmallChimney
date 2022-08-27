@@ -4,6 +4,7 @@
 #include "sleep_common.h"
 #include "algo_chip.hpp"
 
+using namespace std;
 using namespace ns_starpoint;
 using namespace ns_sp9500;
 using namespace ns_sp1401;
@@ -1071,4 +1072,80 @@ int32_t sp1401_r1c::get_rx_chain_state(rx_chain_state_all_t  &rx_chain_state)
 {
     rx_chain_state = m_rx_chain_state;
     return 0;
+}
+
+void sp1401_r1c::tx_guess_base_state(io_mode_t &mode,data_f_tx_pwr &data)
+{
+    switch (mode) {
+    case io_mode_t::OUTPUT :
+        data.pwr = -5.0;
+        data.d_gain = -5.0;
+        data.att0 = 5.0;
+        data.att1 = 20.0;
+        data.att2 = 0.0;
+        data.att3 = 1.0;
+        return;
+    case io_mode_t::IO :
+        data.pwr = -12.0;
+        data.d_gain = -5.0;
+        data.att0 = 5.0;
+        data.att1 = 20.0;
+        data.att2 = 0.0;
+        data.att3 = 1.0;
+        return;
+    default :
+        return;
+    }
+}
+
+void sp1401_r1c::rx_guess_base_state(io_mode_t &mode,data_f_rx_ref &data)
+{
+    switch (mode) {
+    case io_mode_t::OUTPUT :
+        data.state[0].ref = 10.0;
+        data.state[0].lna_att = RX_ATT;
+        data.state[0].att_019 = RX_ATT_19;
+        data.state[0].att1 = 5.0;
+        data.state[0].att2 = 10.0;
+        data.state[0].att3 = 15.0;
+
+        data.state[1].ref = 10.0;
+        data.state[1].lna_att = RX_ATT;
+        data.state[1].att_019 = RX_ATT_0;
+        data.state[1].att1 = 25.0;
+        data.state[1].att2 = 10.0;
+        data.state[1].att3 = 15.0;
+
+        data.state[2].ref = -20.0;
+        data.state[2].lna_att = RX_LNA;
+        data.state[2].att_019 = RX_ATT_19;
+        data.state[2].att1 = 10.0;
+        data.state[2].att2 = 10.0;
+        data.state[2].att3 = 15.0;
+        return;
+    case io_mode_t::IO :
+        data.state[0].ref = 10.0;
+        data.state[0].lna_att = RX_ATT;
+        data.state[0].att_019 = RX_ATT_19;
+        data.state[0].att1 = 0.0;
+        data.state[0].att2 = 13.0;
+        data.state[0].att3 = 10.0;
+
+        data.state[1].ref = 10;
+        data.state[1].lna_att = RX_ATT;
+        data.state[1].att_019 = RX_ATT_0;
+        data.state[1].att1 = 20.0;
+        data.state[1].att2 = 13.0;
+        data.state[1].att3 = 10.0;
+
+        data.state[2].ref = -20;
+        data.state[2].lna_att = RX_LNA;
+        data.state[2].att_019 = RX_ATT_19;
+        data.state[2].att1 = 4.0;
+        data.state[2].att2 = 13.0;
+        data.state[2].att3 = 10.0;
+        return;
+    default :
+        return;
+    }
 }
